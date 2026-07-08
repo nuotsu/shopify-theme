@@ -1,0 +1,9 @@
+{
+  "sections": {
+    "prose": {
+      "type": "prose",
+      "settings": {}
+    }
+  },
+  "order": ["main"]
+}

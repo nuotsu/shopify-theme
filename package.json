@@ -1,0 +1,12 @@
+{
+  "name": "shopify-theme",
+  "type": "module",
+  "private": true,
+  "scripts": {},
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.2",
+    "prettier": "^3.9.4",
+    "prettier-plugin-tailwindcss": "^0.8.0",
+    "tailwindcss": "^4.3.2"
+  }
+}
