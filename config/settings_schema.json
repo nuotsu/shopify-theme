@@ -6,5 +6,20 @@
     "theme_author": "nuotsu",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Typography"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_primary",
+        "label": "Primary Font",
+        "default": "geist_n4"
+      }
+    ]
   }
 ]

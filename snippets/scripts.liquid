@@ -1,0 +1,26 @@
+{% javascript %}
+// hover-details (desktop only)
+  const desktopMq = window.matchMedia('(min-width: 48rem)')
+  const hoverControllers = new WeakMap()
+
+  const onEnter = (e) => e.currentTarget.setAttribute('open', '')
+  const onLeave = (e) => e.currentTarget.removeAttribute('open')
+
+  const syncHoverDetails = () => {
+    document.querySelectorAll('details[data-hover-details]').forEach((details) => {
+      hoverControllers.get(details)?.abort()
+
+      if (desktopMq.matches) {
+        const controller = new AbortController()
+        details.addEventListener('mouseenter', onEnter, { signal: controller.signal })
+        details.addEventListener('mouseleave', onLeave, { signal: controller.signal })
+        hoverControllers.set(details, controller)
+      } else {
+        details.removeAttribute('open')
+      }
+    })
+  }
+
+  syncHoverDetails()
+  desktopMq.addEventListener('change', syncHoverDetails)
+{% endjavascript %}

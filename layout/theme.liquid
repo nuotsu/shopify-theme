@@ -3,10 +3,35 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{{ page_title }}</title>
+
+  {% render 'metadata' %}
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {% render 'css-variables' %}
+  {% render 'fonts' %}
+  {{ 'tailwind.min.css' | asset_url | stylesheet_tag: preload: true }}
+
+  {%- if request.page_type == 'product' -%}
+    <script type="application/ld+json">
+      {{ product | structured_data }}
+    </script>
+
+    <meta property="og:price:amount" content="{{ product.price | money_without_currency | strip_html }}">
+    <meta property="og:price:currency" content="{{ cart.currency.iso_code }}">
+  {%- endif -%}
+
   {{ content_for_header }}
 </head>
 <body>
-  {{ content_for_layout }}
+  {% sections 'header-group' %}
+
+  <main>
+    {{ content_for_layout }}
+  </main>
+
+  {% sections 'footer-group' %}
+
+  {% render 'scripts' %}
 </body>
 </html>

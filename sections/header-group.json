@@ -8,7 +8,15 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {
-    "content_for_index": []
-  }
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header"
+  ]
 }

@@ -1,0 +1,4 @@
+{% unless settings.font_primary.system? %}
+  <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  {{ settings.font_primary | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+{% endunless %}

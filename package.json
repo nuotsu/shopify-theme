@@ -2,7 +2,10 @@
   "name": "shopify-theme",
   "type": "module",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "css:dev": "bunx @tailwindcss/cli -i ./assets/tailwind.css -o ./assets/tailwind.min.css --watch",
+    "css:build": "bunx @tailwindcss/cli -i ./assets/tailwind.css -o ./assets/tailwind.min.css --minify"
+  },
   "devDependencies": {
     "@tailwindcss/cli": "^4.3.2",
     "prettier": "^3.9.4",

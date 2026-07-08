@@ -1,3 +1,5 @@
-.git/
-.cursor/
-node_modules/
+.git/*
+.cursor/*
+.vscode/*
+
+node_modules/*

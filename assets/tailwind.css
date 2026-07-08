@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-primary: var(--font-primary);
+}
+
+@custom-variant hover (&:hover);
+
+@layer base {
+  body {
+    @apply font-primary;
+  }
+}

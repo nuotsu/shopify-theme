@@ -1,0 +1,56 @@
+<nav class="md:flex items-center">
+  {% for link in section.settings.menu.links %}
+    {%- case link.levels -%}
+      {%- when 2 -%} {% # megamenu %}
+        <details name="header-{{ section.id }}" data-hover-details>
+          <summary>{{ link.title }}</summary>
+
+          <div class="md:absolute top-full inset-x-0">
+            {% for lv1_link in link.links %}
+              <details>
+                <summary>{{ lv1_link.title }}</summary>
+                <ul>
+                  {% for lv2_link in lv1_link.links %}
+                    <li>
+                      <a href="{{ lv2_link.url }}">{{ lv2_link.title }}</a>
+                    </li>
+                  {% endfor %}
+                </ul>
+              </details>
+            {% endfor %}
+          </div>
+        </details>
+
+      {%- when 1 -%} {% # dropdown %}
+        <details class="relative" name="header-{{ section.id }}" data-hover-details>
+          <summary>{{ link.title }}</summary>
+          <ul class="md:absolute top-full left-0 md:min-w-max">
+            {% for lv1_link in link.links %}
+              <li>
+                <a href="{{ lv1_link.url }}">{{ lv1_link.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </details>
+
+      {%- else -%} {% # top-level link %}
+        <a href="{{ link.url }}">{{ link.title }}</a>
+    {%- endcase -%}
+  {% endfor %}
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "tag": "header",
+  "class": "sticky top-0",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

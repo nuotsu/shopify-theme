@@ -1,0 +1,10 @@
+{% style %}
+  {{ settings.font_primary | font_face: font_display: 'swap' }}
+  {{ settings.font_primary | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {{ settings.font_primary | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.font_primary | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+
+  :root {
+    --font-primary: {{ settings.font_primary.family }}, {{ settings.font_primary.fallback_families }};
+  }
+{% endstyle %}

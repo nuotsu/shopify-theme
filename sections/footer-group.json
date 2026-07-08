@@ -8,7 +8,15 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {
-    "content_for_index": []
-  }
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "footer"
+  ]
 }
