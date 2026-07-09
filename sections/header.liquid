@@ -1,43 +1,85 @@
-<nav class="md:flex items-center">
-  {% for link in section.settings.menu.links %}
-    {%- case link.levels -%}
-      {%- when 2 -%} {% # megamenu %}
-        <details name="header-{{ section.id }}" data-hover-details>
-          <summary>{{ link.title }}</summary>
+<div class="header-layout grid items-center gap-x-4">
+  <a href="{{ routes.root_url }}" class="[grid-area:logo]">
+    {{ shop.name }}
+  </a>
 
-          <div class="md:absolute top-full inset-x-0">
-            {% for lv1_link in link.links %}
-              <details>
-                <summary>{{ lv1_link.title }}</summary>
-                <ul>
-                  {% for lv2_link in lv1_link.links %}
-                    <li>
-                      <a href="{{ lv2_link.url }}">{{ lv2_link.title }}</a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              </details>
-            {% endfor %}
-          </div>
-        </details>
+  <nav class="[grid-area:menu] md:flex items-center gap-x-4 max-md:header-not-open:hidden">
+    {% for link in section.settings.menu.links %}
+      {%- case link.levels -%}
+        {%- when 2 -%} {% # megamenu %}
+          <details name="header-{{ section.id }}" data-hover-details>
+            <summary>{{ link.title }}</summary>
+            <div class="md:absolute top-full inset-x-0">
+              {% for lv1_link in link.links %}
+                <details>
+                  <summary>{{ lv1_link.title }}</summary>
+                  <ul>
+                    {% for lv2_link in lv1_link.links %}
+                      <li><a href="{{ lv2_link.url }}">{{ lv2_link.title }}</a></li>
+                    {% endfor %}
+                  </ul>
+                </details>
+              {% endfor %}
+            </div>
+          </details>
 
-      {%- when 1 -%} {% # dropdown %}
-        <details class="relative" name="header-{{ section.id }}" data-hover-details>
-          <summary>{{ link.title }}</summary>
-          <ul class="md:absolute top-full left-0 md:min-w-max">
-            {% for lv1_link in link.links %}
-              <li>
-                <a href="{{ lv1_link.url }}">{{ lv1_link.title }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-        </details>
+        {%- when 1 -%} {% # dropdown %}
+          <details class="relative" name="header-{{ section.id }}" data-hover-details>
+            <summary>{{ link.title }}</summary>
+            <ul class="md:absolute top-full left-0 md:min-w-max">
+              {% for lv1_link in link.links %}
+                <li><a href="{{ lv1_link.url }}">{{ lv1_link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </details>
 
-      {%- else -%} {% # top-level link %}
-        <a href="{{ link.url }}">{{ link.title }}</a>
-    {%- endcase -%}
-  {% endfor %}
-</nav>
+        {%- else -%} {% # top-level link %}
+          <a href="{{ link.url }}">{{ link.title }}</a>
+      {%- endcase -%}
+    {% endfor %}
+  </nav>
+
+  <nav class="[grid-area:actions] md:flex items-center gap-x-4">
+    <details class="relative" name="header-{{ section.id }}" data-hover-details>
+      <summary>Account</summary>
+      <ul class="md:absolute top-full left-0 md:min-w-max">
+        {% if customer %}
+          <li><a href="{{ routes.account_url }}">My Account</a></li>
+          <li><a href="{{ routes.account_logout_url }}">Logout</a></li>
+        {% else %}
+          <li><a href="{{ routes.account_login_url }}">Login</a></li>
+          <li><a href="{{ routes.account_register_url }}">Register</a></li>
+        {% endif %}
+      </ul>
+    </details>
+
+    <a href="{{ routes.cart_url }}">
+      Cart
+      <span class="{% if cart.item_count > 0 %} hidden {% endif %}">({{ cart.item_count }})</span>
+    </a>
+  </nav>
+
+  <label class="[grid-area:toggle] md:hidden">
+    <input id="header-open" type="checkbox" />
+    Toggle
+  </label>
+</div>
+
+<style>
+  @scope {
+    :scope {
+      .header-layout {
+        grid-template: 'logo menu actions' / auto 1fr auto;
+
+        @media (width < 48rem) {
+          grid-template:
+            'logo actions toggle' auto
+            'menu menu menu' auto / 1fr auto auto;
+        }
+      }
+    }
+  }
+</style>
 
 {% schema %}
 {
@@ -49,7 +91,8 @@
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
-      "default": "main-menu"
+      "default": "main-menu",
+      "info": "1 level of nesting = dropdown; 2 levels = megamenu."
     }
   ]
 }

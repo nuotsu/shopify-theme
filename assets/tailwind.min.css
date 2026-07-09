@@ -6,6 +6,7 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --spacing: 0.25rem;
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
     --font-primary: var(--font-primary);
@@ -181,14 +182,32 @@
   .contents {
     display: contents;
   }
-  .flex {
-    display: flex;
+  .grid {
+    display: grid;
+  }
+  .hidden {
+    display: none;
   }
   .items-center {
     align-items: center;
   }
+  .gap-x-4 {
+    column-gap: calc(var(--spacing) * 4);
+  }
   .italic {
     font-style: italic;
+  }
+  .\[grid-area\:actions\] {
+    grid-area: actions;
+  }
+  .\[grid-area\:logo\] {
+    grid-area: logo;
+  }
+  .\[grid-area\:menu\] {
+    grid-area: menu;
+  }
+  .\[grid-area\:toggle\] {
+    grid-area: toggle;
   }
   .md\:absolute {
     @media (width >= 48rem) {
@@ -200,14 +219,47 @@
       display: flex;
     }
   }
+  .md\:hidden {
+    @media (width >= 48rem) {
+      display: none;
+    }
+  }
   .md\:min-w-max {
     @media (width >= 48rem) {
       min-width: max-content;
     }
   }
+  .max-md\:header-not-open\:hidden {
+    @media (width < 48rem) {
+      body:has(#header-open:not(:checked)) & {
+        display: none;
+      }
+    }
+  }
+  .md\:header-not-open\:hidden {
+    @media (width >= 48rem) {
+      body:has(#header-open:not(:checked)) & {
+        display: none;
+      }
+    }
+  }
 }
 @layer base {
+  @supports (interpolate-size: allow-keywords) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+    :open::details-content {
+      height: auto;
+    }
+  }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     font-family: var(--font-primary);
+  }
+  summary, label {
+    cursor: pointer;
   }
 }

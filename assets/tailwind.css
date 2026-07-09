@@ -6,8 +6,30 @@
 
 @custom-variant hover (&:hover);
 
+@variant header-open (body:has(#header-open:checked) &);
+@variant header-not-open (body:has(#header-open:not(:checked)) &);
+
 @layer base {
+  @supports (interpolate-size: allow-keywords) {
+    :root {
+      interpolate-size: allow-keywords;
+    }
+
+    :open::details-content {
+      height: auto;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply font-primary;
+  }
+
+  summary,
+  label {
+    cursor: pointer;
   }
 }
