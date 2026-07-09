@@ -1,0 +1,31 @@
+<button
+  class="cursor-pointer"
+  type="button"
+  commandfor="cart-drawer"
+  command="show-modal"
+>
+  Cart
+  <span class="{% unless cart.item_count > 0 %} hidden {% endunless %}">({{ cart.item_count }})</span>
+</button>
+
+<dialog
+  id="cart-drawer"
+  class="anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto w-full max-w-lg min-h-svh bg-background backdrop:transition-opacity backdrop:starting:opacity-0"
+  closedby="any"
+>
+  <header class="flex items-center gap-4 justify-between">
+    <a href="{{ routes.cart_url }}">Cart</a>
+
+    <button
+      class="cursor-pointer"
+      type="button"
+      commandfor="cart-drawer"
+      command="close"
+      aria-label="Close cart"
+    >
+      {{ 'icon-close.svg' | inline_asset_content }}
+    </button>
+  </header>
+
+  <div></div>
+</dialog>

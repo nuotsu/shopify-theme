@@ -1,10 +1,11 @@
 {% javascript %}
-// hover-details (desktop only)
   const desktopMq = window.matchMedia('(min-width: 48rem)')
+
+  // hover-details (desktop only) [data-hover-details]
   const hoverControllers = new WeakMap()
 
-  const onEnter = (e) => e.currentTarget.setAttribute('open', '')
-  const onLeave = (e) => e.currentTarget.removeAttribute('open')
+  const onHoverDetailsEnter = (e) => e.currentTarget.setAttribute('open', '')
+  const onHoverDetailsLeave = (e) => e.currentTarget.removeAttribute('open')
 
   const syncHoverDetails = () => {
     document.querySelectorAll('details[data-hover-details]').forEach((details) => {
@@ -12,8 +13,8 @@
 
       if (desktopMq.matches) {
         const controller = new AbortController()
-        details.addEventListener('mouseenter', onEnter, { signal: controller.signal })
-        details.addEventListener('mouseleave', onLeave, { signal: controller.signal })
+        details.addEventListener('mouseenter', onHoverDetailsEnter, { signal: controller.signal })
+        details.addEventListener('mouseleave', onHoverDetailsLeave, { signal: controller.signal })
         hoverControllers.set(details, controller)
       } else {
         details.removeAttribute('open')
@@ -21,6 +22,39 @@
     })
   }
 
-  syncHoverDetails()
-  desktopMq.addEventListener('change', syncHoverDetails)
+  // mobile-only details [data-mobile-only-details]
+  const mobileOnlyControllers = new WeakMap()
+
+  const onMobileOnlySummaryClick = (e) => e.preventDefault()
+  const onMobileOnlyToggle = (e) => e.currentTarget.setAttribute('open', '')
+
+  const syncMobileOnlyDetails = () => {
+    document.querySelectorAll('details[data-mobile-only-details]').forEach((details) => {
+      mobileOnlyControllers.get(details)?.abort()
+
+      if (desktopMq.matches) {
+        details.setAttribute('open', '')
+        const controller = new AbortController()
+        const { signal } = controller
+
+        details.querySelector('summary')?.addEventListener('click', onMobileOnlySummaryClick, {
+          capture: true,
+          signal,
+        })
+        details.addEventListener('toggle', onMobileOnlyToggle, { signal })
+
+        mobileOnlyControllers.set(details, controller)
+      } else {
+        details.removeAttribute('open')
+      }
+    })
+  }
+
+  const syncDetails = () => {
+    syncHoverDetails()
+    syncMobileOnlyDetails()
+  }
+
+  syncDetails()
+  desktopMq.addEventListener('change', syncDetails)
 {% endjavascript %}

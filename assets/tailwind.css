@@ -2,12 +2,15 @@
 
 @theme {
   --font-primary: var(--font-primary);
+
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
 }
 
 @custom-variant hover (&:hover);
 
-@variant header-open (body:has(#header-open:checked) &);
-@variant header-not-open (body:has(#header-open:not(:checked)) &);
+@variant menu-open (body:has(#menu-open:checked) &);
+@variant menu-not-open (body:has(#menu-open:not(:checked)) &);
 
 @layer base {
   @supports (interpolate-size: allow-keywords) {
@@ -28,8 +31,69 @@
     @apply font-primary;
   }
 
-  summary,
+  details {
+    &::details-content {
+      overflow: clip;
+      transition-duration: var(--default-transition-duration);
+      transition-property: content-visibility, block-size;
+      transition-behavior: allow-discrete;
+    }
+
+    &:not(:open)::details-content {
+      block-size: 0;
+    }
+  }
+
+  summary {
+    cursor: pointer;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
   label {
     cursor: pointer;
   }
+}
+
+@utility accordion {
+  &>summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5em;
+
+    & svg {
+      @apply shrink-0 transition-[rotate];
+    }
+  }
+
+  &:open>summary svg {
+    rotate: .5turn;
+  }
+}
+
+/* anims */
+
+@utility anim-fade {
+	transition: var(--default-transition-duration) var(--default-transition-timing-function);
+	transition-property: opacity, translate, scale;
+	@apply starting:opacity-0;
+}
+
+@utility anim-fade-to-l {
+	@apply anim-fade starting:translate-x-4;
+}
+
+@utility anim-fade-to-r {
+	@apply anim-fade starting:-translate-x-4;
+}
+
+@utility anim-fade-to-t {
+	@apply anim-fade starting:translate-y-4;
+}
+
+@utility anim-fade-to-b {
+	@apply anim-fade starting:-translate-y-4;
 }

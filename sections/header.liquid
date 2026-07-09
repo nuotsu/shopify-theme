@@ -3,15 +3,18 @@
     {{ shop.name }}
   </a>
 
-  <nav class="[grid-area:menu] md:flex items-center gap-x-4 max-md:header-not-open:hidden">
+  <nav class="[grid-area:menu] md:flex items-center gap-x-4 max-md:menu-not-open:hidden">
     {% for link in section.settings.menu.links %}
       {%- case link.levels -%}
         {%- when 2 -%} {% # megamenu %}
-          <details name="header-{{ section.id }}" data-hover-details>
-            <summary>{{ link.title }}</summary>
-            <div class="md:absolute top-full inset-x-0">
+          <details class="accordion" name="header-{{ section.id }}" data-hover-details>
+            <summary>
+              {{ link.title }}
+              {{ 'icon-chevron-down.svg' | inline_asset_content }}
+            </summary>
+            <div class="anim-fade-to-b md:absolute top-full inset-x-0 md:bg-background md:shadow-lg columns-[24ch] gap-x-4">
               {% for lv1_link in link.links %}
-                <details>
+                <details class="break-inside-avoid" data-mobile-only-details>
                   <summary>{{ lv1_link.title }}</summary>
                   <ul>
                     {% for lv2_link in lv1_link.links %}
@@ -24,9 +27,12 @@
           </details>
 
         {%- when 1 -%} {% # dropdown %}
-          <details class="relative" name="header-{{ section.id }}" data-hover-details>
-            <summary>{{ link.title }}</summary>
-            <ul class="md:absolute top-full left-0 md:min-w-max">
+          <details class="accordion relative" name="header-{{ section.id }}" data-hover-details>
+            <summary>
+              {{ link.title }}
+              {{ 'icon-chevron-down.svg' | inline_asset_content }}
+            </summary>
+            <ul class="anim-fade-to-b md:absolute top-full left-0 md:min-w-max md:bg-background md:shadow-lg">
               {% for lv1_link in link.links %}
                 <li><a href="{{ lv1_link.url }}">{{ lv1_link.title }}</a></li>
               {% endfor %}
@@ -39,10 +45,13 @@
     {% endfor %}
   </nav>
 
-  <nav class="[grid-area:actions] md:flex items-center gap-x-4">
-    <details class="relative" name="header-{{ section.id }}" data-hover-details>
-      <summary>Account</summary>
-      <ul class="md:absolute top-full left-0 md:min-w-max">
+  <nav class="[grid-area:actions] flex items-center gap-x-4">
+    <details class="accordion relative" name="header-{{ section.id }}" data-hover-details>
+      <summary>
+        Account
+        {{ 'icon-chevron-down.svg' | inline_asset_content }}
+      </summary>
+      <ul class="anim-fade-to-b md:absolute top-full left-0 md:min-w-max md:bg-background md:shadow-lg">
         {% if customer %}
           <li><a href="{{ routes.account_url }}">My Account</a></li>
           <li><a href="{{ routes.account_logout_url }}">Logout</a></li>
@@ -53,15 +62,20 @@
       </ul>
     </details>
 
-    <a href="{{ routes.cart_url }}">
-      Cart
-      <span class="{% if cart.item_count > 0 %} hidden {% endif %}">({{ cart.item_count }})</span>
-    </a>
+    {% if settings.enable_cart_drawer %}
+      {% render 'cart-drawer' %}
+    {% else %}
+      <a href="{{ routes.cart_url }}">
+        Cart
+        <span class="{% unless cart.item_count > 0 %} hidden {% endunless %}">({{ cart.item_count }})</span>
+      </a>
+    {% endif %}
   </nav>
 
-  <label class="[grid-area:toggle] md:hidden">
-    <input id="header-open" type="checkbox" />
-    Toggle
+  <label class="[grid-area:toggle] group/toggle md:hidden" aria-label="Toggle menu">
+    <input id="menu-open" type="checkbox" hidden />
+    <span class="menu-open:hidden">{{ 'icon-menu.svg' | inline_asset_content }}</span>
+    <span class="menu-not-open:hidden">{{ 'icon-close.svg' | inline_asset_content }}</span>
   </label>
 </div>
 
@@ -85,7 +99,7 @@
 {
   "name": "Header",
   "tag": "header",
-  "class": "sticky top-0",
+  "class": "sticky top-0 border-b",
   "settings": [
     {
       "type": "link_list",
