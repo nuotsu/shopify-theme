@@ -5,6 +5,9 @@
 
   --color-background: var(--color-background);
   --color-foreground: var(--color-foreground);
+
+  --spacing-lh: 1lh;
+  --spacing-ch: 1ch;
 }
 
 @custom-variant hover (&:hover);
@@ -29,6 +32,10 @@
 
   body {
     @apply font-primary;
+
+    &:has(#menu-open:checked):has(.header-layout nav > details:open) {
+      overflow: hidden;
+    }
   }
 
   details {
@@ -57,13 +64,77 @@
   }
 }
 
-/* layout */
+/* typography */
 
-@utility section {
-  @apply mx-auto max-w-(--section-width);
+@utility h-base {
+  @apply font-bold;
+}
+@utility h0 {
+  @apply h-base;
+}
+@utility h1 {
+  @apply h-base;
+}
+@utility h2 {
+  @apply h-base;
+}
+@utility h3 {
+  @apply h-base;
+}
+@utility h4 {
+  @apply h-base;
+}
+@utility h5 {
+  @apply h-base;
+}
+@utility h6 {
+  @apply h-base;
+}
+
+@utility prose {
+  @apply space-y-[1em];
+
+  h1 { @apply h1; }
+  h2 { @apply h2; }
+  h3 { @apply h3; }
+  h4 { @apply h4; }
+  h5 { @apply h5; }
+  h6 { @apply h6; }
+}
+
+/* ctas, links, inputs */
+
+@utility action-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: .5em;
+}
+
+@utility action {
+  @apply action-base;
+}
+
+@utility action-outline {
+  @apply action-base;
+}
+
+@utility ghost {
+  @apply action-base;
+}
+
+@utility link {
+  text-decoration: underline;
 }
 
 /* components */
+
+@utility section {
+  max-width: var(--section-width);
+  padding: var(--section-vertical-padding) var(--section-horizontal-padding);
+  @apply mx-auto;
+}
 
 @utility accordion {
   &>summary {
@@ -95,6 +166,13 @@
 
     @apply anim-fade fixed z-1 min-w-max bg-background shadow-lg origin-top starting:-translate-y-1 starting:scale-95;
   }
+}
+
+/* utilities */
+
+@utility full-bleed {
+  width: 100vw;
+  margin-inline: calc(50% - 50vw);
 }
 
 /* anims */

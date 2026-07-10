@@ -22,7 +22,7 @@
       },
       {
         "type": "header",
-        "content": "Layout"
+        "content": "Sections"
       },
       {
         "type": "range",
@@ -33,6 +33,26 @@
         "step": 100,
         "unit": "px",
         "default": 1200,
+      },
+      {
+        "type": "range",
+        "id": "section_vertical_padding",
+        "label": "Vertical padding",
+        "min": 0,
+        "max": 4,
+        "step": 1,
+        "unit": "rem",
+        "default": 3,
+      },
+      {
+        "type": "range",
+        "id": "section_horizontal_padding",
+        "label": "Horizontal padding",
+        "min": 0,
+        "max": 4,
+        "step": 1,
+        "unit": "rem",
+        "default": 1,
       }
     ]
   },

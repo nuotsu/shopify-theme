@@ -25,26 +25,36 @@
   // mobile-only details [data-mobile-only-details]
   const mobileOnlyControllers = new WeakMap()
 
-  const onMobileOnlySummaryClick = (e) => e.preventDefault()
-  const onMobileOnlyToggle = (e) => e.currentTarget.setAttribute('open', '')
+  const onMobileOnlyDetailsSummaryClick = (e) => e.preventDefault()
+  const onMobileOnlyDetailsToggle = (e) => e.currentTarget.setAttribute('open', '')
 
   const syncMobileOnlyDetails = () => {
     document.querySelectorAll('details[data-mobile-only-details]').forEach((details) => {
       mobileOnlyControllers.get(details)?.abort()
 
+      const storedName =
+        details.getAttribute('data-name') ?? details.getAttribute('name')
+
+      if (storedName && !details.hasAttribute('data-name')) {
+        details.setAttribute('data-name', storedName)
+      }
+
       if (desktopMq.matches) {
+        details.removeAttribute('name')
         details.setAttribute('open', '')
         const controller = new AbortController()
         const { signal } = controller
 
-        details.querySelector('summary')?.addEventListener('click', onMobileOnlySummaryClick, {
-          capture: true,
-          signal,
-        })
-        details.addEventListener('toggle', onMobileOnlyToggle, { signal })
+        details.querySelector('summary')?.addEventListener('click', onMobileOnlyDetailsSummaryClick, { capture: true, signal, })
+        details.addEventListener('toggle', onMobileOnlyDetailsToggle, { signal })
 
         mobileOnlyControllers.set(details, controller)
       } else {
+        if (storedName) {
+          details.setAttribute('name', storedName)
+        } else {
+          details.removeAttribute('name')
+        }
         details.removeAttribute('open')
       }
     })

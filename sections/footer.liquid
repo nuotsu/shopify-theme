@@ -1,13 +1,95 @@
+<div class="section flex flex-wrap max-md:flex-col md:items-start justify-between gap-4">
+  <div class="md:min-w-[24ch]">
+    <a class="inline-block" href="{{ routes.root_url }}">
+      {{ shop.name }}
+    </a>
+
+    {%- if section.settings.blurb -%}
+      <div class="prose">
+        {{ section.settings.blurb }}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <nav
+    class="flex flex-wrap max-md:flex-col gap-4 md:*:w-(--column-width) leading-tight"
+    style="--column-width: {{ section.settings.column_width | default: 200 }}px;"
+  >
+    {%- for link in section.settings.menu.links -%}
+      {%- case link.levels -%}
+        {%- when 1 -%}
+          <details
+            class="group/lv1 accordion"
+            open
+            {% if section.settings.collapsible_menu %} data-mobile-only-details {% endif %}
+          >
+            <summary
+              class="group-open/lv1:font-bold [&_svg]:md:hidden"
+              {% unless section.settings.collapsible_menu %} onclick="event.preventDefault()" {% endunless %}
+            >
+              {{ link.title | link_to: link.url, class: 'block py-0.5 hover:underline' }}
+              {% if section.settings.collapsible_menu %} {{ 'icon-chevron-down.svg' | inline_asset_content }} {% endif %}
+            </summary>
+            <ul>
+              {%- for lv1_link in link.links -%}
+                <li>{{ lv1_link.title | link_to: lv1_link.url, class: 'block py-0.5 hover:underline' }}</li>
+              {%- endfor -%}
+            </ul>
+          </details>
+
+        {%- else -%}
+          {{ link.title | link_to: link.url }}
+
+      {%- endcase -%}
+    {%- endfor -%}
+  </nav>
+</div>
+
+<style>
+  @scope {
+    :scope {
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+  }
+</style>
+
 {% schema %}
 {
   "name": "Footer",
   "tag": "footer",
+  "class": "bg-background color-foreground",
   "settings": [
+    {
+      "type": "richtext",
+      "id": "blurb",
+      "label": "Blurb"
+    },
+    {
+      "type": "header",
+      "content": "Menu"
+    },
     {
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
       "default": "footer"
+    },
+    {
+      "type": "range",
+      "id": "column_width",
+      "label": "Column width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "checkbox",
+      "id": "collapsible_menu",
+      "label": "Collapsible menu",
+      "info": "Mobile only",
+      "default": false
     }
   ]
 }

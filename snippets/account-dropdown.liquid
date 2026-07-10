@@ -9,13 +9,16 @@
     {{ 'icon-chevron-down.svg' | inline_asset_content }}
   </summary>
 
-  <ul>
+  <ul class="
+    max-md:anim-fade-to-b p-4 max-md:py-0 max-md:border-l max-md:mb-4
+    [&_a]:block [&_a]:py-0.5 [&_a]:hover:underline
+  ">
     {% if customer %}
-      <li><a href="{{ routes.account_url }}">My Account</a></li>
-      <li><a href="{{ routes.account_logout_url }}">Logout</a></li>
+      <li>{{ 'My Account' | link_to: routes.account_url }}</li>
+      <li>{{ 'Logout' | link_to: routes.account_logout_url }}</li>
     {% else %}
-      <li><a href="{{ routes.account_login_url }}">Login</a></li>
-      <li><a href="{{ routes.account_register_url }}">Register</a></li>
+      <li>{{ 'Login' | link_to: routes.account_login_url }}</li>
+      <li>{{ 'Register' | link_to: routes.account_register_url }}</li>
     {% endif %}
   </ul>
 </details>
