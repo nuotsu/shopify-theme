@@ -135,6 +135,7 @@
 /* components */
 
 @utility section {
+  width: 100%;
   max-width: var(--section-width);
   padding: var(--section-vertical-padding) var(--section-horizontal-padding);
   @apply mx-auto;

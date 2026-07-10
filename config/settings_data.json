@@ -10,5 +10,14 @@
 {
   "current": {
     "content_for_index": []
+  },
+  "presets": {
+    "Default": {
+      "font_primary": "geist_n4"
+    },
+    "Brutalist": {
+      "font_primary": "geist_mono_n4",
+      "section_width": 2000
+    }
   }
 }

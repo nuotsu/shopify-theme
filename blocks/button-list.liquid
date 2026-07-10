@@ -1,9 +1,14 @@
-<div
-  class="flex flex-wrap items-center gap-[.25em_.5em] max-md:*:w-full"
-  style="justify-content: {{ block.settings.justify_content }};"
->
+<div class="button-list flex flex-wrap items-center gap-[.25em_.5em] max-md:*:w-full">
   {% content_for 'blocks' %}
 </div>
+
+<style>
+  @scope {
+    .button-list {
+      justify-content: {{ block.settings.justify_content }};
+    }
+  }
+</style>
 
 {% schema %}
 {
@@ -30,13 +35,13 @@
       "default": "start"
     }
   ],
-  "blocks": [{ "type": "button" }],
+  "blocks": [{ "type": "_button" }],
   "presets": [
     {
       "name": "Button list",
       "blocks": [
         {
-          "type": "button",
+          "type": "_button",
           "settings": {
             "label": "Shop now"
           }

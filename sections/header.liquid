@@ -10,7 +10,7 @@
       {%- case link.levels -%}
         {%- when 2 -%} {% # megamenu %}
           <details class="group/lv1 accordion" name="header-{{ section.id }}" data-hover-details>
-            <summary class="max-md:group-open/lv1:font-bold py-1">
+            <summary class="max-md:group-open/lv1:font-bold py-1 md:text-center">
               {{ link.title }}
               {{ 'icon-chevron-down.svg' | inline_asset_content }}
             </summary>
@@ -74,7 +74,7 @@
             name="header-{{ section.id }}"
             data-hover-details
           >
-            <summary class="max-md:group-open/lv1:font-bold py-1">
+            <summary class="max-md:group-open/lv1:font-bold py-1 md:text-center">
               {{ link.title }}
               {{ 'icon-chevron-down.svg' | inline_asset_content }}
             </summary>
@@ -86,7 +86,7 @@
           </details>
 
         {%- else -%} {% # top-level link %}
-          {{ link.title | link_to: link.url, class: 'block py-1' }}
+          {{ link.title | link_to: link.url, class: 'block py-1 md:text-center' }}
       {%- endcase -%}
     {%- endfor -%}
 

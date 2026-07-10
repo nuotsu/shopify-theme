@@ -1,0 +1,270 @@
+{%- liquid
+  if block.settings.daylight_savings
+    assign add_time = 3600
+  else
+    assign add_time = 0
+  endif
+
+  assign today_date = 'now' | date: '%s' | plus: add_time
+  assign start_date = block.settings.start_datetime | append: ' -0800' | date: '%s' | times: 1
+  assign end_date = block.settings.end_datetime | append: ' -0800' | date: '%s' | times: 1
+
+  if block.settings.enable_scheduling and today_date >= start_date and today_date <= end_date
+    assign hero = block
+  elsif block.settings.enable_scheduling == false
+    assign hero = block
+  endif
+-%}
+
+{% if hero %}
+  {%- if hero.settings.image -%}
+    <picture style="opacity: {{ hero.settings.image_opacity }}%;">
+      {%- if hero.settings.image_mobile -%}
+        <source
+          srcset="{{ hero.settings.image_mobile | image_url: width: 800 }}"
+          media="(max-width: 767px)"
+        />
+      {%- endif -%}
+
+      {{ hero.settings.image
+        | image_url: width: settings.section_width
+        | image_tag: class: 'min-h-full object-cover', loading: hero.settings.image_loading, draggable: false
+      }}
+    </picture>
+  {%- endif -%}
+
+  <div
+    class="section relative flex flex-col"
+    style="
+      align-self: {{ hero.settings.vertical_alignment }};
+      align-items: {{ hero.settings.horizontal_alignment }};
+      text-align: {{ hero.settings.horizontal_alignment }};
+    "
+  >
+    <header
+      class="prose"
+      style="max-width: {{ hero.settings.content_width }}px;"
+    >
+      {{ hero.settings.content }}
+
+      {% content_for 'blocks' %}
+    </header>
+  </div>
+
+  <style>
+    @scope {
+      :scope {
+        {% if hero.settings.image_fit == 'cover' %}
+          picture {
+            position: absolute;
+            inset: 0;
+
+            img {
+              position: absolute;
+              inset: 0;
+              width: 100%;
+              height: 100%;
+            }
+          }
+        {%- else -%}
+          display: grid;
+
+          & > * {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
+          }
+        {% endif %}
+
+        .button-list {
+          justify-content: {{ hero.settings.horizontal_alignment }};
+        }
+      }
+    }
+  </style>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Hero (backdrop)",
+  "class": "relative",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h1>Heading 1</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "Content width",
+      "min": 100,
+      "max": 800,
+      "step": 10,
+      "unit": "px",
+      "default": 500
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment",
+      "label": "Horizontal alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        {
+          "value": "start",
+          "label": "Top"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "Bottom"
+        }
+      ],
+      "info": "Used with image fit 'contain'",
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Backdrop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Mobile image",
+      "visible_if": "{{ block.settings.image != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "image_loading",
+      "label": "Loading",
+      "options": [
+        {
+          "value": "eager",
+          "label": "Eager"
+        },
+        {
+          "value": "lazy",
+          "label": "Lazy"
+        }
+      ],
+      "default": "lazy",
+      "visible_if": "{{ block.settings.image != blank }}"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Fit",
+      "options": [
+        {
+          "value": "cover",
+          "label": "Cover"
+        },
+        {
+          "value": "contain",
+          "label": "Contain"
+        }
+      ],
+      "default": "cover",
+      "visible_if": "{{ block.settings.image != blank }}"
+    },
+    {
+      "type": "range",
+      "id": "image_opacity",
+      "label": "Opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100,
+      "visible_if": "{{ block.settings.image != blank }}"
+    },
+    {
+      "type": "header",
+      "content": "Scheduling"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_scheduling",
+      "label": "Enable scheduling",
+      "default": false,
+      "info": "Based on [store timezone](/admin/settings/general)."
+    },
+    {
+      "type": "text",
+      "id": "start_datetime",
+      "label": "Start datetime",
+      "placeholder": "2026-01-01 00:00:00",
+      "info": "Format: YYYY-MM-DD HH:MM:SS",
+      "visible_if": "{{ block.settings.enable_scheduling == true }}"
+    },
+    {
+      "type": "text",
+      "id": "end_datetime",
+      "label": "End datetime",
+      "placeholder": "2026-12-31 23:59:59",
+      "info": "Format: YYYY-MM-DD HH:MM:SS",
+      "visible_if": "{{ block.settings.enable_scheduling == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "daylight_savings",
+      "label": "Daylight savings",
+      "default": false,
+      "info": "Summer time (UTC+1)",
+      "visible_if": "{{ block.settings.enable_scheduling == true }}"
+    }
+  ],
+  "blocks": [
+    { "type": "button-list" }
+  ],
+  "presets": [
+    {
+      "name": "Hero (backdrop)",
+      "blocks": {
+        "button_list": {
+          "type": "button-list",
+          "name": "Button list",
+          "blocks": {
+            "button": {
+              "type": "_button"
+            }
+          },
+          "block_order": [
+            "button"
+          ]
+        }
+      },
+      "block_order": [
+        "button_list"
+      ]
+    }
+  ]
+}
+{% endschema %}
