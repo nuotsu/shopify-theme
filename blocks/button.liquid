@@ -1,0 +1,51 @@
+<a href="{{ block.settings.link }}" class="{{ block.settings.style }}">
+  {{ block.settings.label }}
+</a>
+
+{% schema %}
+{
+  "name": "Button",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "label",
+      "label": "Label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "action",
+          "label": "Action"
+        },
+        {
+          "value": "action-outline",
+          "label": "Outline"
+        },
+        {
+          "value": "ghost",
+          "label": "Ghost"
+        },
+        {
+          "value": "link",
+          "label": "Link"
+        }
+      ],
+      "default": "action"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Button"
+    }
+  ]
+}
+{% endschema %}

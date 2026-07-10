@@ -1,0 +1,48 @@
+<figure
+  class="mx-auto"
+  {%- unless block.settings.full_width -%} style="max-width: {{ block.settings.max_width }}px;" {%- endunless -%}
+>
+  {%- if block.settings.image -%}
+    {{- block.settings.image
+      | image_url: width: section.settings.image_width
+      | image_tag: class: 'w-full', loading: 'lazy'
+    -}}
+  {%- else -%}
+    {{- 'image' | placeholder_svg_tag -}}
+  {%- endif -%}
+</figure>
+
+{% schema %}
+{
+  "name": "Image",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max width",
+      "min": 100,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 600,
+      "visible_if": "{{ block.settings.full_width == false }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image"
+    }
+  ]
+}
+{% endschema %}

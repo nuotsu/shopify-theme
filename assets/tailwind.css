@@ -105,27 +105,31 @@
 /* ctas, links, inputs */
 
 @utility action-base {
+  cursor: pointer;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   gap: .5em;
+  text-align: center;
+  padding: 0.25em 0.5em;
+  border: 1px solid transparent;
+  @apply active:scale-98 transition-all;
 }
 
 @utility action {
-  @apply action-base;
+  @apply action-base bg-foreground text-background;
 }
 
 @utility action-outline {
-  @apply action-base;
+  @apply action-base bg-background text-foreground border-current;
 }
 
 @utility ghost {
-  @apply action-base;
+  @apply action-base text-inherit bg-current/2 hover:bg-current/5;
 }
 
 @utility link {
-  text-decoration: underline;
+  @apply cursor-pointer underline hover:decoration-2;
 }
 
 /* components */

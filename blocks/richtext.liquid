@@ -1,0 +1,46 @@
+<div class="prose" style="text-align: {{ block.settings.text_align }};">
+  {{ block.settings.content }}
+</div>
+
+{% schema %}
+{
+  "name": "Richtext",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h2>Heading 2</h2><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text align",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Inherit"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "inherit"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Prose"
+    }
+  ]
+}
+{% endschema %}

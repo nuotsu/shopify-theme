@@ -1,0 +1,48 @@
+<div
+  class="flex flex-wrap items-center gap-[.25em_.5em] max-md:*:w-full"
+  style="justify-content: {{ block.settings.justify_content }};"
+>
+  {% content_for 'blocks' %}
+</div>
+
+{% schema %}
+{
+  "name": "Button list",
+  "settings": [
+    {
+      "type": "select",
+      "id": "justify_content",
+      "label": "Justify content",
+      "options": [
+        {
+          "value": "start",
+          "label": "Start"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "end",
+          "label": "End"
+        }
+      ],
+      "default": "start"
+    }
+  ],
+  "blocks": [{ "type": "button" }],
+  "presets": [
+    {
+      "name": "Button list",
+      "blocks": [
+        {
+          "type": "button",
+          "settings": {
+            "label": "Shop now"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
