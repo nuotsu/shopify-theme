@@ -8,7 +8,7 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "Brand",
+    "name": "Global",
     "settings": [
       {
         "type": "header",
@@ -19,6 +19,20 @@
         "id": "font_primary",
         "label": "Primary Font",
         "default": "geist_n4"
+      },
+      {
+        "type": "header",
+        "content": "Layout"
+      },
+      {
+        "type": "range",
+        "id": "section_width",
+        "label": "Section width",
+        "min": 800,
+        "max": 2000,
+        "step": 100,
+        "unit": "px",
+        "default": 1200,
       }
     ]
   },

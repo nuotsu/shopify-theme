@@ -1,0 +1,21 @@
+<details
+  class="accordion md:dropdown {{ class }}"
+  style="--anchor-name: --account-dropdown;"
+  name="header-{{ section.id }}"
+  data-hover-details
+>
+  <summary>
+    Account
+    {{ 'icon-chevron-down.svg' | inline_asset_content }}
+  </summary>
+
+  <ul>
+    {% if customer %}
+      <li><a href="{{ routes.account_url }}">My Account</a></li>
+      <li><a href="{{ routes.account_logout_url }}">Logout</a></li>
+    {% else %}
+      <li><a href="{{ routes.account_login_url }}">Login</a></li>
+      <li><a href="{{ routes.account_register_url }}">Register</a></li>
+    {% endif %}
+  </ul>
+</details>

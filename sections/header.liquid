@@ -1,4 +1,4 @@
-<div class="header-layout grid items-center gap-x-4">
+<div class="header-layout section grid items-center gap-x-4">
   <a href="{{ routes.root_url }}" class="[grid-area:logo]">
     {{ shop.name }}
   </a>
@@ -12,27 +12,41 @@
               {{ link.title }}
               {{ 'icon-chevron-down.svg' | inline_asset_content }}
             </summary>
-            <div class="anim-fade-to-b md:absolute top-full inset-x-0 md:bg-background md:shadow-lg columns-[24ch] gap-x-4">
-              {% for lv1_link in link.links %}
-                <details class="break-inside-avoid" data-mobile-only-details>
-                  <summary>{{ lv1_link.title }}</summary>
-                  <ul>
-                    {% for lv2_link in lv1_link.links %}
-                      <li><a href="{{ lv2_link.url }}">{{ lv2_link.title }}</a></li>
-                    {% endfor %}
-                  </ul>
-                </details>
-              {% endfor %}
+            <div class="anim-fade-to-b md:absolute top-full inset-x-0 md:bg-background md:shadow-lg">
+              <div class="section columns-[24ch] gap-x-4">
+                {% for lv1_link in link.links %}
+                  {%- case lv1_link.levels -%}
+                    {%- when 1 -%}
+                      <details class="break-inside-avoid" open data-mobile-only-details>
+                        <summary>{{ lv1_link.title }}</summary>
+                        <ul>
+                          {% for lv2_link in lv1_link.links %}
+                            <li><a href="{{ lv2_link.url }}">{{ lv2_link.title }}</a></li>
+                          {% endfor %}
+                        </ul>
+                      </details>
+
+                    {%- else -%}
+                      <a href="{{ lv1_link.url }}">{{ lv1_link.title }}</a>
+
+                  {%- endcase -%}
+                {% endfor %}
+              </div>
             </div>
           </details>
 
         {%- when 1 -%} {% # dropdown %}
-          <details class="accordion relative" name="header-{{ section.id }}" data-hover-details>
+          <details
+            class="accordion md:dropdown"
+            style="--anchor-name: --header-dropdown-{{ forloop.index }};"
+            name="header-{{ section.id }}"
+            data-hover-details
+          >
             <summary>
               {{ link.title }}
               {{ 'icon-chevron-down.svg' | inline_asset_content }}
             </summary>
-            <ul class="anim-fade-to-b md:absolute top-full left-0 md:min-w-max md:bg-background md:shadow-lg">
+            <ul class="max-md:anim-fade-to-b">
               {% for lv1_link in link.links %}
                 <li><a href="{{ lv1_link.url }}">{{ lv1_link.title }}</a></li>
               {% endfor %}
@@ -43,24 +57,12 @@
           <a href="{{ link.url }}">{{ link.title }}</a>
       {%- endcase -%}
     {% endfor %}
+
+    {% render 'account-dropdown', section: section, class: 'md:hidden' %}
   </nav>
 
   <nav class="[grid-area:actions] flex items-center gap-x-4">
-    <details class="accordion relative" name="header-{{ section.id }}" data-hover-details>
-      <summary>
-        Account
-        {{ 'icon-chevron-down.svg' | inline_asset_content }}
-      </summary>
-      <ul class="anim-fade-to-b md:absolute top-full left-0 md:min-w-max md:bg-background md:shadow-lg">
-        {% if customer %}
-          <li><a href="{{ routes.account_url }}">My Account</a></li>
-          <li><a href="{{ routes.account_logout_url }}">Logout</a></li>
-        {% else %}
-          <li><a href="{{ routes.account_login_url }}">Login</a></li>
-          <li><a href="{{ routes.account_register_url }}">Register</a></li>
-        {% endif %}
-      </ul>
-    </details>
+    {% render 'account-dropdown', section: section, class: 'max-md:hidden' %}
 
     {% if settings.enable_cart_drawer %}
       {% render 'cart-drawer' %}
@@ -99,7 +101,7 @@
 {
   "name": "Header",
   "tag": "header",
-  "class": "sticky top-0 border-b",
+  "class": "sticky top-0 z-10 bg-background border-b",
   "settings": [
     {
       "type": "link_list",
