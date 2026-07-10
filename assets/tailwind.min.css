@@ -245,6 +245,9 @@
     padding: var(--section-vertical-padding) var(--section-horizontal-padding);
     margin-inline: auto;
   }
+  .mx-auto {
+    margin-inline: auto;
+  }
   .ml-auto {
     margin-left: auto;
   }

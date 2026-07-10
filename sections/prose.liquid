@@ -1,10 +1,179 @@
+<div class="section prose">
+  {{ section.settings.content }}
+
+  {%- for block in section.blocks -%}
+    {%- case block.type -%}
+      {%- when 'richtext' -%}
+        <div
+          class="prose"
+          style="text-align: {{ block.settings.text_align }};"
+          {{ block.shopify_attributes }}
+        >
+          {{ block.settings.content }}
+        </div>
+
+      {%- when 'image' -%}
+        <figure
+          class="mx-auto"
+          {%- unless block.settings.full_width -%} style="max-width: {{ block.settings.max_width }}px;" {%- endunless -%}
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.image -%}
+            {{- block.settings.image
+              | image_url: width: section.settings.image_width
+              | image_tag: class: 'w-full', loading: 'lazy'
+            -}}
+          {%- else -%}
+            {{- 'image' | placeholder_svg_tag -}}
+          {%- endif -%}
+        </figure>
+
+    {%- endcase -%}
+  {%- endfor -%}
+</div>
+
+<style>
+  @scope {
+    .section {
+      --section-width:
+      {%- if section.settings.section_full_width -%} 100%
+      {%- else -%} {{ section.settings.section_width }}px
+      {%- endif -%};
+      text-align: {{ section.settings.text_align }};
+    }
+  }
+</style>
+
 {% schema %}
 {
   "name": "Prose",
-  "settings": [],
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text align",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Section"
+    },
+    {
+      "type": "checkbox",
+      "id": "section_full_width",
+      "label": "Full width",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "section_width",
+      "label": "Section width",
+      "min": 500,
+      "max": 2000,
+      "step": 100,
+      "unit": "px",
+      "default": 1200,
+      "visible_if": "{{ section.settings.section_full_width == false }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "richtext",
+      "name": "Richtext",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content",
+          "default": "<h2>Heading 2</h2><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+        },
+        {
+          "type": "select",
+          "id": "text_align",
+          "label": "Text align",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Inherit"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "default": "left"
+        }
+      ]
+    },
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "full_width",
+          "label": "Full width",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "max_width",
+          "label": "Max width",
+          "min": 100,
+          "max": 1600,
+          "step": 50,
+          "unit": "px",
+          "default": 600,
+          "visible_if": "{{ block.settings.full_width == false }}"
+        }
+      ]
+    }
+  ],
   "presets": [
     {
-      "name": "Prose"
+      "name": "Prose",
+      "settings": {
+        "content": "<h1>Heading 1</h1><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+      }
+    },
+    {
+      "name": "Prose with page content",
+      "settings": {
+        "content": "<h1>{{ page.title }}</h1>{{ page.content }}"
+      },
+      "category": "Page"
     }
   ]
 }
