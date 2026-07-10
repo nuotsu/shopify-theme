@@ -27,12 +27,12 @@
               class="group-open/lv1:font-bold [&_svg]:md:hidden"
               {% unless section.settings.collapsible_menu %} onclick="event.preventDefault()" {% endunless %}
             >
-              {{ link.title | link_to: link.url, class: 'block py-0.5 hover:underline' }}
+              {{ link.title | link_to: link.url, class: 'block py-1 hover:underline' }}
               {% if section.settings.collapsible_menu %} {{ 'icon-chevron-down.svg' | inline_asset_content }} {% endif %}
             </summary>
             <ul>
               {%- for lv1_link in link.links -%}
-                <li>{{ lv1_link.title | link_to: lv1_link.url, class: 'block py-0.5 hover:underline' }}</li>
+                <li>{{ lv1_link.title | link_to: lv1_link.url, class: 'block py-1 hover:underline' }}</li>
               {%- endfor -%}
             </ul>
           </details>

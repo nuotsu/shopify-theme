@@ -1,14 +1,16 @@
+{%- assign megamenu_cards = section.blocks | where: 'type', 'megamenu_card' -%}
+
 <div class="header-layout section grid items-center gap-x-4 p-4 max-h-svh overflow-y-auto">
   <a class="inline-block" href="{{ routes.root_url }}" class="[grid-area:logo]">
     {{ shop.name }}
   </a>
 
-  <nav class="[grid-area:menu] md:flex items-center gap-x-4 max-md:menu-not-open:hidden max-md:mt-4">
+  <nav class="[grid-area:menu] md:flex items-center gap-x-4 max-md:menu-not-open:hidden max-md:mt-4 leading-tight">
     {%- for link in section.settings.menu.links -%}
       {%- case link.levels -%}
         {%- when 2 -%} {% # megamenu %}
           <details class="group/lv1 accordion" name="header-{{ section.id }}" data-hover-details>
-            <summary class="max-md:group-open/lv1:font-bold">
+            <summary class="max-md:group-open/lv1:font-bold py-1">
               {{ link.title }}
               {{ 'icon-chevron-down.svg' | inline_asset_content }}
             </summary>
@@ -18,19 +20,46 @@
                   {%- case lv1_link.levels -%}
                     {%- when 1 -%}
                       <details class="group/lv2 accordion" name="header-{{ section.id }}-lv2" open data-mobile-only-details>
-                        <summary class="line-clamp-1 break-all py-0.5 [&_svg]:md:hidden group-open/lv2:font-bold">
+                        <summary class="line-clamp-1 break-all py-1 [&_svg]:md:hidden group-open/lv2:font-bold">
                           {{ lv1_link.title }}
                           {{ 'icon-chevron-down.svg' | inline_asset_content }}
                         </summary>
                         <ul class="max-md:border-l max-md:px-4 max-md:mb-4">
                           {% for lv2_link in lv1_link.links %}
-                            <li>{{ lv2_link.title | link_to: lv2_link.url, class: 'block py-0.5 hover:underline' }}</li>
+                            <li>{{ lv2_link.title | link_to: lv2_link.url, class: 'block py-1 hover:underline' }}</li>
                           {% endfor %}
                         </ul>
                       </details>
 
                     {%- else -%}
-                      {{ lv1_link.title | link_to: lv1_link.url }}
+                      {%- assign megamenu_card = null -%}
+                      {%- for block in megamenu_cards -%}
+                        {%- if block.settings.identifier == lv1_link.title -%}
+                          {%- assign megamenu_card = block -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+
+                      {%- if megamenu_card -%}
+                        <figure class="relative md:max-w-[24ch]">
+                          {%- if megamenu_card.settings.image -%}
+                            {{ megamenu_card.settings.image | image_url: width: 300 | image_tag: class: 'w-full max-md:hidden' }}
+                          {%- endif -%}
+
+                          <a href="{{ lv1_link.url }}" class="block py-1 hover:underline md:font-bold after:absolute after:inset-0">
+                            {{ lv1_link.title }}
+                          </a>
+
+                          {%- if megamenu_card.settings.content -%}
+                            <figcaption class="prose">
+                              {{ megamenu_card.settings.content }}
+                            </figcaption>
+                          {%- endif -%}
+                        </figure>
+
+                      {%- else -%}
+                        {{ lv1_link.title | link_to: lv1_link.url, class: 'block py-1 hover:underline' }}
+
+                      {%- endif -%}
 
                   {%- endcase -%}
                 {% endfor %}
@@ -45,19 +74,19 @@
             name="header-{{ section.id }}"
             data-hover-details
           >
-            <summary class="max-md:group-open/lv1:font-bold">
+            <summary class="max-md:group-open/lv1:font-bold py-1">
               {{ link.title }}
               {{ 'icon-chevron-down.svg' | inline_asset_content }}
             </summary>
             <ul class="max-md:anim-fade-to-b p-4 max-md:py-0 max-md:border-l max-md:mb-4">
               {% for lv1_link in link.links %}
-                <li>{{ lv1_link.title | link_to: lv1_link.url, class: 'block py-0.5 hover:underline' }}</li>
+                <li>{{ lv1_link.title | link_to: lv1_link.url, class: 'block py-1 hover:underline' }}</li>
               {% endfor %}
             </ul>
           </details>
 
         {%- else -%} {% # top-level link %}
-          {{ link.title | link_to: link.url }}
+          {{ link.title | link_to: link.url, class: 'block py-1' }}
       {%- endcase -%}
     {%- endfor -%}
 
@@ -110,6 +139,30 @@
       "label": "Menu",
       "default": "main-menu",
       "info": "1 level of nesting = dropdown; 2 levels = megamenu."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "megamenu_card",
+      "name": "Megamenu Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "identifier",
+          "label": "Identifier",
+          "info": "Exact match with a level 1 link title to render as a card."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
     }
   ]
 }
