@@ -5,6 +5,10 @@
 
   --color-background: var(--color-background);
   --color-foreground: var(--color-foreground);
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--color-primary-foreground);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-foreground: var(--color-secondary-foreground);
 
   --spacing-lh: 1lh;
   --spacing-ch: 1ch;
@@ -31,7 +35,7 @@
   }
 
   body {
-    @apply font-primary;
+    @apply font-primary text-foreground bg-background;
 
     &:has(#menu-open:checked):has(.header-layout nav > details:open) {
       overflow: hidden;
@@ -117,19 +121,19 @@
 }
 
 @utility action {
-  @apply action-base bg-foreground text-background;
+  @apply action-base bg-primary text-primary-foreground;
 }
 
 @utility action-outline {
-  @apply action-base bg-background text-foreground border-current;
+  @apply action-base bg-secondary text-secondary-foreground border-current;
 }
 
 @utility ghost {
-  @apply action-base text-inherit bg-current/2 hover:bg-current/5;
+  @apply action-base text-inherit bg-primary/2 hover:bg-primary/5;
 }
 
 @utility link {
-  @apply cursor-pointer underline hover:decoration-2;
+  @apply cursor-pointer text-primary underline hover:decoration-2;
 }
 
 /* components */

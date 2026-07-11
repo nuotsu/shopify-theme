@@ -86,7 +86,9 @@
           </details>
 
         {%- else -%} {% # top-level link %}
-          {{ link.title | link_to: link.url, class: 'block py-1 md:text-center' }}
+          <a href="{{ link.url }}" class="block py-1 md:text-center">
+            {{ link.title }}
+          </a>
       {%- endcase -%}
     {%- endfor -%}
 

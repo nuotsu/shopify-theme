@@ -20,6 +20,10 @@
     --font-primary: var(--font-primary);
     --color-background: var(--color-background);
     --color-foreground: var(--color-foreground);
+    --color-primary: var(--color-primary);
+    --color-primary-foreground: var(--color-primary-foreground);
+    --color-secondary: var(--color-secondary);
+    --color-secondary-foreground: var(--color-secondary-foreground);
   }
 }
 @layer base {
@@ -285,8 +289,8 @@
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
     border-color: currentcolor;
-    background-color: var(--color-background);
-    color: var(--color-foreground);
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-foreground);
   }
   .ghost {
     cursor: pointer;
@@ -306,15 +310,15 @@
       --tw-scale-z: 98%;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
-    background-color: currentcolor;
+    background-color: var(--color-primary);
     @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, currentcolor 2%, transparent);
+      background-color: color-mix(in oklab, var(--color-primary) 2%, transparent);
     }
     color: inherit;
     &:hover {
-      background-color: currentcolor;
+      background-color: var(--color-primary);
       @supports (color: color-mix(in lab, red, red)) {
-        background-color: color-mix(in oklab, currentcolor 5%, transparent);
+        background-color: color-mix(in oklab, var(--color-primary) 5%, transparent);
       }
     }
   }
@@ -336,8 +340,8 @@
       --tw-scale-z: 98%;
       scale: var(--tw-scale-x) var(--tw-scale-y);
     }
-    background-color: var(--color-foreground);
-    color: var(--color-background);
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
   }
   .line-clamp-1 {
     overflow: hidden;
@@ -402,6 +406,7 @@
   }
   .link {
     cursor: pointer;
+    color: var(--color-primary);
     text-decoration-line: underline;
     &:hover {
       text-decoration-thickness: 2px;
@@ -808,7 +813,9 @@
     scroll-behavior: smooth;
   }
   body {
+    background-color: var(--color-background);
     font-family: var(--font-primary);
+    color: var(--color-foreground);
     &:has(#menu-open:checked):has(.header-layout nav > details:open) {
       overflow: hidden;
     }

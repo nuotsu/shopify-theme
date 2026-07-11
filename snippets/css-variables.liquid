@@ -7,8 +7,12 @@
   :root {
     --font-primary: {{ settings.font_primary.family }}, {{ settings.font_primary.fallback_families }};
 
-    --color-background: #fff;
-    --color-foreground: #000;
+    --color-background: {{ settings.color_schemes.scheme-1.settings.background }};
+    --color-foreground: {{ settings.color_schemes.scheme-1.settings.foreground }};
+    --color-primary: {{ settings.color_schemes.scheme-1.settings.primary }};
+    --color-primary-foreground: {{ settings.color_schemes.scheme-1.settings.primary_foreground }};
+    --color-secondary: {{ settings.color_schemes.scheme-1.settings.secondary }};
+    --color-secondary-foreground: {{ settings.color_schemes.scheme-1.settings.secondary_foreground }};
 
     --section-width: {{ settings.section_width }}px;
     --section-vertical-padding: {{ settings.section_vertical_padding }}rem;

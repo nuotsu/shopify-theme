@@ -12,6 +12,58 @@
     "settings": [
       {
         "type": "header",
+        "content": "Colors"
+      },
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background"
+          },
+          {
+            "type": "color",
+            "id": "foreground",
+            "label": "Foreground"
+          },
+          {
+            "type": "color",
+            "id": "primary",
+            "label": "Primary"
+          },
+          {
+            "type": "color",
+            "id": "primary_foreground",
+            "label": "Primary foreground"
+          },
+          {
+            "type": "color",
+            "id": "secondary",
+            "label": "Secondary"
+          },
+          {
+            "type": "color",
+            "id": "secondary_foreground",
+            "label": "Secondary foreground"
+          }
+        ],
+        "role": {
+          "text": "foreground",
+          "background": "background",
+          "primary_button": "primary",
+          "on_primary_button": "primary_foreground",
+          "primary_button_border": "primary",
+          "secondary_button": "secondary",
+          "on_secondary_button": "secondary_foreground",
+          "secondary_button_border": "secondary_foreground",
+          "links": "primary",
+          "icons": "foreground"
+        }
+      },
+      {
+        "type": "header",
         "content": "Typography"
       },
       {

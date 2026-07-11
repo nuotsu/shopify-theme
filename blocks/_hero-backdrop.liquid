@@ -45,8 +45,6 @@
       class="prose"
       style="max-width: {{ hero.settings.content_width }}px;"
     >
-      {{ hero.settings.content }}
-
       {% content_for 'blocks' %}
     </header>
   </div>
@@ -88,12 +86,6 @@
   "name": "Hero (backdrop)",
   "class": "relative",
   "settings": [
-    {
-      "type": "richtext",
-      "id": "content",
-      "label": "Content",
-      "default": "<h1>Heading 1</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
-    },
     {
       "type": "range",
       "id": "content_width",
@@ -242,12 +234,20 @@
     }
   ],
   "blocks": [
-    { "type": "button-list" }
+    { "type": "richtext" },
+    { "type": "button-list" },
   ],
   "presets": [
     {
       "name": "Hero (backdrop)",
       "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "name": "Richtext",
+          "settings": {
+            "content": "<h1>Heading 1</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+          }
+        },
         "button_list": {
           "type": "button-list",
           "name": "Button list",
@@ -262,6 +262,7 @@
         }
       },
       "block_order": [
+        "richtext",
         "button_list"
       ]
     }

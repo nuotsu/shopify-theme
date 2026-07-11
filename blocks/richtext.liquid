@@ -2,6 +2,16 @@
   {{ block.settings.content }}
 </div>
 
+{% if block.settings.font_size != '' %}
+  <style>
+    @scope {
+      .prose {
+        font-size: {{ block.settings.font_size }};
+      }
+    }
+  </style>
+{% endif %}
+
 {% schema %}
 {
   "name": "Richtext",
@@ -35,11 +45,31 @@
         }
       ],
       "default": "inherit"
-    }
+    },
+    {
+      "type": "select",
+      "id": "font_size",
+      "label": "Font size",
+      "options": [
+        {
+          "value": "smaller",
+          "label": "Smaller"
+        },
+        {
+          "value": "",
+          "label": "Default"
+        },
+        {
+          "value": "larger",
+          "label": "Larger"
+        }
+      ],
+      "default": "",
+    },
   ],
   "presets": [
     {
-      "name": "Prose"
+      "name": "Richtext"
     }
   ]
 }

@@ -16,10 +16,16 @@
           "type": "_hero-backdrop",
           "name": "Hero",
           "settings": {
-            "content": "<h1>Heading 1</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>",
             "enable_scheduling": false
           },
           "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h1>Heading 1</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
             "button_list": {
               "type": "button-list",
               "name": "Button list",
@@ -34,6 +40,7 @@
             }
           },
           "block_order": [
+            "richtext",
             "button_list"
           ]
         }

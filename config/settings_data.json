@@ -9,7 +9,19 @@
  */
 {
   "current": {
-    "content_for_index": []
+    "content_for_index": [],
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#ffffff",
+          "foreground": "#000000",
+          "primary": "#000000",
+          "primary_foreground": "#ffffff",
+          "secondary": "#ffffff",
+          "secondary_foreground": "#000000"
+        }
+      }
+    }
   },
   "presets": {
     "Default": {
