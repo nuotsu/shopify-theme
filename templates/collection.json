@@ -51,28 +51,31 @@
           "settings": {},
           "blocks": {
             "product-card-image": {
-              "type": "_product-card-image",
-              "settings": {
-                "aspect_ratio": "1 / 1",
-                "enable_hover": true
-              }
+              "type": "_product-card-image"
             },
             "product-card-title": {
-              "type": "_product-card-title",
-              "settings": {}
+              "type": "_product-card-title"
             },
             "product-card-price": {
-              "type": "_product-card-price",
+              "type": "_product-card-price"
+            },
+            "product-card-variants_color": {
+              "type": "_product-card-variants"
+            },
+            "product-card-variants_size": {
+              "disabled": true,
+              "type": "_product-card-variants",
               "settings": {
-                "discount_display": "percentage",
-                "discount_prefix": "\"-\""
+                "option_name": "Size"
               }
             }
           },
           "block_order": [
             "product-card-image",
             "product-card-title",
-            "product-card-price"
+            "product-card-price",
+            "product-card-variants_color",
+            "product-card-variants_size"
           ]
         }
       }

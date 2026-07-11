@@ -1,0 +1,61 @@
+<div class="flex flex-wrap items-center gap-[.25em] text-sm">
+  {% assign option = closest.product.options_by_name[block.settings.option_name] %}
+  {% if option %}
+    {% for value in option.values limit: block.settings.limit %}
+      <a
+        href="{{ closest.product.url }}?variant={{ value.variant.id }}"
+        class="
+          inline-grid place-items-center px-[.25em] border not-hover:border-current/25
+          has-[.swatch]:size-lh has-[.swatch]:rounded-full has-[.swatch]:p-[2px] has-[.swatch]:order-first
+          {% unless value.available %} bg-current/25 opacity-25 {% endunless %}
+        "
+      >
+        {% assign swatch = closest.product.metafields.shopify.color-pattern.value | find: 'label', value %}
+        {% if swatch %}
+          <div
+            class="swatch inline-block size-full rounded-full"
+            style="background-color: {{ swatch.color }};"
+            title="{{ value }}"
+          ></div>
+
+        {% else %}
+          {{ value }}
+
+        {% endif %}
+      </a>
+    {% endfor %}
+
+    {% if option.values.size > block.settings.limit %}
+      <span>{{ option.values.size | minus: block.settings.limit }} more</span>
+    {% endif %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Variants",
+  "settings": [
+    {
+      "type": "text",
+      "id": "option_name",
+      "label": "Option name",
+      "default": "Color",
+      "info": "e.g. Color, Size, etc."
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    }
+  ],
+  "presets": [
+    {
+      "name": "Variants"
+    }
+  ]
+}
+{% endschema %}

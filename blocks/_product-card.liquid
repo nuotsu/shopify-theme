@@ -1,4 +1,4 @@
-<li class="group/card relative flex flex-col gap-2 leading-tight">
+<li class="group/card relative flex flex-col gap-4 leading-tight">
   {% content_for 'blocks', closest.product: closest.product %}
 </li>
 
@@ -10,6 +10,7 @@
     { "type": "_product-card-image" },
     { "type": "_product-card-title" },
     { "type": "_product-card-price" },
+    { "type": "_product-card-variants" },
     { "type": "@app" }
   ],
   "presets": [
@@ -27,12 +28,25 @@
         "product-card-price": {
           "type": "_product-card-price",
           "name": "Price"
-        }
+        },
+        "product-card-variants_color": {
+          "type": "_product-card-variants",
+          "name": "Swatches"
+        },
+        "product-card-variants_size": {
+          "type": "_product-card-variants",
+          "name": "Swatches",
+          "settings": {
+            "option_name": "Size"
+          }
+        },
       },
       "block_order": [
         "product-card-image",
         "product-card-title",
-        "product-card-price"
+        "product-card-price",
+        "product-card-variants_color",
+        "product-card-variants_size"
       ]
     }
   ]
