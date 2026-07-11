@@ -7,11 +7,11 @@
       "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-white: #fff;
     --spacing: 0.25rem;
     --container-lg: 32rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
-    --font-weight-light: 300;
     --font-weight-bold: 700;
     --leading-tight: 1.25;
     --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -26,6 +26,7 @@
     --color-primary-foreground: var(--color-primary-foreground);
     --color-secondary: var(--color-secondary);
     --color-secondary-foreground: var(--color-secondary-foreground);
+    --color-alert: red;
     --spacing-em: 1em;
     --spacing-lh: 1lh;
   }
@@ -229,6 +230,9 @@
   .relative {
     position: relative;
   }
+  .static {
+    position: static;
+  }
   .sticky {
     position: sticky;
   }
@@ -370,30 +374,14 @@
     background-color: var(--color-primary);
     color: var(--color-primary-foreground);
   }
-  .action-base {
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: .5em;
-    text-align: center;
-    padding: 0.25em 0.5em;
-    border: 1px solid transparent;
-    transition-property: all;
-    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
-    transition-duration: var(--tw-duration, var(--default-transition-duration));
-    &:active {
-      --tw-scale-x: 98%;
-      --tw-scale-y: 98%;
-      --tw-scale-z: 98%;
-      scale: var(--tw-scale-x) var(--tw-scale-y);
-    }
-  }
   .pagination {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: calc(var(--spacing) * 4);
+    a:hover {
+      text-decoration: underline;
+    }
     .current {
       --tw-font-weight: var(--font-weight-bold);
       font-weight: var(--font-weight-bold);
@@ -433,9 +421,6 @@
   }
   .h-3\.5 {
     height: calc(var(--spacing) * 3.5);
-  }
-  .h-full {
-    height: 100%;
   }
   .h-lh {
     height: 1lh;
@@ -517,8 +502,8 @@
   .columns-\[24ch\] {
     columns: 24ch;
   }
-  .grid-cols-\[repeat\(auto-fill\,minmax\(var\(--column-width\)\,1fr\)\)\] {
-    grid-template-columns: repeat(auto-fill,minmax(var(--column-width),1fr));
+  .grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
   .flex-col {
     flex-direction: column;
@@ -528,6 +513,9 @@
   }
   .place-content-center {
     place-content: center;
+  }
+  .place-items-center {
+    place-items: center;
   }
   .items-center {
     align-items: center;
@@ -540,15 +528,6 @@
   }
   .justify-center {
     justify-content: center;
-  }
-  .justify-end {
-    justify-content: flex-end;
-  }
-  .gap-\(--gap\) {
-    gap: var(--gap);
-  }
-  .gap-0 {
-    gap: 0;
   }
   .gap-1\.5 {
     gap: calc(var(--spacing) * 1.5);
@@ -564,6 +543,9 @@
   }
   .gap-\[\.25em_\.5em\] {
     gap: .25em .5em;
+  }
+  .gap-lh {
+    gap: var(--spacing-lh);
   }
   .prose {
     :where(& > :not(:last-child)) {
@@ -603,8 +585,17 @@
       margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
+  .gap-x-\(--gap\) {
+    column-gap: var(--gap);
+  }
   .gap-x-4 {
     column-gap: calc(var(--spacing) * 4);
+  }
+  .gap-x-\[\.5em\] {
+    column-gap: .5em;
+  }
+  .gap-y-lh {
+    row-gap: var(--spacing-lh);
   }
   .self-start {
     align-self: flex-start;
@@ -616,19 +607,15 @@
     border-style: var(--tw-border-style);
     border-width: 1px;
   }
-  .border-t {
-    border-top-style: var(--tw-border-style);
-    border-top-width: 1px;
-  }
   .border-b {
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
   }
-  .border-current {
-    border-color: currentcolor;
+  .bg-\(--color-alert\) {
+    background-color: var(--color-alert);
   }
-  .border-b-current {
-    border-bottom-color: currentcolor;
+  .bg-alert {
+    background-color: var(--color-alert);
   }
   .bg-background {
     background-color: var(--color-background);
@@ -639,8 +626,17 @@
   .p-4 {
     padding: calc(var(--spacing) * 4);
   }
+  .p-\[\.25em_\.5em\] {
+    padding: .25em .5em;
+  }
   .p-\[\.75em_1em\] {
     padding: .75em 1em;
+  }
+  .p-\[\.125em_\.25em\] {
+    padding: .125em .25em;
+  }
+  .px-\[\.25em\] {
+    padding-inline: .25em;
   }
   .py-0 {
     padding-block: 0;
@@ -650,9 +646,6 @@
   }
   .py-4 {
     padding-block: calc(var(--spacing) * 4);
-  }
-  .pr-0 {
-    padding-right: 0;
   }
   .pb-4 {
     padding-bottom: calc(var(--spacing) * 4);
@@ -680,17 +673,22 @@
   .break-all {
     word-break: break-all;
   }
+  .text-white {
+    color: var(--color-white);
+  }
   .italic {
     font-style: italic;
-  }
-  .underline {
-    text-decoration-line: underline;
   }
   .opacity-50 {
     opacity: 50%;
   }
   .filter {
     filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+  }
+  .transition-opacity {
+    transition-property: opacity;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
   .\[--offset\:1rem\] {
     --offset: 1rem;
@@ -707,9 +705,35 @@
   .\[grid-area\:toggle\] {
     grid-area: toggle;
   }
+  .\*\:col-span-full {
+    :is(& > *) {
+      grid-column: 1 / -1;
+    }
+  }
+  .\*\:row-span-full {
+    :is(& > *) {
+      grid-row: 1 / -1;
+    }
+  }
   .\*\:break-inside-avoid {
     :is(& > *) {
       break-inside: avoid;
+    }
+  }
+  .\*\:object-cover {
+    :is(& > *) {
+      object-fit: cover;
+    }
+  }
+  .group-not-hover\/card\:opacity-0 {
+    &:is(:where(.group\/card):not(*:hover) *) {
+      opacity: 0%;
+    }
+  }
+  .group-open\/filter\:font-bold {
+    &:is(:where(.group\/filter):is([open], :popover-open, :open) *) {
+      --tw-font-weight: var(--font-weight-bold);
+      font-weight: var(--font-weight-bold);
     }
   }
   .group-open\/lv1\:font-bold {
@@ -731,6 +755,12 @@
       transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
   }
+  .before\:content-\(--before\) {
+    &::before {
+      --tw-content: var(--before);
+      content: var(--tw-content);
+    }
+  }
   .before\:content-\(--currency-symbol\) {
     &::before {
       --tw-content: var(--currency-symbol);
@@ -747,6 +777,12 @@
     &::after {
       content: var(--tw-content);
       inset: 0;
+    }
+  }
+  .after\:content-\(--after\) {
+    &::after {
+      --tw-content: var(--after);
+      content: var(--tw-content);
     }
   }
   .open\:flex {
@@ -769,19 +805,6 @@
       justify-content: space-between;
     }
   }
-  .max-md\:sr-only {
-    @media (width < 48rem) {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
-      border-width: 0;
-    }
-  }
   .max-md\:mt-4 {
     @media (width < 48rem) {
       margin-top: calc(var(--spacing) * 4);
@@ -790,11 +813,6 @@
   .max-md\:mb-4 {
     @media (width < 48rem) {
       margin-bottom: calc(var(--spacing) * 4);
-    }
-  }
-  .max-md\:grid {
-    @media (width < 48rem) {
-      display: grid;
     }
   }
   .max-md\:hidden {
@@ -929,9 +947,9 @@
       min-width: 24ch;
     }
   }
-  .md\:grid-cols-\[auto_1fr\] {
+  .md\:grid-cols-\[repeat\(auto-fill\,minmax\(min\(var\(--column-width\)\,100\%\)\,1fr\)\)\] {
     @media (width >= 48rem) {
-      grid-template-columns: auto 1fr;
+      grid-template-columns: repeat(auto-fill,minmax(min(var(--column-width), 100%),1fr));
     }
   }
   .md\:items-center {
@@ -1043,23 +1061,12 @@
       }
     }
   }
-  .\[\&_details\]\:border-t {
-    & details {
-      border-top-style: var(--tw-border-style);
-      border-top-width: 1px;
-    }
-  }
   .\[\&_details\]\:not-first\:border-t {
     & details {
       &:not(*:first-child) {
         border-top-style: var(--tw-border-style);
         border-top-width: 1px;
       }
-    }
-  }
-  .\[\&_svg\]\:shrink {
-    & svg {
-      flex-shrink: 1;
     }
   }
   .\[\&_svg\]\:shrink-0 {

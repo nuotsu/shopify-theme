@@ -43,7 +43,39 @@
     },
     "collection": {
       "type": "collection",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "card": {
+          "type": "_product-card",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "product-card-image": {
+              "type": "_product-card-image",
+              "settings": {
+                "image_aspect_ratio": "1 / 1",
+                "enable_image_hover": true
+              }
+            },
+            "product-card-title": {
+              "type": "_product-card-title",
+              "settings": {}
+            },
+            "product-card-price": {
+              "type": "_product-card-price",
+              "settings": {
+                "discount_display": "percentage",
+                "discount_prefix": "\"-\""
+              }
+            }
+          },
+          "block_order": [
+            "product-card-image",
+            "product-card-title",
+            "product-card-price"
+          ]
+        }
+      }
     }
   },
   "order": [

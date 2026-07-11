@@ -1,0 +1,61 @@
+<figure class="grid place-items-center *:col-span-full *:row-span-full *:object-cover">
+  {{ closest.product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
+
+  {% if block.settings.enable_image_hover and closest.product.images.size > 1 %}
+    {{ closest.product.images[1]
+      | image_url: width: 600
+      | image_tag: class: 'group-not-hover/card:opacity-0 transition-opacity', loading: 'lazy'
+    }}
+  {% endif %}
+</figure>
+
+<style>
+  @scope {
+    figure img {
+      aspect-ratio: {{ block.settings.image_aspect_ratio }};
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Image",
+  "settings": [
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        {
+          "value": "none",
+          "label": "Original"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait"
+        }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_image_hover",
+      "label": "Hover to show secondary image",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image"
+    }
+  ]
+}
+{% endschema %}

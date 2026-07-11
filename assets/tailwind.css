@@ -10,6 +10,8 @@
   --color-secondary: var(--color-secondary);
   --color-secondary-foreground: var(--color-secondary-foreground);
 
+  --color-alert: red;
+
   --spacing-em: 1em;
   --spacing-lh: 1lh;
   --spacing-ch: 1ch;
@@ -184,6 +186,10 @@
 
 @utility pagination {
   @apply flex items-center justify-center gap-4;
+
+  a:hover {
+    text-decoration: underline;
+  }
 
   .current {
     @apply font-bold underline;

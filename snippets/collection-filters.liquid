@@ -11,10 +11,10 @@
   <div>
     {%- for filter in collection.filters -%}
       <details
-        class="accordion"
-        {% if filter.active_values.size > 0 -%} open {%- endif %}
+        class="accordion group/filter"
+        {% if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank -%} open {%- endif %}
       >
-        <summary class="py-1">
+        <summary class="py-1 group-open/filter:font-bold">
           {{ filter.label }}
           {{ 'icon-chevron-down.svg' | inline_asset_content }}
         </summary>
@@ -59,7 +59,7 @@
                       min="{{ filter.range_min | money_without_currency | replace: ',', '' }}"
                       max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
                       placeholder="{{ filter.range_min | default: 0 | money_without_currency }}"
-                      class="w-full border"
+                      class="w-full border p-[.25em_.5em]"
                     >
                     </label>
                 </div>
@@ -75,7 +75,7 @@
                       min="{{ filter.range_min | money_without_currency | replace: ',', '' }}"
                       max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
                       placeholder="{{ filter.range_max | money_without_currency }}"
-                      class="w-full border"
+                      class="w-full border p-[.25em_.5em]"
                     >
                   </label>
                 </div>

@@ -1,0 +1,49 @@
+<li class="group/card relative flex flex-col gap-2 leading-tight">
+  {% content_for 'blocks', closest.product: closest.product %}
+</li>
+
+{% schema %}
+{
+  "name": "Product card",
+  "settings": [],
+  "blocks": [
+    { "type": "_product-card-image" },
+    { "type": "_product-card-title" },
+    { "type": "_product-card-price" },
+    { "type": "@app" }
+  ],
+  "presets": [
+    {
+      "name": "Product card",
+      "blocks": {
+        "product-card-image": {
+          "type": "_product-card-image",
+          "name": "Image",
+          "settings": {
+            "image_aspect_ratio": "1 / 1",
+            "enable_image_hover": true
+          }
+        },
+        "product-card-title": {
+          "type": "_product-card-title",
+          "name": "Title",
+          "settings": {}
+        },
+        "product-card-price": {
+          "type": "_product-card-price",
+          "name": "Price",
+          "settings": {
+            "discount_display": "percentage",
+            "discount_prefix": "\"-\""
+          }
+        }
+      },
+      "block_order": [
+        "product-card-image",
+        "product-card-title",
+        "product-card-price"
+      ]
+    }
+  ]
+}
+{% endschema %}

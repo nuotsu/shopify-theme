@@ -1,0 +1,140 @@
+{% capture single_price %}
+  {% if closest.product.price < closest.product.compare_at_price %}
+    <span>{{ closest.product.price | money }}</span>
+    <s class="opacity-50">{{ closest.product.compare_at_price | money }}</s>
+  {% else %}
+    <span>{{ closest.product.price | money }}</span>
+  {% endif %}
+{% endcapture %}
+
+<div class="flex flex-wrap items-center gap-x-[.5em]">
+  {%- case block.settings.price_display -%}
+    {%- when 'range' -%}
+      {% if closest.product.price_varies %}
+        <span>{{ closest.product.price_min | money }} to {{ closest.product.price_max | money }}</span>
+      {% else %}
+        {{ single_price }}
+      {% endif %}
+
+    {%- when 'lowest' -%}
+      {% if closest.product.price_varies %}
+        <span>From {{ closest.product.price_min | money }}</span>
+      {% else %}
+        {{ single_price }}
+      {% endif %}
+
+    {%- else -%}
+      {{ single_price }}
+  {%- endcase -%}
+
+  {%- if block.settings.discount_display != 'none' and closest.product.price < closest.product.compare_at_price -%}
+    <span class="discount inline-block px-[.25em] bg-alert text-white before:content-(--before) after:content-(--after)">
+      {%- if block.settings.discount_display == 'percentage' -%}
+        {{ closest.product.compare_at_price
+          | minus: closest.product.price
+          | times: 100.0
+          | divided_by: closest.product.compare_at_price
+          | round
+        }}%
+      {%- else -%}
+        {{ closest.product.compare_at_price
+          | minus: closest.product.price
+          | money
+        }}
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</div>
+
+<style>
+  @scope {
+    .discount {
+      {% if block.settings.discount_prefix != 'none' %}
+        --before: {{ block.settings.discount_prefix }};
+      {% endif %}
+      {% if block.settings.discount_suffix != 'none' %}
+        --after: {{ block.settings.discount_suffix }};
+      {% endif %}
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Price",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Price"
+    },
+    {
+      "type": "select",
+      "id": "price_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "single",
+          "label": "Single"
+        },
+        {
+          "value": "lowest",
+          "label": "Lowest"
+        },
+        {
+          "value": "range",
+          "label": "Range"
+        }
+      ],
+      "default": "single"
+    },
+    {
+      "type": "header",
+      "content": "Discount"
+    },
+    {
+      "type": "select",
+      "id": "discount_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "percentage",
+          "label": "%"
+        },
+        {
+          "value": "amount",
+          "label": "$"
+        }
+      ],
+      "default": "percentage"
+    },
+    {
+      "type": "text",
+      "id": "discount_prefix",
+      "label": "Prefix",
+      "default": "\"-\"",
+      "info": "Surround with quotes (e.g. \"-\")",
+      "visible_if": "{{ block.settings.discount_display != 'none' }}"
+    },
+    {
+      "type": "text",
+      "id": "discount_suffix",
+      "label": "Suffix",
+      "info": "Surround with quotes (e.g. \" off\")",
+      "visible_if": "{{ block.settings.discount_display != 'none' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price",
+      "settings": {
+        "discount_display": "percentage",
+        "discount_prefix": "-"
+      }
+    }
+  ]
+}
+{% endschema %}

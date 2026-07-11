@@ -1,5 +1,5 @@
 <div
-  class="section grid has-[aside]:md:grid-cols-[auto_1fr] gap-4 items-start"
+  class="section grid has-[aside]:md:grid-cols-[auto_1fr] gap-lh items-start"
   data-section-id="{{ section.id }}"
 >
   {%- if section.settings.enable_filters and section.settings.filter_behavior == 'sidebar' -%}
@@ -13,7 +13,7 @@
     </aside>
   {%- endif -%}
 
-  <div class="grid gap-4">
+  <div class="grid gap-lh">
     <div class="flex flex-wrap md:items-center md:justify-end gap-2 max-md:*:grow empty:hidden">
       {%- if section.settings.enable_filters and section.settings.filter_behavior == 'drawer' -%}
         {%- render 'collection-filter-drawer' -%}
@@ -26,19 +26,14 @@
 
     <ul
       id="collection-product-grid"
-      class="grid grid-cols-[repeat(auto-fill,minmax(var(--column-width),1fr))] gap-(--gap)"
+      class="
+        grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh
+        {% if section.settings.mobile_2_column %} grid-cols-2 {% endif %}
+      "
     >
       {% paginate collection.products by section.settings.products_per_page %}
         {%- for product in collection.products -%}
-          <li class="relative">
-            <figure>
-              {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
-            </figure>
-
-            <a href="{{ product.url }}" class="block after:absolute after:inset-0">
-              {{ product.title }}
-            </a>
-          </li>
+          {% content_for 'block', type: '_product-card', id: 'card', closest.product: product %}
         {%- endfor -%}
 
         <div class="pagination col-span-full">
@@ -157,7 +152,7 @@
       "id": "products_per_page",
       "label": "Products per page",
       "min": 1,
-      "max": 30,
+      "max": 100,
       "step": 1,
       "default": 12
     },
@@ -172,6 +167,12 @@
       "default": 250
     },
     {
+      "type": "checkbox",
+      "id": "mobile_2_column",
+      "label": "2-columns on mobile",
+      "default": true
+    },
+    {
       "type": "range",
       "id": "gap",
       "label": "Gap",
@@ -180,6 +181,10 @@
       "step": 1,
       "unit": "px",
       "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Product card"
     },
     {
       "type": "header",
@@ -215,9 +220,36 @@
       "default": true
     }
   ],
+  "blocks": [{ "type": "_product-card" }],
   "presets": [
     {
-      "name": "Collection"
+      "name": "Collection",
+      "blocks": [
+        {
+          "type": "_product-card",
+          "id": "card",
+          "static": true,
+          "blocks": [
+            {
+              "type": "_product-card-image",
+              "settings": {
+                "image_aspect_ratio": "1 / 1",
+                "enable_image_hover": true
+              }
+            },
+            {
+              "type": "_product-card-title"
+            },
+            {
+              "type": "_product-card-price",
+              "settings": {
+                "discount_display": "percentage",
+                "discount_prefix": "\"-\""
+              }
+            }
+          ]
+        }
+      ]
     }
   ],
   "enabled_on": {
