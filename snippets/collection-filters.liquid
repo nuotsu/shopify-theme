@@ -1,0 +1,123 @@
+<form id="collection-filters" class="{{ class }}" action="{{ collection.url }}">
+  {%- if collection.sort_by != collection.default_sort_by -%}
+    <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+  {%- endif -%}
+
+  {%- assign active_filters_count = 0 -%}
+  {%- for filter in collection.filters -%}
+    {%- assign active_filters_count = active_filters_count | plus: filter.active_values.size -%}
+  {%- endfor -%}
+
+  <div>
+    {%- for filter in collection.filters -%}
+      <details
+        class="accordion"
+        {% if filter.active_values.size > 0 -%} open {%- endif %}
+      >
+        <summary class="py-1">
+          {{ filter.label }}
+          {{ 'icon-chevron-down.svg' | inline_asset_content }}
+        </summary>
+
+        <div class="pb-4">
+          {%- case filter.type -%}
+            {%- when 'list', 'boolean' -%}
+              <ul class="space-y-2">
+                {%- for value in filter.values -%}
+                  <li>
+                    <label class="
+                      flex items-center gap-2
+                      {% if value.count == 0 and value.active == false %} opacity-50 cursor-not-allowed {% endif %}
+                    ">
+                      <span class="grid place-content-center h-lh self-start">
+                        <input
+                          type="checkbox"
+                          name="{{ value.param_name }}"
+                          value="{{ value.value }}"
+                          class="size-em cursor-pointer"
+                          {% if value.active %} checked {% endif %}
+                          {% if value.count == 0 and value.active == false %} disabled {% endif %}
+                        >
+                      </span>
+                      <span class="leading-tight">{{ value.label }}</span>
+                      <small>({{ value.count }})</small>
+                    </label>
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+            {%- when 'price_range' -%}
+              <div class="flex items-center gap-2" style="--currency-symbol: '{{ cart.currency.symbol }}';">
+                <div class="grow">
+                  <label for="Filter-{{ filter.param_name }}-min" class="flex items-center before:content-(--currency-symbol)">
+                    <span class="sr-only">Min price</span>
+                    <input
+                      type="number"
+                      id="Filter-{{ filter.param_name }}-min"
+                      name="{{ filter.min_value.param_name }}"
+                      value="{% if filter.min_value.value != blank %}{{ filter.min_value.value | divided_by: 100.0 }}{% endif %}"
+                      min="{{ filter.range_min | money_without_currency | replace: ',', '' }}"
+                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      placeholder="{{ filter.range_min | default: 0 | money_without_currency }}"
+                      class="w-full border"
+                    >
+                    </label>
+                </div>
+                -
+                <div class="grow">
+                  <label for="Filter-{{ filter.param_name }}-max" class="flex items-center before:content-(--currency-symbol)">
+                    <span class="sr-only">Max price</span>
+                    <input
+                      type="number"
+                      id="Filter-{{ filter.param_name }}-max"
+                      name="{{ filter.max_value.param_name }}"
+                      value="{% if filter.max_value.value != blank %}{{ filter.max_value.value | divided_by: 100.0 }}{% endif %}"
+                      min="{{ filter.range_min | money_without_currency | replace: ',', '' }}"
+                      max="{{ filter.range_max | money_without_currency | replace: ',', '' }}"
+                      placeholder="{{ filter.range_max | money_without_currency }}"
+                      class="w-full border"
+                    >
+                  </label>
+                </div>
+              </div>
+          {%- endcase -%}
+        </div>
+      </details>
+    {%- endfor -%}
+  </div>
+
+  {%- if collection.filters.size == 0 -%}
+    <p class="text-sm py-4">No filters available for this collection.</p>
+  {%- endif -%}
+
+  {%- if active_filters_count > 0 -%}
+    <div class="flex flex-wrap items-center gap-2 mt-4 md:hidden">
+      {%- for filter in collection.filters -%}
+        {%- for value in filter.active_values -%}
+          <a
+            href="{{ value.url_to_remove }}"
+            data-filter-remove
+            class="inline-flex items-center gap-1.5 p-[.75em_1em] text-sm"
+          >
+            {{ value.label }}
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </a>
+        {%- endfor -%}
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  <a
+    href="{{ collection.url }}{% if collection.sort_by != collection.default_sort_by %}?sort_by={{ collection.sort_by }}{% endif %}"
+    class="action-outline"
+    data-filter-remove
+  >
+    Clear all
+  </a>
+
+  <noscript>
+    <button type="submit" class="action w-full">Apply Filters</button>
+  </noscript>
+</form>

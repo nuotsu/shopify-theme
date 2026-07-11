@@ -1,0 +1,22 @@
+<label class="ghost [&_svg]:shrink-0">
+  {{ 'icon-sort.svg' | inline_asset_content }}
+
+  <select
+    id="collection-sorting"
+    class="grow text-left"
+    name="sort_by"
+    aria-label="Sort products"
+  >
+    {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+    {%- for option in collection.sort_options -%}
+      <option
+        value="{{ option.value }}"
+        {% if sort_by == option.value %}
+          selected
+        {% endif %}
+      >
+        {{ option.name }}
+      </option>
+    {%- endfor -%}
+  </select>
+</label>

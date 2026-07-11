@@ -1,0 +1,31 @@
+<button
+  class="ghost"
+  type="button"
+  commandfor="collection-filter-drawer"
+  command="show-modal"
+>
+  {{ 'icon-filter.svg' | inline_asset_content }}
+  Filters
+</button>
+
+<dialog
+  id="collection-filter-drawer"
+  class="anim-fade-to-r fixed inset-y-0 left-0 m-0 mr-auto open:flex flex-col w-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
+  closedby="any"
+>
+  <header class="sticky top-0 z-1 bg-background flex items-center gap-4 justify-between p-4 border-b">
+    <span class="block py-1">Filters</span>
+
+    <button
+      class="cursor-pointer"
+      type="button"
+      commandfor="collection-filter-drawer"
+      command="close"
+      aria-label="Close filters"
+    >
+      {{ 'icon-close.svg' | inline_asset_content }}
+    </button>
+  </header>
+
+  {%- render 'collection-filters', class: 'grow flex flex-col gap-4 [&>div]:grow [&_details]:not-first:border-t p-4 pb-[max(env(safe-area-inset-bottom),1rem)]' -%}
+</dialog>

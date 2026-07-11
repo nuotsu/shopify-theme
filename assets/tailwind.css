@@ -10,6 +10,7 @@
   --color-secondary: var(--color-secondary);
   --color-secondary-foreground: var(--color-secondary-foreground);
 
+  --spacing-em: 1em;
   --spacing-lh: 1lh;
   --spacing-ch: 1ch;
 }
@@ -20,6 +21,10 @@
 @variant menu-not-open (body:has(#menu-open:not(:checked)) &);
 
 @layer base {
+  :root {
+    --header-height: 0px;
+  }
+
   @supports (interpolate-size: allow-keywords) {
     :root {
       interpolate-size: allow-keywords;
@@ -96,7 +101,7 @@
 }
 
 @utility prose {
-  @apply space-y-[1em];
+  @apply space-y-em;
 
   h1 { @apply h1; }
   h2 { @apply h2; }
@@ -177,11 +182,24 @@
   }
 }
 
+@utility pagination {
+  @apply flex items-center justify-center gap-4;
+
+  .current {
+    @apply font-bold underline;
+  }
+}
+
 /* utilities */
 
 @utility full-bleed {
   width: 100vw;
   margin-inline: calc(50% - 50vw);
+}
+
+@utility sticky-below-header {
+  position: sticky;
+  top: calc(var(--header-height) + var(--offset, 0px));
 }
 
 /* anims */

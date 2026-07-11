@@ -46,6 +46,38 @@
       "block_order": [
         "hero_backdrop"
       ]
+    },
+    {
+      "name": "Collection hero",
+      "settings": {},
+      "blocks": {
+        "hero_backdrop": {
+          "type": "_hero-backdrop",
+          "name": "Hero",
+          "settings": {
+            "content_width": 750,
+            "horizontal_alignment": "center",
+            "vertical_alignment": "center"
+          },
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h1>{{ closest.collection.title }}</h1>{{ closest.collection.description }}"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "richtext"
+          ]
+        }
+      },
+      "block_order": [
+        "hero_backdrop"
+      ],
+      "category": "Collection"
     }
   ]
 }

@@ -1,0 +1,228 @@
+<div
+  class="section grid has-[aside]:md:grid-cols-[auto_1fr] gap-4 items-start"
+  data-section-id="{{ section.id }}"
+>
+  {%- if section.settings.enable_filters and section.settings.filter_behavior == 'sidebar' -%}
+    <aside class="md:sticky-below-header md:w-[24ch] [--offset:1rem] grid gap-2">
+      <div class="inline-flex items-center gap-2 py-1">
+        {{ 'icon-filter.svg' | inline_asset_content }}
+        Filter by
+      </div>
+
+      {%- render 'collection-filters', class: 'grid gap-2 [&_details]:not-first:border-t' -%}
+    </aside>
+  {%- endif -%}
+
+  <div class="grid gap-4">
+    <div class="flex flex-wrap md:items-center md:justify-end gap-2 max-md:*:grow empty:hidden">
+      {%- if section.settings.enable_filters and section.settings.filter_behavior == 'drawer' -%}
+        {%- render 'collection-filter-drawer' -%}
+      {%- endif -%}
+
+      {%- if section.settings.enable_sorting -%}
+        {%- render 'collection-sorting' -%}
+      {%- endif -%}
+    </div>
+
+    <ul
+      id="collection-product-grid"
+      class="grid grid-cols-[repeat(auto-fill,minmax(var(--column-width),1fr))] gap-(--gap)"
+    >
+      {% paginate collection.products by section.settings.products_per_page %}
+        {%- for product in collection.products -%}
+          <li class="relative">
+            <figure>
+              {{ product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
+            </figure>
+
+            <a href="{{ product.url }}" class="block after:absolute after:inset-0">
+              {{ product.title }}
+            </a>
+          </li>
+        {%- endfor -%}
+
+        <div class="pagination col-span-full">
+          {{ paginate | default_pagination }}
+        </div>
+      {% endpaginate %}
+    </ul>
+  </div>
+</div>
+
+<style>
+  @scope {
+    ul {
+      --column-width: {{ section.settings.column_width }}px;
+      --gap: {{ section.settings.gap }}px;
+    }
+  }
+</style>
+
+{% javascript %}
+  (() => {
+    const productList = document.querySelector('#collection-product-grid')
+    if (!productList) return
+
+    const root = productList.closest('[data-section-id]')
+    const sectionId = root?.dataset.sectionId
+    if (!root || !sectionId) return
+
+    const form = document.querySelector('#collection-filters')
+
+    async function fetchAndReplace(urlString) {
+      const fetchUrl = new URL(urlString, window.location.origin)
+      fetchUrl.searchParams.set('section_id', sectionId)
+
+      productList.classList.add('animate-pulse')
+
+      try {
+        const response = await fetch(fetchUrl.toString())
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
+        const html = await response.text()
+        const doc = new DOMParser().parseFromString(html, 'text/html')
+
+        const newProductGrid = doc.querySelector('#collection-product-grid')
+        const newFilters = doc.querySelector('#collection-filters')
+        const newSorting = doc.querySelector('#collection-sorting')
+        const sorting = document.querySelector('#collection-sorting')
+
+        if (newProductGrid) {
+          productList.innerHTML = newProductGrid.innerHTML
+        }
+
+        if (newFilters && form) {
+          form.innerHTML = newFilters.innerHTML
+        }
+
+        if (newSorting && sorting) {
+          sorting.innerHTML = newSorting.innerHTML
+        }
+      } catch (error) {
+        console.error('Collection AJAX error:', error)
+      } finally {
+        productList.classList.remove('animate-pulse')
+      }
+    }
+
+    root.addEventListener('change', async (e) => {
+      if (!e.target.matches('#collection-sorting')) return
+
+      const url = new URL(window.location.href)
+      url.searchParams.set('sort_by', e.target.value)
+
+      history.pushState({}, '', url.toString())
+      await fetchAndReplace(url.toString())
+    })
+
+    if (form) {
+      form.addEventListener('change', async () => {
+        const url = new URL(form.action, window.location.origin)
+        const params = new URLSearchParams(new FormData(form))
+        url.search = params.toString()
+
+        history.pushState({}, '', url.toString())
+        await fetchAndReplace(url.toString())
+      })
+    }
+
+    document.addEventListener('click', async (e) => {
+      const removeLink = e.target.closest('[data-filter-remove]')
+      if (!removeLink || !root.contains(removeLink)) return
+
+      e.preventDefault()
+      const url = removeLink.href
+
+      history.pushState({}, '', url)
+      await fetchAndReplace(url)
+    })
+
+    window.addEventListener('popstate', () => {
+      fetchAndReplace(window.location.href)
+    })
+  })()
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Collection",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "column_width",
+      "label": "Column width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Filters and sorting"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_filters",
+      "label": "Enable filters",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "filter_behavior",
+      "label": "Filter behavior",
+      "options": [
+        {
+          "value": "drawer",
+          "label": "Drawer"
+        },
+        {
+          "value": "sidebar",
+          "label": "Sidebar"
+        }
+      ],
+      "default": "drawer",
+      "visible_if": "{{ section.settings.enable_filters == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_sorting",
+      "label": "Enable sorting",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection"
+    }
+  ],
+  "enabled_on": {
+    "templates": ["collection"]
+  },
+  "limit": 1
+}
+{% endschema %}

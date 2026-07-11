@@ -1,6 +1,9 @@
 {%- assign megamenu_cards = section.blocks | where: 'type', 'megamenu_card' -%}
 
-<div class="header-layout section grid items-center gap-x-4 p-4 max-h-svh overflow-y-auto">
+<div
+  class="header-layout section grid items-center gap-x-4 p-4 max-h-svh overflow-y-auto"
+  data-height-var="--header-height"
+>
   <a class="inline-block" href="{{ routes.root_url }}" class="[grid-area:logo]">
     {{ shop.name }}
   </a>
@@ -98,7 +101,7 @@
   <nav class="[grid-area:actions] flex items-center gap-x-4">
     {% render 'account-dropdown', section: section, class: 'max-md:hidden' %}
 
-    {% if settings.enable_cart_drawer %}
+    {% if settings.cart_behavior == 'drawer' %}
       {% render 'cart-drawer' %}
     {% else %}
       <a href="{{ routes.cart_url }}">

@@ -12,6 +12,8 @@
   {% render 'fonts' %}
   {{ 'tailwind.min.css' | asset_url | stylesheet_tag: preload: true }}
 
+  <script src="{{ 'scripts.js' | asset_url }}" defer></script>
+
   {%- if request.page_type == 'product' -%}
     <script type="application/ld+json">
       {{ product | structured_data }}
@@ -31,7 +33,5 @@
   </main>
 
   {% sections 'footer-group' %}
-
-  {% render 'scripts' %}
 </body>
 </html>

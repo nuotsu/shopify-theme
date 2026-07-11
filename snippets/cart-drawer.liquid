@@ -13,7 +13,7 @@
   class="anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto w-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
   closedby="any"
 >
-  <header class="sticky top-0 z-1 flex items-center gap-4 justify-between p-4 border-b">
+  <header class="sticky top-0 z-1 bg-background flex items-center gap-4 justify-between p-4 border-b">
     <a href="{{ routes.cart_url }}" class="block py-1 hover:underline">
       Cart
     </a>
@@ -29,5 +29,7 @@
     </button>
   </header>
 
-  <div></div>
+  <div>
+    {% comment %} line items {% endcomment %}
+  </div>
 </dialog>
