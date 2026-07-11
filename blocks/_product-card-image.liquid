@@ -1,10 +1,11 @@
-<figure class="grid place-items-center *:col-span-full *:row-span-full *:object-cover">
+<figure class="grid place-items-center *:col-span-full *:row-span-full">
   {{ closest.product.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
 
-  {% if block.settings.enable_image_hover and closest.product.images.size > 1 %}
-    {{ closest.product.images[1]
+  {% if block.settings.enable_hover and closest.product.images.size > 1 %}
+    {{
+      closest.product.images[1]
       | image_url: width: 600
-      | image_tag: class: 'group-not-hover/card:opacity-0 transition-opacity', loading: 'lazy'
+      | image_tag: class: 'group-not-hover/card:opacity-0 transition-opacity bg-background', loading: 'lazy'
     }}
   {% endif %}
 </figure>
@@ -12,7 +13,8 @@
 <style>
   @scope {
     figure img {
-      aspect-ratio: {{ block.settings.image_aspect_ratio }};
+      object-fit: {{ block.settings.fit }};
+      aspect-ratio: {{ block.settings.aspect_ratio }};
     }
   }
 </style>
@@ -23,8 +25,8 @@
   "settings": [
     {
       "type": "select",
-      "id": "image_aspect_ratio",
-      "label": "Image aspect ratio",
+      "id": "aspect_ratio",
+      "label": "Aspect ratio",
       "options": [
         {
           "value": "none",
@@ -46,8 +48,25 @@
       "default": "1 / 1"
     },
     {
+      "type": "select",
+      "id": "fit",
+      "label": "Fit",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Contain"
+        },
+        {
+          "value": "cover",
+          "label": "Cover"
+        }
+      ],
+      "default": "cover",
+      "visible_if": "{{ block.settings.aspect_ratio != 'none' }}"
+    },
+    {
       "type": "checkbox",
-      "id": "enable_image_hover",
+      "id": "enable_hover",
       "label": "Hover to show secondary image",
       "default": true
     }
