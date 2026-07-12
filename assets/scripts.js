@@ -1,4 +1,4 @@
-(function(){
+(() => {
 
 const desktopMq = window.matchMedia('(min-width: 48rem)')
 
@@ -85,4 +85,4 @@ document.querySelectorAll('[data-height-var]').forEach((el) => {
   heightVarObserver.observe(el)
 })
 
-})();
+})()

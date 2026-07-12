@@ -5,7 +5,7 @@
   command="show-modal"
 >
   Cart
-  <span class="{% unless cart.item_count > 0 %} hidden {% endunless %}">({{ cart.item_count }})</span>
+  <span data-cart-count class="{% unless cart.item_count > 0 %} hidden {% endunless %}">({{ cart.item_count }})</span>
 </button>
 
 <dialog
@@ -30,6 +30,6 @@
   </header>
 
   <div>
-    {% comment %} line items {% endcomment %}
+    {%- render 'cart-line-items' -%}
   </div>
 </dialog>

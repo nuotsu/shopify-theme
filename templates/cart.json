@@ -1,9 +1,9 @@
 {
   "sections": {
-    "prose": {
-      "type": "prose",
+    "cart": {
+      "type": "cart",
       "settings": {}
     }
   },
-  "order": ["prose"]
+  "order": ["cart"]
 }

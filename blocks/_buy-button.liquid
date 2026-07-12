@@ -1,6 +1,70 @@
-<button type="submit" class="{{ block.settings.style }} w-full">
+<button
+  type="submit"
+  class="{{ block.settings.style }} w-full"
+  data-buy-button
+  data-cart-behavior="{{ settings.cart_behavior }}"
+  data-cart-url="{{ routes.cart_url }}"
+>
   Add to cart
 </button>
+
+{% javascript %}
+  const root = window.Shopify?.routes?.root || '/'
+  const addUrl = `${root}cart/add.js`
+  const cartUrl = `${root}cart.js`
+
+  const updateCartCount = (itemCount) => {
+    document.querySelectorAll('[data-cart-count]').forEach((el) => {
+      el.textContent = `(${itemCount})`
+      el.classList.toggle('hidden', itemCount <= 0)
+    })
+  }
+
+  const bindBuyButton = (button) => {
+    if (button.dataset.buyButtonBound === 'true') return
+    button.dataset.buyButtonBound = 'true'
+
+    const form = button.closest('form')
+    if (!form) return
+
+    form.addEventListener('submit', async (event) => {
+      if (button.dataset.cartBehavior !== 'drawer') return
+
+      event.preventDefault()
+
+      const cartDrawer = document.getElementById('cart-drawer')
+      const fallbackCartUrl = button.dataset.cartUrl || `${root}cart`
+
+      try {
+        const addResponse = await fetch(addUrl, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        })
+
+        if (!addResponse.ok) throw new Error(`Add failed: ${addResponse.status}`)
+
+        const cartResponse = await fetch(cartUrl, {
+          headers: { Accept: 'application/json' },
+        })
+        if (!cartResponse.ok) throw new Error(`Cart fetch failed: ${cartResponse.status}`)
+
+        const cart = await cartResponse.json()
+        updateCartCount(cart.item_count ?? 0)
+
+        if (cartDrawer?.showModal) {
+          cartDrawer.showModal()
+        } else {
+          window.location.href = fallbackCartUrl
+        }
+      } catch {
+        window.location.href = fallbackCartUrl
+      }
+    })
+  }
+
+  document.querySelectorAll('[data-buy-button]').forEach(bindBuyButton)
+{% endjavascript %}
 
 {% schema %}
 {
