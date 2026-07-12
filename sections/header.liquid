@@ -102,7 +102,7 @@
     {% render 'account-dropdown', section: section, class: 'max-md:hidden' %}
 
     {% if settings.cart_behavior == 'drawer' %}
-      {% render 'cart-drawer' %}
+      {% render 'cart-drawer', section_id: section.id %}
     {% else %}
       <a href="{{ routes.cart_url }}">
         Cart

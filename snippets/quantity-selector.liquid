@@ -1,0 +1,158 @@
+{% doc %}
+  Reusable quantity selector with +/- controls.
+
+  @param {string} id - Unique id for the input / label association
+  @param {string} [name] - Input name (`quantity` for product forms, `updates[]` for cart forms)
+  @param {number} [value] - Initial quantity value
+  @param {number} [min] - Minimum quantity
+  @param {number} [max] - Maximum quantity
+  @param {string} [line_item_key] - Cart line item key; when set, quantity changes POST to /cart/change.js
+
+  @example
+  {% render 'quantity-selector', id: block.id, name: 'quantity', value: 1, min: 1, max: 100 %}
+{% enddoc %}
+
+<div
+  class="inline-flex items-stretch border"
+  data-quantity-selector
+  {% if line_item_key != blank %}
+    data-line-item-key="{{ line_item_key }}"
+  {% endif %}
+>
+  <label class="sr-only" for="Quantity-{{ id }}">Quantity</label>
+
+  <button
+    class="ghost"
+    type="button"
+    data-qty-increment
+    aria-label="Increase quantity"
+  >
+    +
+  </button>
+
+  <input
+    id="Quantity-{{ id }}"
+    name="{{ name | default: 'quantity' }}"
+    type="number"
+    value="{{ value | default: 1 }}"
+    min="{{ min | default: 1 }}"
+    max="{{ max | default: 100 }}"
+    class="text-center"
+    data-qty-input
+  >
+
+  <button
+    class="ghost"
+    type="button"
+    data-qty-decrement
+    aria-label="Decrease quantity"
+  >
+    -
+  </button>
+</div>
+
+<style>
+  @scope {
+    input {
+      -moz-appearance: textfield;
+
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+      }
+    }
+  }
+</style>
+
+{% javascript %}
+const rootPath = window.Shopify?.routes?.root || '/'
+const changeUrl = `${rootPath}cart/change.js`
+
+const updateCartCount = (itemCount) => {
+  document.querySelectorAll('[data-cart-count]').forEach((el) => {
+    el.textContent = `(${itemCount})`
+    el.classList.toggle('hidden', itemCount <= 0)
+  })
+}
+
+const bindQuantitySelector = (root) => {
+  if (root.dataset.qtyBound === 'true') return
+  root.dataset.qtyBound = 'true'
+
+  const input = root.querySelector('[data-qty-input]')
+  if (!input) return
+
+  const bounds = () => ({
+    min: Number(input.min) || 0,
+    max: Number(input.max) || Infinity,
+  })
+
+  const setValue = (next) => {
+    const { min, max } = bounds()
+    const value = String(Math.min(max, Math.max(min, next)))
+    if (input.value === value) return
+    input.value = value
+    input.dispatchEvent(new Event('change', { bubbles: true }))
+  }
+
+  const syncCartQuantity = async (quantity) => {
+    const key = root.dataset.lineItemKey
+    if (!key) return
+
+    try {
+      const response = await fetch(changeUrl, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: key, quantity }),
+      })
+      if (!response.ok) throw new Error(`Cart change failed: ${response.status}`)
+
+      const cart = await response.json()
+      updateCartCount(cart.item_count ?? 0)
+
+      if (quantity === 0) {
+        root.closest('li')?.remove()
+      }
+    } catch {
+      // Keep the local value; the next successful sync or page refresh will correct state.
+    }
+  }
+
+  root.addEventListener('click', (event) => {
+    const increment = event.target.closest('[data-qty-increment]')
+    const decrement = event.target.closest('[data-qty-decrement]')
+    if (!increment && !decrement) return
+
+    const current = Number.parseInt(input.value, 10) || bounds().min
+    setValue(current + (increment ? 1 : -1))
+  })
+
+  input.addEventListener('change', () => {
+    const current = Number.parseInt(input.value, 10)
+    if (Number.isNaN(current)) {
+      setValue(bounds().min)
+      return
+    }
+
+    const { min, max } = bounds()
+    const clamped = Math.min(max, Math.max(min, current))
+    if (String(clamped) !== input.value) {
+      setValue(clamped)
+      return
+    }
+
+    syncCartQuantity(clamped)
+  })
+}
+
+const bindAllQuantitySelectors = () => {
+  document.querySelectorAll('[data-quantity-selector]').forEach(bindQuantitySelector)
+}
+
+bindAllQuantitySelectors()
+document.addEventListener('cart:updated', bindAllQuantitySelectors)
+{% endjavascript %}

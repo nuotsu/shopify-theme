@@ -1,5 +1,18 @@
-{%- for line_item in cart.items -%}
-  <div>
-    {{ line_item.title }}
-  </div>
-{%- endfor -%}
+<ul class="grid md:grid-cols-[1fr_auto] gap-4">
+  {%- for line_item in cart.items -%}
+    <li class="grid md:col-span-full md:grid-cols-subgrid">
+      <a href="{{ line_item.url }}">{{ line_item.title }}</a>
+
+      <div>
+        {% render 'quantity-selector',
+          id: line_item.key,
+          name: 'updates[]',
+          value: line_item.quantity,
+          min: 0,
+          max: line_item.variant.quantity_rule.max | default: 100,
+          line_item_key: line_item.key
+        %}
+      </div>
+    </li>
+  {%- endfor -%}
+</ul>

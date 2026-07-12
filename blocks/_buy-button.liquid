@@ -20,6 +20,30 @@
     })
   }
 
+  const refreshCartLines = async (cartDrawer) => {
+    const sectionId = cartDrawer?.dataset.sectionId
+    const lines = cartDrawer?.querySelector('[data-cart-lines]')
+    if (!sectionId || !lines) return
+
+    try {
+      const fetchUrl = new URL(window.location.href)
+      fetchUrl.searchParams.set('section_id', sectionId)
+
+      const response = await fetch(fetchUrl.toString())
+      if (!response.ok) throw new Error(`Section fetch failed: ${response.status}`)
+
+      const html = await response.text()
+      const doc = new DOMParser().parseFromString(html, 'text/html')
+      const newLines = doc.querySelector('[data-cart-lines]')
+      if (!newLines) return
+
+      lines.innerHTML = newLines.innerHTML
+      document.dispatchEvent(new CustomEvent('cart:updated'))
+    } catch {
+      // Drawer can still open with stale lines; count is already updated.
+    }
+  }
+
   const bindBuyButton = (button) => {
     if (button.dataset.buyButtonBound === 'true') return
     button.dataset.buyButtonBound = 'true'
@@ -53,6 +77,7 @@
         updateCartCount(cart.item_count ?? 0)
 
         if (cartDrawer?.showModal) {
+          await refreshCartLines(cartDrawer)
           cartDrawer.showModal()
         } else {
           window.location.href = fallbackCartUrl

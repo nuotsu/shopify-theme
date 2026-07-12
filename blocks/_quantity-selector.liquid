@@ -1,86 +1,10 @@
-<div class="inline-flex items-stretch border" data-quantity-selector>
-  <label class="sr-only" for="Quantity-{{ block.id }}">Quantity</label>
-
-  <button
-    class="ghost"
-    type="button"
-    data-qty-increment
-    aria-label="Increase quantity"
-  >
-    +
-  </button>
-
-  <input
-    id="Quantity-{{ block.id }}"
-    name="quantity"
-    type="number"
-    value="1"
-    min="1"
-    max="100"
-    class="text-center"
-  >
-
-  <button
-    class="ghost"
-    type="button"
-    data-qty-decrement
-    aria-label="Decrease quantity"
-  >
-    -
-  </button>
-</div>
-
-<style>
-  @scope {
-    input {
-      -moz-appearance: textfield;
-
-      &::-webkit-inner-spin-button,
-      &::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        appearance: none;
-      }
-    }
-  }
-</style>
-
-{% javascript %}
-document.querySelectorAll('[data-quantity-selector]').forEach((root) => {
-  const input = root.querySelector('input[name="quantity"]')
-  if (!input) return
-
-  const bounds = () => ({
-    min: Number(input.min) || 1,
-    max: Number(input.max) || Infinity,
-  })
-
-  const setValue = (next) => {
-    const { min, max } = bounds()
-    const value = String(Math.min(max, Math.max(min, next)))
-    if (input.value === value) return
-    input.value = value
-    input.dispatchEvent(new Event('change', { bubbles: true }))
-  }
-
-  root.addEventListener('click', (event) => {
-    const increment = event.target.closest('[data-qty-increment]')
-    const decrement = event.target.closest('[data-qty-decrement]')
-    if (!increment && !decrement) return
-
-    const current = Number.parseInt(input.value, 10) || bounds().min
-    setValue(current + (increment ? 1 : -1))
-  })
-
-  input.addEventListener('change', () => {
-    const current = Number.parseInt(input.value, 10)
-    if (Number.isNaN(current)) {
-      setValue(bounds().min)
-      return
-    }
-    setValue(current)
-  })
-})
-{% endjavascript %}
+{% render 'quantity-selector',
+  id: block.id,
+  name: 'quantity',
+  value: 1,
+  min: 1,
+  max: 100
+%}
 
 {% schema %}
 {
