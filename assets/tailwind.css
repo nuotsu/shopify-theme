@@ -81,16 +81,16 @@
   @apply font-bold;
 }
 @utility h0 {
-  @apply h-base;
+  @apply h-base text-3xl;
 }
 @utility h1 {
-  @apply h-base;
+  @apply h-base text-2xl;
 }
 @utility h2 {
-  @apply h-base;
+  @apply h-base text-xl;
 }
 @utility h3 {
-  @apply h-base;
+  @apply h-base text-lg;
 }
 @utility h4 {
   @apply h-base;
@@ -103,7 +103,7 @@
 }
 
 @utility prose {
-  @apply space-y-em;
+  @apply space-y-4;
 
   h1 {
     @apply h1;

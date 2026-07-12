@@ -40,6 +40,9 @@
           "static": true,
           "settings": {},
           "blocks": {
+            "product_price": {
+              "type": "_product-price"
+            },
             "product_options": {
               "type": "_product-options"
             },
@@ -53,7 +56,7 @@
               "blocks": {}
             }
           },
-          "block_order": ["product_options", "quantity_selector", "buy_button"]
+          "block_order": ["product_price", "product_options", "quantity_selector", "buy_button"]
         }
       },
       "settings": {}

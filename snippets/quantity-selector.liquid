@@ -66,93 +66,93 @@
 </style>
 
 {% javascript %}
-const rootPath = window.Shopify?.routes?.root || '/'
-const changeUrl = `${rootPath}cart/change.js`
+  const rootPath = window.Shopify?.routes?.root || '/'
+  const changeUrl = `${rootPath}cart/change.js`
 
-const updateCartCount = (itemCount) => {
-  document.querySelectorAll('[data-cart-count]').forEach((el) => {
-    el.textContent = `(${itemCount})`
-    el.classList.toggle('hidden', itemCount <= 0)
-  })
-}
-
-const bindQuantitySelector = (root) => {
-  if (root.dataset.qtyBound === 'true') return
-  root.dataset.qtyBound = 'true'
-
-  const input = root.querySelector('[data-qty-input]')
-  if (!input) return
-
-  const bounds = () => ({
-    min: Number(input.min) || 0,
-    max: Number(input.max) || Infinity,
-  })
-
-  const setValue = (next) => {
-    const { min, max } = bounds()
-    const value = String(Math.min(max, Math.max(min, next)))
-    if (input.value === value) return
-    input.value = value
-    input.dispatchEvent(new Event('change', { bubbles: true }))
+  const updateCartCount = (itemCount) => {
+    document.querySelectorAll('[data-cart-count]').forEach((el) => {
+      el.textContent = `(${itemCount})`
+      el.classList.toggle('hidden', itemCount <= 0)
+    })
   }
 
-  const syncCartQuantity = async (quantity) => {
-    const key = root.dataset.lineItemKey
-    if (!key) return
+  const bindQuantitySelector = (root) => {
+    if (root.dataset.qtyBound === 'true') return
+    root.dataset.qtyBound = 'true'
 
-    try {
-      const response = await fetch(changeUrl, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ id: key, quantity }),
-      })
-      if (!response.ok) throw new Error(`Cart change failed: ${response.status}`)
+    const input = root.querySelector('[data-qty-input]')
+    if (!input) return
 
-      const cart = await response.json()
-      updateCartCount(cart.item_count ?? 0)
+    const bounds = () => ({
+      min: Number(input.min) || 0,
+      max: Number(input.max) || Infinity,
+    })
 
-      if (quantity === 0) {
-        root.closest('li')?.remove()
+    const setValue = (next) => {
+      const { min, max } = bounds()
+      const value = String(Math.min(max, Math.max(min, next)))
+      if (input.value === value) return
+      input.value = value
+      input.dispatchEvent(new Event('change', { bubbles: true }))
+    }
+
+    const syncCartQuantity = async (quantity) => {
+      const key = root.dataset.lineItemKey
+      if (!key) return
+
+      try {
+        const response = await fetch(changeUrl, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id: key, quantity }),
+        })
+        if (!response.ok) throw new Error(`Cart change failed: ${response.status}`)
+
+        const cart = await response.json()
+        updateCartCount(cart.item_count ?? 0)
+
+        if (quantity === 0) {
+          root.closest('li')?.remove()
+        }
+      } catch {
+        // Keep the local value; the next successful sync or page refresh will correct state.
       }
-    } catch {
-      // Keep the local value; the next successful sync or page refresh will correct state.
     }
+
+    root.addEventListener('click', (event) => {
+      const increment = event.target.closest('[data-qty-increment]')
+      const decrement = event.target.closest('[data-qty-decrement]')
+      if (!increment && !decrement) return
+
+      const current = Number.parseInt(input.value, 10) || bounds().min
+      setValue(current + (increment ? 1 : -1))
+    })
+
+    input.addEventListener('change', () => {
+      const current = Number.parseInt(input.value, 10)
+      if (Number.isNaN(current)) {
+        setValue(bounds().min)
+        return
+      }
+
+      const { min, max } = bounds()
+      const clamped = Math.min(max, Math.max(min, current))
+      if (String(clamped) !== input.value) {
+        setValue(clamped)
+        return
+      }
+
+      syncCartQuantity(clamped)
+    })
   }
 
-  root.addEventListener('click', (event) => {
-    const increment = event.target.closest('[data-qty-increment]')
-    const decrement = event.target.closest('[data-qty-decrement]')
-    if (!increment && !decrement) return
+  const bindAllQuantitySelectors = () => {
+    document.querySelectorAll('[data-quantity-selector]').forEach(bindQuantitySelector)
+  }
 
-    const current = Number.parseInt(input.value, 10) || bounds().min
-    setValue(current + (increment ? 1 : -1))
-  })
-
-  input.addEventListener('change', () => {
-    const current = Number.parseInt(input.value, 10)
-    if (Number.isNaN(current)) {
-      setValue(bounds().min)
-      return
-    }
-
-    const { min, max } = bounds()
-    const clamped = Math.min(max, Math.max(min, current))
-    if (String(clamped) !== input.value) {
-      setValue(clamped)
-      return
-    }
-
-    syncCartQuantity(clamped)
-  })
-}
-
-const bindAllQuantitySelectors = () => {
-  document.querySelectorAll('[data-quantity-selector]').forEach(bindQuantitySelector)
-}
-
-bindAllQuantitySelectors()
-document.addEventListener('cart:updated', bindAllQuantitySelectors)
+  bindAllQuantitySelectors()
+  document.addEventListener('cart:updated', bindAllQuantitySelectors)
 {% endjavascript %}

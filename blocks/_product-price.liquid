@@ -1,0 +1,257 @@
+{%- liquid
+  assign variant = closest.product.selected_or_first_available_variant
+  assign show_aggregate = false
+  if closest.product.price_varies
+    if block.settings.price_display == 'range' or block.settings.price_display == 'lowest'
+      assign show_aggregate = true
+    endif
+  endif
+
+  if show_aggregate
+    assign mode = 'aggregate'
+    assign sale_price = closest.product.price
+    assign compare_at = closest.product.compare_at_price
+  else
+    assign mode = 'variant'
+    assign sale_price = variant.price
+    assign compare_at = variant.compare_at_price
+  endif
+
+  assign on_sale = false
+  if compare_at > sale_price
+    assign on_sale = true
+  endif
+-%}
+
+<div
+  class="flex flex-wrap items-baseline has-[.discount:not(:empty)]:items-center gap-x-[.5em]"
+  data-product-price
+  data-block-id="{{ block.id }}"
+  data-price-display="{{ block.settings.price_display }}"
+  data-discount-display="{{ block.settings.discount_display }}"
+  data-price-varies="{{ closest.product.price_varies }}"
+  data-mode="{{ mode }}"
+  data-price-min="{{ closest.product.price_min | money | escape }}"
+  data-price-max="{{ closest.product.price_max | money | escape }}"
+>
+  <span data-product-price-display class="contents *:anim-fade [&_span]:text-2xl">
+    {%- if show_aggregate -%}
+      {%- if block.settings.price_display == 'range' -%}
+        <span>{{ closest.product.price_min | money }} to {{ closest.product.price_max | money }}</span>
+      {%- else -%}
+        <span>From {{ closest.product.price_min | money }}</span>
+      {%- endif -%}
+    {%- elsif on_sale -%}
+      <span>{{ sale_price | money }}</span>
+      <s class="opacity-50">{{ compare_at | money }}</s>
+    {%- else -%}
+      <span>{{ sale_price | money }}</span>
+    {%- endif -%}
+  </span>
+
+  <span
+    class="discount *:anim-fade-to-l *:inline-block *:px-[.25em] *:bg-alert *:text-white *:before:content-(--before) *:after:content-(--after)"
+    data-product-price-discount
+    {% if block.settings.discount_display == 'none' or on_sale == false %}hidden{% endif %}
+  >
+    {%- if block.settings.discount_display == 'percentage' and on_sale -%}
+      <span>
+        {{- compare_at
+          | minus: sale_price
+          | times: 100.0
+          | divided_by: compare_at
+          | round
+        -}}%
+      </span>
+    {%- elsif block.settings.discount_display == 'amount' and on_sale -%}
+      <span>{{ compare_at | minus: sale_price | money }}</span>
+    {%- endif -%}
+  </span>
+
+  <script type="application/json" data-product-price-variants>
+    [
+      {%- for v in closest.product.variants -%}
+        {%- liquid
+          assign discount_amount = 0
+          assign discount_percentage = 0
+          if v.compare_at_price > v.price
+            assign discount_amount = v.compare_at_price | minus: v.price
+            assign discount_percentage = discount_amount | times: 100.0 | divided_by: v.compare_at_price | round
+          endif
+        -%}
+        {
+          "id": {{ v.id }},
+          "price": {{ v.price }},
+          "compare_at_price": {{ v.compare_at_price | default: 0 }},
+          "price_formatted": {{ v.price | money | json }},
+          "compare_at_formatted": {{ v.compare_at_price | default: 0 | money | json }},
+          "discount_amount_formatted": {{ discount_amount | money | json }},
+          "discount_percentage": {{ discount_percentage }}
+        }{%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  </script>
+</div>
+
+<style>
+  @scope {
+    
+    .discount {
+      {% if block.settings.discount_prefix != blank %}
+        --before: {{ block.settings.discount_prefix }};
+      {% endif %}
+      {% if block.settings.discount_suffix != blank %}
+        --after: {{ block.settings.discount_suffix }};
+      {% endif %}
+    }
+  }
+</style>
+
+{% javascript %}
+  if (!window.__productPriceBound) {
+    window.__productPriceBound = true
+
+    const setDiscountText = (discount, text) => {
+      const inner = document.createElement('span')
+      inner.textContent = text
+      discount.replaceChildren(inner)
+      discount.hidden = false
+    }
+
+    const renderVariantPrice = (root, variant) => {
+      const display = root.querySelector('[data-product-price-display]')
+      const discount = root.querySelector('[data-product-price-discount]')
+      if (!display) return
+
+      const onSale = variant.compare_at_price > variant.price
+
+      if (onSale) {
+        display.innerHTML = `<span>${variant.price_formatted}</span><s class="opacity-50">${variant.compare_at_formatted}</s>`
+      } else {
+        display.innerHTML = `<span>${variant.price_formatted}</span>`
+      }
+
+      if (!discount) return
+
+      const discountDisplay = root.dataset.discountDisplay
+      if (discountDisplay === 'none' || !onSale) {
+        discount.hidden = true
+        discount.replaceChildren()
+        return
+      }
+
+      setDiscountText(
+        discount,
+        discountDisplay === 'percentage'
+          ? `${variant.discount_percentage}%`
+          : variant.discount_amount_formatted
+      )
+    }
+
+    const updateAllPrices = (variantId) => {
+      document.querySelectorAll('[data-product-price]').forEach((root) => {
+        const variantsEl = root.querySelector('[data-product-price-variants]')
+        if (!variantsEl) return
+
+        let variants
+        try {
+          variants = JSON.parse(variantsEl.textContent)
+        } catch {
+          return
+        }
+
+        const variant = variants.find((v) => String(v.id) === String(variantId))
+        if (!variant) return
+
+        root.dataset.mode = 'variant'
+        renderVariantPrice(root, variant)
+      })
+    }
+
+    document.addEventListener('change', (event) => {
+      const select = event.target
+      if (!(select instanceof HTMLSelectElement)) return
+      if (select.name !== 'id') return
+      if (!select.closest('form[action*="/cart/add"]')) return
+
+      updateAllPrices(select.value)
+    })
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Price",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Price"
+    },
+    {
+      "type": "select",
+      "id": "price_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "single",
+          "label": "Single"
+        },
+        {
+          "value": "lowest",
+          "label": "Lowest"
+        },
+        {
+          "value": "range",
+          "label": "Range"
+        }
+      ],
+      "default": "single"
+    },
+    {
+      "type": "header",
+      "content": "Discount"
+    },
+    {
+      "type": "select",
+      "id": "discount_display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "percentage",
+          "label": "%"
+        },
+        {
+          "value": "amount",
+          "label": "$"
+        }
+      ],
+      "default": "percentage"
+    },
+    {
+      "type": "text",
+      "id": "discount_prefix",
+      "label": "Prefix",
+      "default": "\"-\"",
+      "info": "Surround with quotes (e.g. \"-\")",
+      "visible_if": "{{ block.settings.discount_display != 'none' }}"
+    },
+    {
+      "type": "text",
+      "id": "discount_suffix",
+      "label": "Suffix",
+      "info": "Surround with quotes (e.g. \" off\")",
+      "visible_if": "{{ block.settings.discount_display != 'none' }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Price",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

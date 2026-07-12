@@ -101,7 +101,7 @@
   <nav class="[grid-area:actions] flex items-center gap-x-4">
     {% render 'account-dropdown', section: section, class: 'max-md:hidden' %}
 
-    {% if settings.cart_behavior == 'drawer' %}
+    {% if settings.cart_behavior == 'drawer' and template != 'cart' %}
       {% render 'cart-drawer', section_id: section.id %}
     {% else %}
       <a href="{{ routes.cart_url }}">
