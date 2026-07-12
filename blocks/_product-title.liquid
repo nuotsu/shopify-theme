@@ -1,0 +1,22 @@
+{%- if template == 'product' -%}
+  <div class="h1">
+    {{ closest.product.title }}
+  </div>
+{%- else -%}
+  <a class="block" href="{{ closest.product.url }}">
+    {{ closest.product.title }}
+  </a>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Title",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Title",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

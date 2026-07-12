@@ -1,0 +1,23 @@
+{% form 'product', product, class: 'space-y-4' %}
+  {%- content_for 'blocks', closest.product: closest.product -%}
+{% endform %}
+
+{% schema %}
+{
+  "name": "Product form",
+  "settings": [],
+  "blocks": [
+    { "type": "richtext" },
+    { "type": "_product-options" },
+    { "type": "_quantity-selector" },
+    { "type": "_buy-button" },
+    { "type": "_product-title" },
+  ],
+  "presets": [
+    {
+      "name": "Product form",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

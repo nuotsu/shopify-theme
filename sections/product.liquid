@@ -1,5 +1,29 @@
-<div class="section">
-  {{ product.title }}
+<figure
+  class="flex items-center gap-(--gallery-gap) overflow-x-auto snap-x snap-mandatory *:snap-center *:shrink-0 carousel-scroll-buttons"
+  style="--gallery-gap: {{ section.settings.gallery_gap }}px;"
+>
+  {%- for media in product.media -%}
+    {%- case media.media_type -%}
+      {%- when 'image' -%}
+        {%- liquid
+          if forloop.first
+            assign loading = 'eager'
+          else
+            assign loading = 'lazy'
+          endif
+        -%}
+
+        {{ media | image_url: width: 800 | image_tag: class: 'md:h-[20lh] w-auto object-contain', loading: loading }}
+    {%- endcase -%}
+  {%- endfor -%}
+</figure>
+
+<div class="section grid md:grid-cols-[1fr_min(50%,24rem)] gap-x-[2lh] gap-y-lh items-start">
+  {% content_for 'block', type: '_product-details', id: 'product-details' %}
+
+  <div class="md:sticky-below-header [--offset:1rem]">
+    {% content_for 'block', type: '_product-form', id: 'product-form' %}
+  </div>
 </div>
 
 {% schema %}
@@ -7,7 +31,24 @@
   "name": "Product",
   "tag": "section",
   "settings": [
-
+    {
+      "type": "header",
+      "content": "Gallery"
+    },
+    {
+      "type": "range",
+      "id": "gallery_gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    { "type": "_product-details" },
+    { "type": "_product-form" }
   ]
 }
 {% endschema %}

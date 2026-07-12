@@ -1,0 +1,37 @@
+<button type="submit" class="{{ block.settings.style }} w-full">
+  Add to cart
+</button>
+
+{% schema %}
+{
+  "name": "Buy button",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        {
+          "value": "action",
+          "label": "Action"
+        },
+        {
+          "value": "action-outline",
+          "label": "Outline"
+        },
+        {
+          "value": "ghost",
+          "label": "Ghost"
+        }
+      ],
+      "default": "action"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Buy button",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

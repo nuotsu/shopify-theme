@@ -32,14 +32,10 @@
               "blocks": {}
             }
           },
-          "block_order": [
-            "richtext"
-          ]
+          "block_order": ["richtext"]
         }
       },
-      "block_order": [
-        "hero_backdrop"
-      ]
+      "block_order": ["hero_backdrop"]
     },
     "collection": {
       "type": "collection",
@@ -54,7 +50,7 @@
               "type": "_product-card-image"
             },
             "product-card-title": {
-              "type": "_product-card-title"
+              "type": "_product-title"
             },
             "product-card-price": {
               "type": "_product-card-price"
@@ -81,8 +77,5 @@
       }
     }
   },
-  "order": [
-    "hero_backdrop",
-    "collection"
-  ]
+  "order": ["hero_backdrop", "collection"]
 }

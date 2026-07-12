@@ -1,0 +1,48 @@
+<div class="inline-flex items-stretch border">
+  <label class="sr-only" for="quantity">Quantity</label>
+  
+  <button class="ghost" type="button">+</button>
+
+  <input
+    id="quantity"
+    name="quantity"
+    type="number"
+    value="1"
+    min="1"
+    max="100"
+    class="text-center"
+  >
+
+  <button class="ghost" type="button">-</button>
+</div>
+
+<style>
+  @scope {
+    input {
+      -moz-appearance: textfield;
+      
+      &::-webkit-inner-spin-button,
+      &::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        appearance: none;
+      }
+    }
+  }
+</style>
+
+{% javascript %}
+// sync quantity input with +/- buttons
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Quantity selector",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Quantity selector",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

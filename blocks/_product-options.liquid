@@ -1,0 +1,129 @@
+{%- if closest.product.has_only_default_variant -%}
+  <input
+    type="hidden"
+    name="id"
+    value="{{ closest.product.selected_or_first_available_variant.id }}"
+  >
+{%- else -%}
+  <div data-product-options>
+    <label
+      class="flex items-center gap-2"
+      {% if block.settings.display == 'radio' %} hidden {% endif %}
+    >
+      <span>Variants:</span>
+
+      <select name="id" id="id-{{ block.id }}" class="ghost grow">
+        {%- for variant in closest.product.variants -%}
+          <option
+            value="{{ variant.id }}"
+            {% if variant.selected %} selected {% endif %}
+            {% unless variant.available %} disabled {% endunless %}
+          >
+            {{- variant.title -}}
+          </option>
+        {%- endfor -%}
+      </select>
+    </label>
+
+    {%- if block.settings.display == 'radio' -%}
+      <div class="grid gap-4">
+        {%- for option in closest.product.options_with_values -%}
+          <fieldset>
+            <legend>{{ option.name }}:</legend>
+
+            <div class="flex flex-wrap items-center gap-[.25em] leading-tight">
+              {%- for value in option.values -%}
+                <label class="action-outline not-has-checked:border-current/25 min-w-[3ch] has-disabled:opacity-25 has-disabled:bg-current/25">
+                  <input
+                    type="radio"
+                    name="{{ option.name }}"
+                    value="{{ value }}"
+                    id="{{ option.name }}-{{ value }}-{{ block.id }}"
+                    {% if value == option.selected_value %} checked {% endif %}
+                    class="sr-only"
+                  >
+                  {{ value }}
+                </label>
+              {%- endfor -%}
+            </div>
+          </fieldset>
+        {%- endfor -%}
+      </div>
+
+      <script type="application/json" data-variants>
+        {{ closest.product.variants | json }}
+      </script>
+
+      <script>
+        (function () {
+          const container = document.currentScript.closest('[data-product-options]')
+          if (!container) return
+
+          const select = container.querySelector('select[name="id"]')
+          const variantsEl = container.querySelector('[data-variants]')
+          if (!select || !variantsEl) return
+
+          let variants
+          try {
+            variants = JSON.parse(variantsEl.textContent)
+          } catch {
+            return
+          }
+
+          const syncSelectFromRadios = () => {
+            const selected = [...container.querySelectorAll('input[type="radio"]:checked')].map(
+              (input) => input.value
+            )
+
+            const variant = variants.find((v) =>
+              v.options.every((opt, i) => opt === selected[i])
+            )
+
+            if (!variant) return
+
+            select.value = String(variant.id)
+            select.dispatchEvent(new Event('change', { bubbles: true }))
+          }
+
+          container.addEventListener('change', (event) => {
+            if (event.target.matches('input[type="radio"]')) {
+              syncSelectFromRadios()
+            }
+          })
+
+          syncSelectFromRadios()
+        })()
+      </script>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product options",
+  "settings": [
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "radio",
+          "label": "Radio"
+        },
+        {
+          "value": "dropdown",
+          "label": "Dropdown"
+        }
+      ],
+      "default": "radio"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Options",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

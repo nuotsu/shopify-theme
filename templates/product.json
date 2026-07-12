@@ -1,7 +1,61 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "product": {
       "type": "product",
+      "blocks": {
+        "product-details": {
+          "type": "_product-details",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "product_title": {
+              "type": "_product-title",
+              "settings": {},
+              "blocks": {}
+            },
+            "richtext": {
+              "type": "richtext",
+              "name": "Product description",
+              "settings": {
+                "content": "{{ closest.product.description }}",
+                "text_align": "inherit",
+                "font_size": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": ["product_title", "richtext"]
+        },
+        "product-form": {
+          "type": "_product-form",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "product_options": {
+              "type": "_product-options"
+            },
+            "quantity_selector": {
+              "type": "_quantity-selector"
+            },
+            "buy_button": {
+              "type": "_buy-button",
+              "name": "Buy button",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": ["product_options", "quantity_selector", "buy_button"]
+        }
+      },
       "settings": {}
     }
   },

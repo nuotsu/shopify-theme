@@ -1,0 +1,19 @@
+{%- content_for 'blocks', closest.product: closest.product -%}
+
+{% schema %}
+{
+  "name": "Product details",
+  "class": "space-y-4",
+  "settings": [],
+  "blocks": [
+    { "type": "_product-title" },
+    { "type": "richtext" }
+  ],
+  "presets": [
+    {
+      "name": "Product form",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
