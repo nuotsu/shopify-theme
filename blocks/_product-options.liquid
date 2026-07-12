@@ -40,6 +40,7 @@
                     value="{{ value }}"
                     id="{{ option.name }}-{{ value }}-{{ block.id }}"
                     {% if value == option.selected_value %} checked {% endif %}
+                    {% unless value.available %} disabled {% endunless %}
                     class="sr-only"
                   >
                   {{ value }}
@@ -70,13 +71,28 @@
             return
           }
 
-          const syncSelectFromRadios = () => {
-            const selected = [...container.querySelectorAll('input[type="radio"]:checked')].map(
-              (input) => input.value
+          const fieldsets = [...container.querySelectorAll('fieldset')]
+
+          const getSelected = () =>
+            fieldsets.map(
+              (fieldset) => fieldset.querySelector('input[type="radio"]:checked')?.value
             )
 
-            const variant = variants.find((v) =>
-              v.options.every((opt, i) => opt === selected[i])
+          const isAvailable = (optionIndex, value, selected) =>
+            variants.some(
+              (v) =>
+                v.available &&
+                v.options[optionIndex] === value &&
+                v.options.every((opt, i) => i >= optionIndex || opt === selected[i])
+            )
+
+          const syncSelectFromRadios = () => {
+            const selected = getSelected()
+            if (selected.some((value) => value == null)) return
+
+            const variant = variants.find(
+              (v) =>
+                v.available && v.options.every((opt, i) => opt === selected[i])
             )
 
             if (!variant) return
@@ -85,13 +101,44 @@
             select.dispatchEvent(new Event('change', { bubbles: true }))
           }
 
+          const updateDisabledRadios = () => {
+            let selected = getSelected()
+
+            const applyDisabled = () => {
+              fieldsets.forEach((fieldset, optionIndex) => {
+                fieldset.querySelectorAll('input[type="radio"]').forEach((input) => {
+                  input.disabled = !isAvailable(optionIndex, input.value, selected)
+                })
+              })
+            }
+
+            applyDisabled()
+
+            let didFallback = false
+            fieldsets.forEach((fieldset, optionIndex) => {
+              const checked = fieldset.querySelector('input[type="radio"]:checked')
+              if (!checked?.disabled) return
+
+              const fallback = fieldset.querySelector('input[type="radio"]:not(:disabled)')
+              if (!fallback) return
+
+              fallback.checked = true
+              selected[optionIndex] = fallback.value
+              didFallback = true
+            })
+
+            if (didFallback) applyDisabled()
+
+            syncSelectFromRadios()
+          }
+
           container.addEventListener('change', (event) => {
             if (event.target.matches('input[type="radio"]')) {
-              syncSelectFromRadios()
+              updateDisabledRadios()
             }
           })
 
-          syncSelectFromRadios()
+          updateDisabledRadios()
         })()
       </script>
     {%- endif -%}
