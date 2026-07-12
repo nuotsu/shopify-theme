@@ -50,6 +50,10 @@
       --column-width: {{ section.settings.column_width }}px;
       --gap: {{ section.settings.gap }}px;
     }
+
+    .product-card-variants:not(:has(*)) {
+      display: none;
+    }
   }
 </style>
 

@@ -1,6 +1,7 @@
-<div class="flex flex-wrap items-center gap-[.25em] text-sm">
-  {% assign option = closest.product.options_by_name[block.settings.option_name] %}
-  {% if option %}
+{% assign option = closest.product.options_by_name[block.settings.option_name] %}
+
+{% if option %}
+  <div class="flex flex-wrap items-center gap-[.25em] text-sm">
     {% for value in option.values limit: block.settings.limit %}
       <a
         href="{{ closest.product.url }}?variant={{ value.variant.id }}"
@@ -28,12 +29,13 @@
     {% if option.values.size > block.settings.limit %}
       <span>{{ option.values.size | minus: block.settings.limit }} more</span>
     {% endif %}
-  {% endif %}
-</div>
+  </div>
+{% endif %}
 
 {% schema %}
 {
   "name": "Variants",
+  "class": "product-card-variants",
   "settings": [
     {
       "type": "text",

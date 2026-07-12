@@ -1,9 +1,9 @@
 {
   "sections": {
-    "prose": {
-      "type": "prose",
+    "search": {
+      "type": "search",
       "settings": {}
     }
   },
-  "order": ["prose"]
+  "order": ["search"]
 }

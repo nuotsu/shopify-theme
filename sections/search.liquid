@@ -1,0 +1,81 @@
+<header class="prose text-center">
+  {{ section.settings.content }}
+</header>
+
+<search>
+  <form action="{{ routes.search_url }}" method="get">
+    <label class="grid *:col-span-full *:row-span-full items-center">
+      <input
+        class="w-full py-[.25em] pl-[calc(1lh+0.5em)] pr-[.5em] border"
+        type="search"
+        name="q"
+        placeholder="Search"
+        value="{{ search.terms }}"
+      >
+
+      <span class="grid place-content-center aspect-square h-[calc(1lh+0.5em)]">
+        {{- 'icon-search.svg' | inline_asset_content -}}
+      </span>
+    </label>
+  </form>
+</search>
+
+{% if search.performed %}
+  {% if search.results_count == 0 %}
+    <p class="text-center text-current/50">
+      No results found for "{{ search.terms }}"
+    </p>
+
+  {% else %}
+    <p class="text-center text-current/50">
+      {{ search.results_count }} results found for "{{ search.terms }}"
+    </p>
+
+    <div class="search-results">
+      {% paginate search.results by 12 %}
+        {% for result in search.results %}
+          {% unless result.object_type == blank %}
+            <div class="relative flex items-center gap-4 py-1 border-b">
+              <div class="grow grid">
+                <a href="{{ result.url }}" class="line-clamp-1 break-all hover:underline after:absolute after:inset-0">
+                  {{ result.title }}
+                </a>
+
+                <span class="uppercase text-current/50">{{ result.object_type }}</span>
+              </div>
+
+              {%- assign image = result.featured_image | default: result.image -%}
+              {%- if image -%}
+                <figure class="shrink-0">
+                  {{ image
+                    | image_url: width: 300
+                    | image_tag: class: 'size-[2lh] aspect-square object-cover', loading: 'lazy', alt: image.alt
+                  }}
+                </figure>
+              {%- endif -%}
+            </div>
+          {% endunless %}
+        {% endfor %}
+
+        <div class="pagination mt-lh">
+          {{ paginate | default_pagination }}
+        </div>
+      {% endpaginate %}
+    </div>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Search",
+  "class": "section space-y-lh",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h1>Search</h1>"
+    }
+  ]
+}
+{% endschema %}
