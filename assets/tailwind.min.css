@@ -305,6 +305,9 @@
   .right-0 {
     right: 0;
   }
+  .bottom-0 {
+    bottom: 0;
+  }
   .left-0 {
     left: 0;
   }
@@ -534,11 +537,26 @@
   .h-lh {
     height: var(--spacing-lh);
   }
+  .max-h-\[4lh\] {
+    max-height: 4lh;
+  }
   .max-h-svh {
     max-height: 100svh;
   }
+  .min-h-\[calc\(1lh\+\.5em\)\] {
+    min-height: calc(1lh + .5em);
+  }
+  .min-h-\[calc\(1lh\+1em\)\] {
+    min-height: calc(1lh + 1em);
+  }
   .min-h-full {
     min-height: 100%;
+  }
+  .min-h-lh {
+    min-height: 1lh;
+  }
+  .min-h-lh {
+    min-height: var(--spacing-lh);
   }
   .min-h-svh {
     min-height: 100svh;
@@ -635,6 +653,9 @@
   .grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .grid-cols-\[1fr_auto\] {
+    grid-template-columns: 1fr auto;
+  }
   .grid-cols-\[auto_1fr\] {
     grid-template-columns: auto 1fr;
   }
@@ -694,6 +715,9 @@
   }
   .gap-\[\.25em_\.5em\] {
     gap: .25em .5em;
+  }
+  .gap-\[2lh\] {
+    gap: 2lh;
   }
   .gap-\[inherit\] {
     gap: inherit;
@@ -923,6 +947,10 @@
   .italic {
     font-style: italic;
   }
+  .tabular-nums {
+    --tw-numeric-spacing: tabular-nums;
+    font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
+  }
   .line-through {
     text-decoration-line: line-through;
   }
@@ -1075,6 +1103,12 @@
   }
   .group-open\/lv2\:font-bold {
     &:is(:where(.group\/lv2):is([open], :popover-open, :open) *) {
+      --tw-font-weight: var(--font-weight-bold);
+      font-weight: var(--font-weight-bold);
+    }
+  }
+  .group-open\/note\:font-bold {
+    &:is(:where(.group\/note):is([open], :popover-open, :open) *) {
       --tw-font-weight: var(--font-weight-bold);
       font-weight: var(--font-weight-bold);
     }
@@ -1522,6 +1556,17 @@
       display: none;
     }
   }
+  .\@max-lg\/cart\:border-t {
+    @container cart (width < 32rem) {
+      border-top-style: var(--tw-border-style);
+      border-top-width: 1px;
+    }
+  }
+  .\@max-lg\/cart\:pt-4 {
+    @container cart (width < 32rem) {
+      padding-top: calc(var(--spacing) * 4);
+    }
+  }
   .\@max-md\:hidden {
     @container (width < 28rem) {
       display: none;
@@ -1609,6 +1654,11 @@
       height: 100px;
     }
   }
+  .\@lg\/cart\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container cart (width >= 32rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
+    }
+  }
   .\@lg\/cart\:grid-cols-\[auto_1fr_auto_auto\] {
     @container cart (width >= 32rem) {
       grid-template-columns: auto 1fr auto auto;
@@ -1622,6 +1672,11 @@
   .\@lg\/cart\:grid-cols-subgrid {
     @container cart (width >= 32rem) {
       grid-template-columns: subgrid;
+    }
+  }
+  .\@lg\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container (width >= 32rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
     }
   }
   .\@lg\:grid-cols-\[auto_1fr_auto_auto_auto\] {
@@ -1664,6 +1719,92 @@
       text-align: right;
     }
   }
+  .\*\:\@lg\/cart\:sticky-below-header {
+    :is(& > *) {
+      @container cart (width >= 32rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
+  .\@xl\/cart\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container cart (width >= 36rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
+    }
+  }
+  .\*\:\@xl\/cart\:sticky-below-header {
+    :is(& > *) {
+      @container cart (width >= 36rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
+  .\@2xl\/cart\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container cart (width >= 42rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
+    }
+  }
+  .\*\:\@2xl\/cart\:sticky-below-header {
+    :is(& > *) {
+      @container cart (width >= 42rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
+  .\@3xl\/cart\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container cart (width >= 48rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
+    }
+  }
+  .\*\:\@3xl\/cart\:sticky-below-header {
+    :is(& > *) {
+      @container cart (width >= 48rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
+  .\@4xl\/cart\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container cart (width >= 56rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
+    }
+  }
+  .\*\:\@4xl\/cart\:sticky-below-header {
+    :is(& > *) {
+      @container cart (width >= 56rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
+  .\@5xl\/cart\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container cart (width >= 64rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
+    }
+  }
+  .\*\:\@5xl\/cart\:sticky-below-header {
+    :is(& > *) {
+      @container cart (width >= 64rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
+  .\@7xl\/cart\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
+    @container cart (width >= 80rem) {
+      grid-template-columns: 1fr min(50%, 24rem);
+    }
+  }
+  .\*\:\@7xl\/cart\:sticky-below-header {
+    :is(& > *) {
+      @container cart (width >= 80rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
   .backdrop\:starting\:opacity-0 {
     &::backdrop {
       @starting-style {
@@ -1703,6 +1844,12 @@
       &:hover {
         text-decoration-line: underline;
       }
+    }
+  }
+  .\[\&_dd\]\:font-bold {
+    & dd {
+      --tw-font-weight: var(--font-weight-bold);
+      font-weight: var(--font-weight-bold);
     }
   }
   .\[\&_details\]\:not-first\:border-t {
@@ -1910,6 +2057,26 @@
   syntax: "*";
   inherits: false;
 }
+@property --tw-ordinal {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-slashed-zero {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-figure {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-spacing {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-numeric-fraction {
+  syntax: "*";
+  inherits: false;
+}
 @property --tw-blur {
   syntax: "*";
   inherits: false;
@@ -2001,6 +2168,11 @@
       --tw-space-y-reverse: 0;
       --tw-border-style: solid;
       --tw-leading: initial;
+      --tw-ordinal: initial;
+      --tw-slashed-zero: initial;
+      --tw-numeric-figure: initial;
+      --tw-numeric-spacing: initial;
+      --tw-numeric-fraction: initial;
       --tw-blur: initial;
       --tw-brightness: initial;
       --tw-contrast: initial;

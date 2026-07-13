@@ -1,7 +1,11 @@
 {%- unless cart.empty? -%}
-  <div class="data-loading:animate-pulse" data-cart-loading>
+  {%- form 'cart',
+    cart,
+    class: 'grid @4xl/cart:grid-cols-[1fr_min(50%,24rem)] items-start gap-y-lh gap-x-[2lh] *:@4xl/cart:sticky-below-header [--offset:1rem] data-loading:animate-pulse',
+    data-cart-loading: ''
+  -%}
     <ul class="grid @lg/cart:grid-cols-[auto_1fr_auto_auto] gap-y-4 gap-x-lh leading-tight">
-      <li class="hidden @lg:grid col-span-full grid-cols-subgrid *:text-current/50 border-b pb-2">
+      <li class="hidden @lg:grid col-span-full grid-cols-subgrid *:text-current/50 border-b py-1">
         <div class="col-span-2">Product</div>
         <div class="text-center">Quantity</div>
         <div class="text-center">Price</div>
@@ -9,7 +13,7 @@
       
       {%- for line_item in cart.items -%}
         <li class="grid grid-cols-[auto_1fr_auto] items-start @lg/cart:items-center gap-[inherit] @lg/cart:col-span-full @lg/cart:grid-cols-subgrid [&+&]:border-t [&+&]:pt-4">
-          <figure class="sticky-below-header [--offset:1rem]">
+          <figure class="sticky-below-header">
             {{ line_item.image
               | image_url: width: 200
               | image_tag: class: 'size-[60px] @lg/cart:size-[100px] object-cover', loading: 'lazy'
@@ -46,7 +50,7 @@
             </div>
           </div>
 
-          <div class="grid @lg/cart:text-right @max-lg/cart:sticky-below-header [--offset:1rem]">
+          <div class="grid @lg/cart:text-right @max-lg/cart:sticky-below-header tabular-nums">
             {%- if line_item.original_line_price != line_item.final_line_price -%}
               <s>{{ line_item.original_line_price | money }}</s>
               <span>{{ line_item.final_line_price | money }}</span>
@@ -63,5 +67,39 @@
         </li>
       {%- endfor -%}
     </ul>
-  </div>
+
+    <div class="grid gap-4 sticky bottom-0 bg-background @max-lg/cart:pt-4 pb-[max(env(safe-area-inset-bottom),1rem)] @max-lg/cart:border-t">
+      <dl class="grid grid-cols-[1fr_auto] gap-x-4 [&_dd]:font-bold tabular-nums">
+        <dt>Subtotal</dt>
+        <dd>{{ cart.total_price | money }}</dd>
+        
+        {%- for discount in cart.cart_level_discount_applications -%}
+          <dd class="text-alert">
+            -{{ discount.total_allocated_amount | money }}
+          </dd>
+        {%- endfor -%}
+      </dl>
+      
+      <details class="accordion group/note">
+        <summary class="py-1 leading-tight group-open/note:font-bold">
+          Cart notes
+          {{ 'icon-chevron-down.svg' | inline_asset_content }}
+        </summary>
+        <div>
+          <textarea
+            name="note"
+            rows="3"
+            placeholder="Add a note to your order"
+            class="w-full min-h-[calc(1lh+.5em)] max-h-[4lh] p-[.25em_.5em] border"
+          >
+            {{- cart.note -}}
+          </textarea>
+        </div>
+      </details>
+      
+      <button type="submit" name="checkout" class="action w-full">
+        Checkout
+      </button>
+    </div>
+  {%- endform -%}
 {%- endunless -%}

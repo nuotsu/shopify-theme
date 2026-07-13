@@ -1,3 +1,9 @@
+{%- capture cart_count -%}
+  <span data-cart-count class="{% unless cart.item_count > 0 %} hidden {% endunless %}">
+    ({{ cart.item_count }})
+  </span>
+{%- endcapture -%}
+
 <button
   class="cursor-pointer"
   type="button"
@@ -5,7 +11,7 @@
   command="show-modal"
 >
   Cart
-  <span data-cart-count class="{% unless cart.item_count > 0 %} hidden {% endunless %}">({{ cart.item_count }})</span>
+  {{ cart_count }}
 </button>
 
 <dialog
@@ -17,6 +23,7 @@
   <header class="sticky top-0 z-1 bg-background flex items-center gap-4 justify-between p-4 border-b">
     <a href="{{ routes.cart_url }}" class="block py-1 hover:underline">
       Cart
+      {{ cart_count }}
     </a>
 
     <button
