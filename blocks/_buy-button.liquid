@@ -21,9 +21,13 @@
   }
 
   const refreshCartLines = async (cartDrawer) => {
-    const sectionId = cartDrawer?.dataset.sectionId
     const lines = cartDrawer?.querySelector('[data-cart-lines]')
+    const sectionId = lines?.dataset.sectionId || cartDrawer?.dataset.sectionId
     if (!sectionId || !lines) return
+
+    lines.querySelectorAll('[data-cart-loading]').forEach((el) => {
+      el.toggleAttribute('data-loading', true)
+    })
 
     try {
       const fetchUrl = new URL(window.location.href)
@@ -40,6 +44,9 @@
       lines.innerHTML = newLines.innerHTML
       document.dispatchEvent(new CustomEvent('cart:updated'))
     } catch {
+      lines.querySelectorAll('[data-cart-loading]').forEach((el) => {
+        el.toggleAttribute('data-loading', false)
+      })
       // Drawer can still open with stale lines; count is already updated.
     }
   }

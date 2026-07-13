@@ -1,18 +1,67 @@
-<ul class="grid md:grid-cols-[1fr_auto] gap-4">
-  {%- for line_item in cart.items -%}
-    <li class="grid md:col-span-full md:grid-cols-subgrid">
-      <a href="{{ line_item.url }}">{{ line_item.title }}</a>
+{%- unless cart.empty? -%}
+  <div class="data-loading:animate-pulse" data-cart-loading>
+    <ul class="grid @lg/cart:grid-cols-[auto_1fr_auto_auto] gap-y-4 gap-x-lh leading-tight">
+      <li class="hidden @lg:grid col-span-full grid-cols-subgrid *:text-current/50 border-b pb-2">
+        <div class="col-span-2">Product</div>
+        <div class="text-center">Quantity</div>
+        <div class="text-center">Price</div>
+      </li>
+      
+      {%- for line_item in cart.items -%}
+        <li class="grid grid-cols-[auto_1fr_auto] items-start @lg/cart:items-center gap-[inherit] @lg/cart:col-span-full @lg/cart:grid-cols-subgrid [&+&]:border-t [&+&]:pt-4">
+          <figure class="sticky-below-header [--offset:1rem]">
+            {{ line_item.image
+              | image_url: width: 200
+              | image_tag: class: 'size-[60px] @lg/cart:size-[100px] object-cover', loading: 'lazy'
+              | link_to: line_item.url
+            }}
+          </figure>
 
-      <div>
-        {% render 'quantity-selector',
-          id: line_item.key,
-          name: 'updates[]',
-          value: line_item.quantity,
-          min: 0,
-          max: line_item.variant.quantity_rule.max | default: 100,
-          line_item_key: line_item.key
-        %}
-      </div>
-    </li>
-  {%- endfor -%}
-</ul>
+          <div class="@lg/cart:contents grid gap-2">
+            <dl class="relative">
+              <dt>
+                <a href="{{ line_item.url }}" class="after:absolute after:inset-0 hover:underline">
+                  {{- line_item.product.title -}}
+                </a>
+              </dt>
+
+              {%- if line_item.variant.title != 'Default Title' -%}
+                <dd class="mt-2 text-sm text-current/50">
+                  {{- line_item.variant.title -}}
+                </dd>
+              {%- endif -%}
+            </dl>
+
+            <div class="flex flex-wrap @lg/cart:flex-col gap-2 items-center">
+              {% render 'quantity-selector',
+                id: line_item.key,
+                name: 'updates[]',
+                value: line_item.quantity,
+                min: 0,
+                max: line_item.variant.quantity_rule.max | default: 100,
+                line_item_key: line_item.key
+              %}
+
+              {% comment %} <a href="{{ line_item.url_to_remove }}" class="link text-sm">Remove</a> {% endcomment %}
+            </div>
+          </div>
+
+          <div class="grid @lg/cart:text-right @max-lg/cart:sticky-below-header [--offset:1rem]">
+            {%- if line_item.original_line_price != line_item.final_line_price -%}
+              <s>{{ line_item.original_line_price | money }}</s>
+              <span>{{ line_item.final_line_price | money }}</span>
+            {%- else -%}
+              <span>{{ line_item.final_line_price | money }}</span>
+            {%- endif -%}
+
+            {%- for allocation in line_item.line_level_discount_allocations -%}
+              <span class="text-alert">
+                -{{ allocation.amount | money }}
+              </span>
+            {%- endfor -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endunless -%}

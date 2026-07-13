@@ -30,7 +30,11 @@
     </button>
   </header>
 
-  <div class="p-4" data-cart-lines>
+  <div
+    class="@container/cart p-4"
+    data-cart-lines
+    data-section-id="{{ section_id }}"
+  >
     {%- render 'cart-line-items' -%}
   </div>
 </dialog>

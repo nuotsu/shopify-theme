@@ -1,4 +1,10 @@
-{%- render 'cart-line-items' -%}
+<div
+  class="@container/cart"
+  data-cart-lines
+  data-section-id="{{ section.id }}"
+>
+  {%- render 'cart-line-items' -%}
+</div>
 
 {% schema %}
 {

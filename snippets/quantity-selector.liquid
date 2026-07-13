@@ -76,6 +76,43 @@
     })
   }
 
+  const setCartLinesLoading = (loading) => {
+    document.querySelectorAll('[data-cart-loading]').forEach((el) => {
+      el.toggleAttribute('data-loading', loading)
+    })
+  }
+
+  const refreshAllCartLines = async () => {
+    const containers = document.querySelectorAll('[data-cart-lines][data-section-id]')
+    if (!containers.length) return
+
+    await Promise.all(
+      [...containers].map(async (lines) => {
+        const sectionId = lines.dataset.sectionId
+        if (!sectionId) return
+
+        try {
+          const fetchUrl = new URL(window.location.href)
+          fetchUrl.searchParams.set('section_id', sectionId)
+
+          const response = await fetch(fetchUrl.toString())
+          if (!response.ok) throw new Error(`Section fetch failed: ${response.status}`)
+
+          const html = await response.text()
+          const doc = new DOMParser().parseFromString(html, 'text/html')
+          const newLines = doc.querySelector('[data-cart-lines]')
+          if (!newLines) return
+
+          lines.innerHTML = newLines.innerHTML
+        } catch {
+          // Keep existing lines; count is already updated.
+        }
+      })
+    )
+
+    document.dispatchEvent(new CustomEvent('cart:updated'))
+  }
+
   const bindQuantitySelector = (root) => {
     if (root.dataset.qtyBound === 'true') return
     root.dataset.qtyBound = 'true'
@@ -100,6 +137,8 @@
       const key = root.dataset.lineItemKey
       if (!key) return
 
+      setCartLinesLoading(true)
+
       try {
         const response = await fetch(changeUrl, {
           method: 'POST',
@@ -113,11 +152,9 @@
 
         const cart = await response.json()
         updateCartCount(cart.item_count ?? 0)
-
-        if (quantity === 0) {
-          root.closest('li')?.remove()
-        }
+        await refreshAllCartLines()
       } catch {
+        setCartLinesLoading(false)
         // Keep the local value; the next successful sync or page refresh will correct state.
       }
     }
