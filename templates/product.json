@@ -12,8 +12,8 @@
     "product": {
       "type": "product",
       "blocks": {
-        "product-details": {
-          "type": "_product-details",
+        "product-top": {
+          "type": "_product-top",
           "static": true,
           "settings": {},
           "blocks": {
@@ -33,7 +33,87 @@
               "blocks": {}
             }
           },
-          "block_order": ["product_title", "richtext"]
+          "block_order": [
+            "product_title",
+            "richtext"
+          ]
+        },
+        "product-bottom": {
+          "type": "_product-bottom",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "accordion_list": {
+              "type": "accordion-list",
+              "blocks": {
+                "accordion_1": {
+                  "type": "_accordion",
+                  "name": "Accordion",
+                  "settings": {
+                    "summary": "Detail 1"
+                  },
+                  "blocks": {
+                    "richtext": {
+                      "type": "richtext",
+                      "settings": {
+                        "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "richtext"
+                  ]
+                },
+                "accordion_2": {
+                  "type": "_accordion",
+                  "name": "Accordion",
+                  "settings": {
+                    "summary": "Detail 2"
+                  },
+                  "blocks": {
+                    "richtext": {
+                      "type": "richtext",
+                      "settings": {
+                        "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "richtext"
+                  ]
+                },
+                "accordion_3": {
+                  "type": "_accordion",
+                  "name": "Accordion",
+                  "settings": {
+                    "summary": "Detail 3"
+                  },
+                  "blocks": {
+                    "richtext": {
+                      "type": "richtext",
+                      "settings": {
+                        "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+                      },
+                      "blocks": {}
+                    }
+                  },
+                  "block_order": [
+                    "richtext"
+                  ]
+                }
+              },
+              "block_order": [
+                "accordion_1",
+                "accordion_2",
+                "accordion_3"
+              ]
+            }
+          },
+          "block_order": [
+            "accordion_list"
+          ]
         },
         "product-form": {
           "type": "_product-form",
@@ -41,26 +121,54 @@
           "settings": {},
           "blocks": {
             "product_price": {
-              "type": "_product-price"
+              "type": "_product-price",
+              "settings": {
+                "price_display": "single",
+                "discount_display": "percentage",
+                "discount_prefix": "\"-\"",
+                "discount_suffix": ""
+              },
+              "blocks": {}
             },
             "product_options": {
-              "type": "_product-options"
+              "type": "_product-options",
+              "settings": {
+                "display": "radio"
+              },
+              "blocks": {}
             },
             "quantity_selector": {
-              "type": "_quantity-selector"
+              "type": "_quantity-selector",
+              "settings": {},
+              "blocks": {}
             },
             "buy_button": {
               "type": "_buy-button",
               "name": "Buy button",
-              "settings": {},
+              "settings": {
+                "style": "action"
+              },
               "blocks": {}
             }
           },
-          "block_order": ["product_price", "product_options", "quantity_selector", "buy_button"]
+          "block_order": [
+            "product_price",
+            "product_options",
+            "quantity_selector",
+            "buy_button"
+          ]
         }
       },
-      "settings": {}
+      "settings": {
+        "layout": "horizontal",
+        "enable_carousel": false,
+        "enable_two_column": false,
+        "gallery_height": 400,
+        "gallery_gap": 1
+      }
     }
   },
-  "order": ["product"]
+  "order": [
+    "product"
+  ]
 }

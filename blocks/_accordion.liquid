@@ -1,0 +1,61 @@
+<details
+  class="group/accordion accordion text-left open:pb-4"
+  {% if block.settings.open %} open {% endif %}
+  name="accordion-{{ section.id }}"
+>
+  <summary class="py-1 group-open/accordion:font-bold">
+    <div>{{ block.settings.summary }}</div>
+    {{ 'icon-chevron-down.svg' | inline_asset_content }}
+  </summary>
+
+  {%- content_for 'blocks', closest.product: closest.product -%}
+</details>
+
+<style>
+  @scope {
+    *:has(> :scope):last-of-type {
+      border-bottom: 1px solid;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Accordion",
+  "class": "border-t",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "summary",
+      "label": "Summary",
+      "default": "Details"
+    },
+    {
+      "type": "checkbox",
+      "id": "open",
+      "label": "Open",
+      "default": false
+    }
+  ],
+  "blocks": [
+    { "type": "richtext" },
+    { "type": "button-list" },
+  ],
+  "presets": [
+    {
+      "name": "Accordion",
+      "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "settings": {
+            "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "richtext"
+      ]
+    }
+  ]
+}
+{% endschema %}

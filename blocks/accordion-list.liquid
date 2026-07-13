@@ -1,0 +1,80 @@
+{%- content_for 'blocks' -%}
+
+{% schema %}
+{
+  "name": "Accordion list",
+  "settings": [],
+  "blocks": [
+    { "type": "_accordion" }
+  ],
+  "presets": [
+    {
+      "name": "Accordion list",
+      "blocks": {
+        "accordion_1": {
+          "type": "_accordion",
+          "name": "Accordion",
+          "settings": {
+            "summary": "Detail 1"
+          },
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "settings": {
+                "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "richtext"
+          ]
+        },
+        "accordion_2": {
+          "type": "_accordion",
+          "name": "Accordion",
+          "settings": {
+            "summary": "Detail 2"
+          },
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "settings": {
+                "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "richtext"
+          ]
+        },
+        "accordion_3": {
+          "type": "_accordion",
+          "name": "Accordion",
+          "settings": {
+            "summary": "Detail 3"
+          },
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "settings": {
+                "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "richtext"
+          ]
+        }
+      },
+      "block_order": [
+        "accordion_1",
+        "accordion_2",
+        "accordion_3"
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -3,7 +3,8 @@
 -%}
 
 <div class="
-  {% if layout == 'vertical' %} md:section grid md:grid-cols-[1fr_min(50%,24rem)] gap-x-[2lh] items-start *:md:sticky-below-header [--offset:1rem] {% endif %}
+  [--offset:1rem]
+  {% if layout == 'vertical' %} md:section grid md:grid-cols-[1fr_min(50%,var(--column-width))] gap-x-[2lh] items-start *:md:sticky-below-header {% endif %}
 ">
   <figure
     class="
@@ -11,49 +12,72 @@
       {% if layout == 'horizontal' %}
         carousel-scroll-buttons carousel-scroll-marker *:md:h-(--gallery-height)
         {% if product.media.size > 1 %} *:max-w-[calc(100vw-2rem)] {% endif %}
-      {% else %}
+      {% else %} {% # vertical %}
         {% if product.media.size > 1 %} max-md:*:max-w-[calc(100vw-2rem)] {% endif %}
-        {% if section.settings.enable_carousel %} carousel-scroll-buttons carousel-scroll-marker
+        {% if section.settings.enable_carousel %} carousel-scroll-buttons carousel-scroll-marker md:*:aspect-square
         {% else %}
           md:flex-col max-md:carousel-scroll-buttons max-md:carousel-scroll-marker
           {% if section.settings.enable_two_column and product.media.size > 1 %} md:grid md:grid-cols-2 {% endif %}
         {% endif %}
       {% endif %}
     "
-    style="
-      --gallery-height: {{ section.settings.gallery_height }}px;
-      --gallery-gap: {{ section.settings.gallery_gap }}px;
-    "
   >
     {%- for media in product.media -%}
+      {%- liquid
+        if forloop.first
+          assign loading = 'eager'
+        else
+          assign loading = 'lazy'
+        endif
+      -%}
+
       {%- case media.media_type -%}
         {%- when 'image' -%}
-          {%- liquid
-            if forloop.first
-              assign loading = 'eager'
-            else
-              assign loading = 'lazy'
-            endif
-          -%}
-
           {{ media | image_url: width: 800 | image_tag: class: 'w-auto object-contain', loading: loading, draggable: false }}
-      {%- endcase -%}
+
+        {%- when 'video' -%}
+          {%- assign poster = media.preview_image | image_url: width: 800 -%}
+          {{ media | video_tag: class: 'w-auto object-contain', poster: poster, controls: 'true', loading: loading }}
+
+        {%- when 'model' -%}
+          {{ media | model_viewer_tag: class: 'w-auto object-contain', loading: loading, draggable: false }}
+
+        {%- endcase -%}
     {%- endfor -%}
   </figure>
 
   <article class="
-    grid gap-y-lh
-    {% if layout == 'horizontal' %} section md:grid-cols-[1fr_min(50%,24rem)] gap-x-[2lh] items-start
+    grid gap-y-4
+    {% if layout == 'horizontal' %} section md:grid-cols-[1fr_min(50%,var(--column-width))] gap-x-[2lh] items-start
     {% else %} max-md:section
     {% endif %}
   ">
-    {% content_for 'block', type: '_product-details', id: 'product-details' %}
+    <div class="{% if layout == 'horizontal' %} md:sticky-below-header grid gap-4 max-md:contents {% else %} contents {% endif %}">
+      {%- content_for 'block', type: '_product-top', id: 'product-top' -%}
 
-    <div class="{% if layout == 'horizontal' %} md:sticky-below-header [--offset:1rem] {% else %} contents {% endif %}">
-      {% content_for 'block', type: '_product-form', id: 'product-form' %}
+      <div class="
+        not-has-[.product-bottom>*]:hidden
+        {% if layout == 'horizontal' %} max-md:order-last {% else %} order-last {% endif %}
+      ">
+        {%- content_for 'block', type: '_product-bottom', id: 'product-bottom' -%}
+      </div>
+    </div>
+
+    <div class="{% if layout == 'horizontal' %} md:sticky-below-header {% else %} contents {% endif %}">
+      {%- content_for 'block', type: '_product-form', id: 'product-form' -%}
     </div>
   </article>
 </div>
+
+<style>
+  @scope {
+    :scope {
+      --column-width: {{ section.settings.column_width }}px;
+      --gallery-height: {{ section.settings.gallery_height }}px;
+      --gallery-gap: {{ section.settings.gallery_gap }}px;
+    }
+  }
+</style>
 
 {% schema %}
 {
@@ -77,6 +101,16 @@
       "default": "horizontal"
     },
     {
+      "type": "range",
+      "id": "column_width",
+      "label": "Column width",
+      "min": 200,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 400
+    },
+    {
       "type": "header",
       "content": "Gallery"
     },
@@ -94,7 +128,7 @@
       "label": "Enable two-column",
       "default": false,
       "info": "Desktop only",
-      "visible_if": "{{ section.settings.enable_carousel == false }}"
+      "visible_if": "{{ section.settings.layout == 'vertical' and section.settings.enable_carousel == false }}"
     },
     {
       "type": "range",
@@ -118,8 +152,9 @@
     }
   ],
   "blocks": [
-    { "type": "_product-details" },
-    { "type": "_product-form" }
+    { "type": "_product-top" },
+    { "type": "_product-form" },
+    { "type": "_product-bottom" },
   ]
 }
 {% endschema %}
