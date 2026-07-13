@@ -1,5 +1,8 @@
 <figure
-  class="flex items-center gap-(--gallery-gap) overflow-x-auto snap-x snap-mandatory *:snap-center *:shrink-0 carousel-scroll-buttons"
+  class="
+    flex items-center gap-(--gallery-gap) overflow-x-auto snap-x snap-mandatory *:snap-center *:shrink-0 carousel-scroll-buttons
+    {% if product.media.size > 1 %} *:max-w-[calc(100vw-2rem)] {% endif %}
+  "
   style="--gallery-gap: {{ section.settings.gallery_gap }}px;"
 >
   {%- for media in product.media -%}

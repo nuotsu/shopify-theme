@@ -9,16 +9,16 @@
 
   if show_aggregate
     assign mode = 'aggregate'
-    assign sale_price = closest.product.price
+    assign price = closest.product.price
     assign compare_at = closest.product.compare_at_price
   else
     assign mode = 'variant'
-    assign sale_price = variant.price
+    assign price = variant.price
     assign compare_at = variant.compare_at_price
   endif
 
   assign on_sale = false
-  if compare_at > sale_price
+  if compare_at > price
     assign on_sale = true
   endif
 -%}
@@ -34,18 +34,18 @@
   data-price-min="{{ closest.product.price_min | money | escape }}"
   data-price-max="{{ closest.product.price_max | money | escape }}"
 >
-  <span data-product-price-display class="contents *:anim-fade [&_span]:text-2xl">
+  <span data-product-price-display class="contents *:anim-fade">
     {%- if show_aggregate -%}
       {%- if block.settings.price_display == 'range' -%}
-        <span>{{ closest.product.price_min | money }} to {{ closest.product.price_max | money }}</span>
+        <span class="text-2xl">{{ closest.product.price_min | money }} to {{ closest.product.price_max | money }}</span>
       {%- else -%}
-        <span>From {{ closest.product.price_min | money }}</span>
+        <span class="text-2xl">From {{ closest.product.price_min | money }}</span>
       {%- endif -%}
     {%- elsif on_sale -%}
-      <span>{{ sale_price | money }}</span>
+      <span class="text-2xl">{{ price | money }}</span>
       <s class="opacity-50">{{ compare_at | money }}</s>
     {%- else -%}
-      <span>{{ sale_price | money }}</span>
+      <span class="text-2xl">{{ price | money }}</span>
     {%- endif -%}
   </span>
 
@@ -57,14 +57,14 @@
     {%- if block.settings.discount_display == 'percentage' and on_sale -%}
       <span>
         {{- compare_at
-          | minus: sale_price
+          | minus: price
           | times: 100.0
           | divided_by: compare_at
           | round
         -}}%
       </span>
     {%- elsif block.settings.discount_display == 'amount' and on_sale -%}
-      <span>{{ compare_at | minus: sale_price | money }}</span>
+      <span>{{ compare_at | minus: price | money }}</span>
     {%- endif -%}
   </span>
 
@@ -95,7 +95,7 @@
 
 <style>
   @scope {
-    
+
     .discount {
       {% if block.settings.discount_prefix != blank %}
         --before: {{ block.settings.discount_prefix }};

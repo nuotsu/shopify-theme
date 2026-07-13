@@ -1,0 +1,25 @@
+{% content_for 'blocks' %}
+
+{% schema %}
+{
+  "name": "Cart header",
+  "tag": "header",
+  "class": "prose text-center",
+  "settings": [],
+  "blocks": [{ "type": "@theme" }],
+  "presets": [
+    {
+      "name": "Cart header",
+      "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "settings": {
+            "content": "<h1>Cart</h1>"
+          }
+        }
+      },
+      "block_order": ["richtext"]
+    }
+  ]
+}
+{% endschema %}

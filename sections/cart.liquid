@@ -1,9 +1,15 @@
 <div
-  class="@container/cart"
+  class="@container/section space-y-lh"
   data-cart-lines
   data-section-id="{{ section.id }}"
 >
-  {%- render 'cart-line-items' -%}
+  {%- if cart.empty? -%}
+    {% content_for 'block', type: '_cart-header-empty', id: 'cart-empty' %}
+  {%- else -%}
+    {% content_for 'block', type: '_cart-header', id: 'cart-content' %}
+  {%- endif -%}
+
+  {%- render 'cart' -%}
 </div>
 
 {% schema %}
@@ -11,6 +17,10 @@
   "name": "Cart",
   "tag": "section",
   "class": "section",
-  "settings": []
+  "settings": [],
+  "blocks": [
+    { "type": "_cart-header" },
+    { "type": "_cart-header-empty" }
+  ]
 }
 {% endschema %}

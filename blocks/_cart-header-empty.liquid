@@ -1,0 +1,42 @@
+{% content_for 'blocks' %}
+
+{% schema %}
+{
+  "name": "Cart header (empty)",
+  "tag": "header",
+  "class": "prose text-center",
+  "settings": [],
+  "blocks": [{ "type": "@theme" }],
+  "presets": [
+    {
+      "name": "Cart header (empty)",
+      "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "settings": {
+            "content": "<h1>Cart</h1><p>Your cart is empty.</p>"
+          }
+        },
+        "button_list": {
+          "type": "button-list",
+          "settings": {
+            "justify_content": "center"
+          },
+          "blocks": {
+            "button": {
+              "type": "_button",
+              "settings": {
+                "label": "Continue shopping",
+                "link": "shopify://collections",
+                "style": "action"
+              }
+            }
+          },
+          "block_order": ["button"]
+        }
+      },
+      "block_order": ["richtext", "button_list"]
+    }
+  ]
+}
+{% endschema %}

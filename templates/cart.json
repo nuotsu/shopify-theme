@@ -1,9 +1,81 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "cart": {
       "type": "cart",
+      "blocks": {
+        "cart-empty": {
+          "type": "_cart-header-empty",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "settings": {
+                "content": "<h1>Cart</h1><p>Your cart is empty.</p>",
+                "text_align": "inherit",
+                "font_size": ""
+              },
+              "blocks": {}
+            },
+            "button_list": {
+              "type": "button-list",
+              "settings": {
+                "justify_content": "center"
+              },
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Continue shopping",
+                    "link": "shopify://collections",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "cart-content": {
+          "type": "_cart-header",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "settings": {
+                "content": "<h1>Cart</h1>",
+                "text_align": "inherit",
+                "font_size": ""
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "richtext"
+          ]
+        }
+      },
       "settings": {}
     }
   },
-  "order": ["cart"]
+  "order": [
+    "cart"
+  ]
 }
