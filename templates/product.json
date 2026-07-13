@@ -130,8 +130,8 @@
               },
               "blocks": {}
             },
-            "product_options": {
-              "type": "_product-options",
+            "product_variants": {
+              "type": "_product-variants",
               "settings": {
                 "display": "radio"
               },
@@ -153,7 +153,7 @@
           },
           "block_order": [
             "product_price",
-            "product_options",
+            "product_variants",
             "quantity_selector",
             "buy_button"
           ]
@@ -162,7 +162,7 @@
       "settings": {
         "layout": "horizontal",
         "enable_carousel": false,
-        "enable_two_column": false,
+        "enable_two_column": true,
         "gallery_height": 400,
         "gallery_gap": 1
       }

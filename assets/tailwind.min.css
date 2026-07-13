@@ -349,6 +349,18 @@
   .z-10 {
     z-index: 10;
   }
+  .-order-1 {
+    order: calc(1 * -1);
+  }
+  .-order-2 {
+    order: calc(2 * -1);
+  }
+  .order-0 {
+    order: 0;
+  }
+  .order-first {
+    order: -9999;
+  }
   .order-last {
     order: 9999;
   }
@@ -558,6 +570,10 @@
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
+  .size-\[1\.5lh\] {
+    width: 1.5lh;
+    height: 1.5lh;
+  }
   .size-\[2lh\] {
     width: 2lh;
     height: 2lh;
@@ -573,6 +589,10 @@
   .size-full {
     width: 100%;
     height: 100%;
+  }
+  .size-lh {
+    width: var(--spacing-lh);
+    height: var(--spacing-lh);
   }
   .h-3\.5 {
     height: calc(var(--spacing) * 3.5);
@@ -853,6 +873,14 @@
     border-bottom-style: var(--tw-border-style);
     border-bottom-width: 1px;
   }
+  .border-dashed {
+    --tw-border-style: dashed;
+    border-style: dashed;
+  }
+  .border-none {
+    --tw-border-style: none;
+    border-style: none;
+  }
   .bg-alert {
     background-color: var(--color-alert);
   }
@@ -967,6 +995,13 @@
   .tabular-nums {
     --tw-numeric-spacing: tabular-nums;
     font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
+  }
+  .anim-fade {
+    transition: var(--default-transition-duration) var(--default-transition-timing-function);
+    transition-property: opacity, translate, scale;
+    @starting-style {
+      opacity: 0%;
+    }
   }
   .opacity-25 {
     opacity: 25%;
@@ -1085,6 +1120,11 @@
       @starting-style {
         opacity: 0%;
       }
+    }
+  }
+  .not-last-of-type\:hidden {
+    &:not(*:last-of-type) {
+      display: none;
     }
   }
   .not-hover\:border-current\/25 {
@@ -1287,6 +1327,12 @@
       order: -9999;
     }
   }
+  .has-\[\.swatch\]\:size-\[1\.5lh\] {
+    &:has(*:is(.swatch)) {
+      width: 1.5lh;
+      height: 1.5lh;
+    }
+  }
   .has-\[\.swatch\]\:size-lh {
     &:has(*:is(.swatch)) {
       width: var(--spacing-lh);
@@ -1301,6 +1347,11 @@
   .has-\[\.swatch\]\:p-\[2px\] {
     &:has(*:is(.swatch)) {
       padding: 2px;
+    }
+  }
+  .has-\[\.swatch\]\:p-\[3px\] {
+    &:has(*:is(.swatch)) {
+      padding: 3px;
     }
   }
   .has-\[ul\]\:justify-between {
@@ -1725,6 +1776,54 @@
     @media (width >= 48rem) {
       :is(& > *) {
         max-width: calc(100vw - 2rem);
+      }
+    }
+  }
+  .md\:before\:order-first {
+    @media (width >= 48rem) {
+      &::before {
+        content: var(--tw-content);
+        order: -9999;
+      }
+    }
+  }
+  .md\:before\:m-auto {
+    @media (width >= 48rem) {
+      &::before {
+        content: var(--tw-content);
+        margin: auto;
+      }
+    }
+  }
+  .md\:before\:grow {
+    @media (width >= 48rem) {
+      &::before {
+        content: var(--tw-content);
+        flex-grow: 1;
+      }
+    }
+  }
+  .md\:after\:order-last {
+    @media (width >= 48rem) {
+      &::after {
+        content: var(--tw-content);
+        order: 9999;
+      }
+    }
+  }
+  .md\:after\:m-auto {
+    @media (width >= 48rem) {
+      &::after {
+        content: var(--tw-content);
+        margin: auto;
+      }
+    }
+  }
+  .md\:after\:grow {
+    @media (width >= 48rem) {
+      &::after {
+        content: var(--tw-content);
+        flex-grow: 1;
       }
     }
   }

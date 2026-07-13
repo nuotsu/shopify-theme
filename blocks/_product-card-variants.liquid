@@ -1,8 +1,15 @@
-{% assign option = closest.product.options_by_name[block.settings.option_name] %}
+{%- assign option = closest.product.options_by_name[block.settings.option_name] -%}
 
-{% if option %}
+{%- if option -%}
   <div class="flex flex-wrap items-center gap-[.25em] text-sm">
     {% for value in option.values limit: block.settings.limit %}
+      {%- liquid
+        assign swatch = nil
+        if block.settings.enable_color_swatches
+          assign swatch = closest.product.metafields.shopify.color-pattern.value | find: 'label', value
+        endif
+      -%}
+
       <a
         href="{{ closest.product.url }}?variant={{ value.variant.id }}"
         class="
@@ -12,26 +19,29 @@
           {% unless value.available %} bg-current/25 opacity-25 {% endunless %}
         "
       >
-        {% assign swatch = closest.product.metafields.shopify.color-pattern.value | find: 'label', value %}
-        {% if swatch %}
+        {%- if swatch -%}
           <div
             class="swatch inline-block size-full rounded-full"
             style="background-color: {{ swatch.color }};"
             title="{{ value }}"
           ></div>
 
-        {% else %}
+        {%- else -%}
           {{ value }}
 
-        {% endif %}
+        {%- endif -%}
       </a>
-    {% endfor %}
 
-    {% if option.values.size > block.settings.limit %}
+      {%- if swatch -%}
+        <hr class="not-last-of-type:hidden order-first w-full border-none">
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if option.values.size > block.settings.limit -%}
       <span>{{ option.values.size | minus: block.settings.limit }} more</span>
-    {% endif %}
+    {%- endif -%}
   </div>
-{% endif %}
+{%- endif -%}
 
 {% schema %}
 {
@@ -53,7 +63,14 @@
       "max": 20,
       "step": 1,
       "default": 5
-    }
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatches",
+      "label": "Enable color swatches",
+      "default": true,
+      "info": "Uses metafields (\"shopify.color-pattern\")"
+    },
   ],
   "presets": [
     {

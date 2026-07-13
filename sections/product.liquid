@@ -1,50 +1,10 @@
-{%- liquid
-  assign layout = section.settings.layout
--%}
+{%- assign layout = section.settings.layout -%}
 
 <div class="
   [--offset:1rem]
   {% if layout == 'vertical' %} md:section grid md:grid-cols-[1fr_min(50%,var(--column-width))] gap-x-[2lh] items-start *:md:sticky-below-header {% endif %}
 ">
-  <figure
-    class="
-      flex gap-(--gallery-gap) items-center snap-x snap-mandatory *:snap-center *:shrink-0 overflow-x-auto
-      {% if layout == 'horizontal' %}
-        carousel-scroll-buttons carousel-scroll-marker *:md:h-(--gallery-height)
-        {% if product.media.size > 1 %} *:max-w-[calc(100vw-2rem)] {% endif %}
-      {% else %} {% # vertical %}
-        {% if product.media.size > 1 %} max-md:*:max-w-[calc(100vw-2rem)] {% endif %}
-        {% if section.settings.enable_carousel %} carousel-scroll-buttons carousel-scroll-marker md:*:aspect-square
-        {% else %}
-          md:flex-col max-md:carousel-scroll-buttons max-md:carousel-scroll-marker
-          {% if section.settings.enable_two_column and product.media.size > 1 %} md:grid md:grid-cols-2 {% endif %}
-        {% endif %}
-      {% endif %}
-    "
-  >
-    {%- for media in product.media -%}
-      {%- liquid
-        if forloop.first
-          assign loading = 'eager'
-        else
-          assign loading = 'lazy'
-        endif
-      -%}
-
-      {%- case media.media_type -%}
-        {%- when 'image' -%}
-          {{ media | image_url: width: 800 | image_tag: class: 'w-auto object-contain', loading: loading, draggable: false }}
-
-        {%- when 'video' -%}
-          {%- assign poster = media.preview_image | image_url: width: 800 -%}
-          {{ media | video_tag: class: 'w-auto object-contain', poster: poster, controls: 'true', loading: loading }}
-
-        {%- when 'model' -%}
-          {{ media | model_viewer_tag: class: 'w-auto object-contain', loading: loading, draggable: false }}
-
-        {%- endcase -%}
-    {%- endfor -%}
-  </figure>
+  {% render 'product-gallery', product: product, section: section %}
 
   <article class="
     grid gap-y-4
@@ -126,7 +86,7 @@
       "type": "checkbox",
       "id": "enable_two_column",
       "label": "Enable two-column",
-      "default": false,
+      "default": true,
       "info": "Desktop only",
       "visible_if": "{{ section.settings.layout == 'vertical' and section.settings.enable_carousel == false }}"
     },
@@ -149,7 +109,23 @@
       "step": 1,
       "unit": "px",
       "default": 1
-    }
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_gallery_by_selection",
+      "label": "Filter gallery by selection",
+      "info": "Shows images whose alt text includes the selected option (for example Color: Red).",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "options_to_match",
+      "label": "Options to match",
+      "default": "Color",
+      "placeholder": "Color",
+      "info": "List product options to use (one per line). Images with that option’s value in their alt text are shown.",
+      "visible_if": "{{ section.settings.filter_gallery_by_selection == true }}"
+    },
   ],
   "blocks": [
     { "type": "_product-top" },

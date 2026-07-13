@@ -49,6 +49,10 @@
     ul {
       --column-width: {{ section.settings.column_width }}px;
       --gap: {{ section.settings.gap }}px;
+
+      li > :not(.product-card-image) {
+        padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
     }
 
     .product-card-variants:not(:has(*)) {
@@ -185,10 +189,6 @@
       "step": 1,
       "unit": "px",
       "default": 16
-    },
-    {
-      "type": "header",
-      "content": "Product card"
     },
     {
       "type": "header",

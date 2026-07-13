@@ -10,7 +10,7 @@
       class="flex items-center gap-2"
       {% if block.settings.display == 'radio' %} hidden {% endif %}
     >
-      <span>Variants:</span>
+      <span>Options:</span>
 
       <select name="id" id="id-{{ block.id }}" class="ghost grow">
         {%- for variant in closest.product.variants -%}
@@ -29,11 +29,25 @@
       <div class="grid gap-4">
         {%- for option in closest.product.options_with_values -%}
           <fieldset>
-            <legend>{{ option.name }}:</legend>
+            <legend>
+              {{ option.name }}:
+              <b class="anim-fade" data-option-value>{{ option.selected_value }}</b>
+            </legend>
 
             <div class="flex flex-wrap items-center gap-[.25em] leading-tight">
               {%- for value in option.values -%}
-                <label class="action-outline not-has-checked:border-current/25 min-w-[3ch] has-disabled:opacity-25 has-disabled:bg-current/25">
+                {%- liquid
+                  assign swatch = nil
+                  if block.settings.enable_color_swatches
+                    assign swatch = closest.product.metafields.shopify.color-pattern.value | find: 'label', value
+                  endif
+                -%}
+
+                <label class="
+                  action-outline not-has-checked:border-current/25 has-disabled:opacity-25 has-disabled:bg-current/25
+                  has-[.swatch]:size-[1.5lh] has-[.swatch]:rounded-full has-[.swatch]:p-[3px] has-[.swatch]:order-first
+                  not-has-[.swatch]:min-w-[3ch]
+                ">
                   <input
                     type="radio"
                     name="{{ option.name }}"
@@ -43,8 +57,23 @@
                     {% unless value.available %} disabled {% endunless %}
                     class="sr-only"
                   >
-                  {{ value }}
+
+                  {%- if swatch -%}
+                    <div
+                      class="swatch inline-block size-full rounded-full"
+                      style="background-color: {{ swatch.color }};"
+                      title="{{ value }}"
+                    ></div>
+
+                  {%- else -%}
+                    {{ value }}
+
+                  {%- endif -%}
                 </label>
+
+                {%- if swatch -%}
+                  <hr class="not-last-of-type:hidden order-first w-full border-none">
+                {%- endif -%}
               {%- endfor -%}
             </div>
           </fieldset>
@@ -101,6 +130,18 @@
             select.dispatchEvent(new Event('change', { bubbles: true }))
           }
 
+          const updateOptionValueLabels = () => {
+            fieldsets.forEach((fieldset) => {
+              const label = fieldset.querySelector('[data-option-value]')
+              const value = fieldset.querySelector('input[type="radio"]:checked')?.value
+              if (!label || value == null || label.textContent === value) return
+
+              const next = label.cloneNode(false)
+              next.textContent = value
+              label.replaceWith(next)
+            })
+          }
+
           const updateDisabledRadios = () => {
             let selected = getSelected()
 
@@ -129,6 +170,7 @@
 
             if (didFallback) applyDisabled()
 
+            updateOptionValueLabels()
             syncSelectFromRadios()
           }
 
@@ -147,7 +189,7 @@
 
 {% schema %}
 {
-  "name": "Options",
+  "name": "Variants",
   "settings": [
     {
       "type": "select",
@@ -164,11 +206,19 @@
         }
       ],
       "default": "radio"
-    }
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_color_swatches",
+      "label": "Enable color swatches",
+      "default": true,
+      "info": "Uses metafields (\"shopify.color-pattern\")",
+      "visible_if": "{{ block.settings.display == 'radio' }}"
+    },
   ],
   "presets": [
     {
-      "name": "Options",
+      "name": "Variants",
       "category": "Product"
     }
   ]

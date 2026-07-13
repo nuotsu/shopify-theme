@@ -1,0 +1,193 @@
+{% doc %}
+  Product media gallery with optional variant-alt image filtering.
+
+  @param {product} product - Product whose media and variants are rendered
+  @param {section} section - Product section (layout + gallery filter settings)
+
+  @example
+  {% render 'product-gallery', product: product, section: section %}
+{% enddoc %}
+
+{%- liquid
+  assign layout = section.settings.layout
+
+  assign width = 800
+  if layout == 'vertical'
+    if section.settings.enable_carousel or section.settings.enable_two_column == false
+      assign width = 1200
+    endif
+  endif
+-%}
+
+<figure
+  data-product-gallery
+  class="
+    flex gap-(--gallery-gap) items-center snap-x snap-mandatory *:snap-center *:shrink-0 overflow-x-auto
+    {% if layout == 'horizontal' %}
+      carousel-scroll-buttons carousel-scroll-marker *:md:h-(--gallery-height)
+      {% if product.media.size > 1 %} *:max-w-[calc(100vw-2rem)] md:before:order-first md:before:m-auto md:after:order-last md:after:m-auto {% endif %}
+    {% else %} {% # vertical %}
+      {% if product.media.size > 1 %} max-md:*:max-w-[calc(100vw-2rem)] {% endif %}
+      {% if section.settings.enable_carousel %} carousel-scroll-buttons carousel-scroll-marker md:*:aspect-square
+      {% else %}
+        md:flex-col max-md:carousel-scroll-buttons max-md:carousel-scroll-marker
+        {% if section.settings.enable_two_column and product.media.size > 1 %} md:grid md:grid-cols-2 {% endif %}
+      {% endif %}
+    {% endif %}
+  "
+>
+  {%- for media in product.media -%}
+    {%- liquid
+      if forloop.first
+        assign loading = 'eager'
+      else
+        assign loading = 'lazy'
+      endif
+    -%}
+
+    {%- case media.media_type -%}
+      {%- when 'image' -%}
+        {{ media | image_url: width: width | image_tag: class: 'w-auto object-contain', loading: loading, draggable: false, data-media-id: media.id, data-alt: media.alt }}
+
+      {%- when 'video' -%}
+        {%- assign poster = media.preview_image | image_url: width: width -%}
+        {{ media | video_tag: class: 'w-auto object-contain', poster: poster, controls: 'true', loading: loading, data-media-id: media.id, data-alt: media.alt }}
+
+      {%- when 'model' -%}
+        {{ media | model_viewer_tag: class: 'w-auto object-contain', loading: loading, draggable: false, data-media-id: media.id, data-alt: media.alt }}
+
+      {%- endcase -%}
+  {%- endfor -%}
+</figure>
+
+{%- if section.settings.filter_gallery_by_selection -%}
+  {%- assign option_names_raw = section.settings.options_to_match | newline_to_br | split: '<br />' -%}
+  <script type="application/json" data-product-gallery-config>
+    {
+      "optionNames": [
+        {%- assign option_name_first = true -%}
+        {%- for raw_name in option_names_raw -%}
+          {%- assign option_name = raw_name | strip -%}
+          {%- if option_name != blank -%}
+            {%- unless option_name_first -%},{%- endunless -%}
+            {{ option_name | json }}
+            {%- assign option_name_first = false -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ],
+      "optionValues": {
+        {%- for option in product.options_with_values -%}
+          {{ option.name | json }}: [
+            {%- for value in option.values -%}
+              {%- capture value_label -%}{{ value }}{%- endcapture -%}
+              {{ value_label | json }}{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      },
+      "optionIndexes": {
+        {%- for option in product.options_with_values -%}
+          {{ option.name | json }}: {{ forloop.index0 }}{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      },
+      "variants": [
+        {%- for variant in product.variants -%}
+          {
+            "id": {{ variant.id }},
+            "options": {{ variant.options | json }},
+            "featuredMediaId": {{ variant.featured_media.id | default: 'null' }}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    }
+  </script>
+  <script>
+    (() => {
+      const configEl = document.currentScript?.previousElementSibling
+      const sectionEl = configEl?.closest('section')
+      if (!configEl?.matches('[data-product-gallery-config]') || !sectionEl) return
+
+      const boot = () => {
+        const gallery = sectionEl.querySelector('[data-product-gallery]')
+        if (!gallery) return
+
+        let config
+        try {
+          config = JSON.parse(configEl.textContent)
+        } catch {
+          return
+        }
+
+        const { optionNames, optionValues, optionIndexes, variants } = config
+        if (!optionNames?.length || !variants?.length) return
+
+        const knownValues = optionNames.flatMap((name) => optionValues[name] || [])
+        const mediaItems = [...gallery.querySelectorAll('[data-media-id]')]
+
+        const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+
+        const matchesWholeWord = (alt, value) => {
+          if (!value) return false
+          return new RegExp(`\\b${escapeRegExp(value)}\\b`, 'i').test(alt)
+        }
+
+        const isUntagged = (alt) => !knownValues.some((value) => matchesWholeWord(alt, value))
+
+        const matchesSelected = (alt, selectedValues) =>
+          selectedValues.every((value) => matchesWholeWord(alt, value))
+
+        const getSelectedValues = (variant) =>
+          optionNames
+            .map((name) => {
+              const index = optionIndexes[name]
+              if (index == null) return null
+              return variant.options[index]
+            })
+            .filter(Boolean)
+
+        const filterGallery = (variantId) => {
+          const variant = variants.find((v) => String(v.id) === String(variantId))
+          if (!variant) return
+
+          const selectedValues = getSelectedValues(variant)
+          let visibleCount = 0
+
+          mediaItems.forEach((item) => {
+            const alt = item.getAttribute('data-alt') || ''
+            const matched = matchesSelected(alt, selectedValues)
+            const show = isUntagged(alt) || matched
+            item.hidden = !show
+            item.classList.toggle('order-first', matched)
+            item.classList.toggle('anim-fade', matched)
+            if (show) visibleCount += 1
+          })
+
+          if (visibleCount === 0 && variant.featuredMediaId != null) {
+            const featured = mediaItems.find(
+              (item) => String(item.getAttribute('data-media-id')) === String(variant.featuredMediaId)
+            )
+            if (featured) {
+              featured.hidden = false
+              featured.classList.add('order-first', 'anim-fade')
+            }
+          }
+        }
+
+        sectionEl.addEventListener('change', (event) => {
+          const select = event.target.closest('select[name="id"]')
+          if (!select || !sectionEl.contains(select)) return
+          filterGallery(select.value)
+        })
+
+        const initialSelect = sectionEl.querySelector('select[name="id"], input[name="id"]')
+        if (initialSelect?.value) filterGallery(initialSelect.value)
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot, { once: true })
+      } else {
+        boot()
+      }
+    })()
+  </script>
+{%- endif -%}
