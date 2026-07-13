@@ -195,6 +195,37 @@
     container-type: inline-size;
     container-name: section;
   }
+  .carousel-scroll-marker {
+    --size: 12px;
+    scroll-marker-group: after;
+    &::scroll-marker-group {
+      position: absolute;
+      position-anchor: var(--anchor-name);
+      top: calc(anchor(bottom) + 1rem);
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      gap: 0.5ch;
+    }
+    & > * {
+      &::scroll-marker {
+        content: "";
+        display: block;
+        width: var(--spacing);
+        height: var(--spacing);
+        border-radius: calc(infinity * 1px);
+        background-color: var(--color-foreground);
+        @supports (color: color-mix(in lab, red, red)) {
+          background-color: color-mix(in oklab, var(--color-foreground) 25%, transparent);
+        }
+      }
+      &::scroll-marker:target-current {
+        width: 2ch;
+        background-color: var(--color-foreground);
+        opacity: 100%;
+      }
+    }
+  }
   .sticky-below-header {
     position: sticky;
     top: calc(var(--header-height) + var(--offset, 0px));
@@ -458,6 +489,24 @@
     }
     background-color: var(--color-primary);
     color: var(--color-primary-foreground);
+  }
+  .carousel {
+    --anchor-name: attr(data-anchor-name type(<custom-ident>), --carousel);
+    anchor-name: var(--anchor-name);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(var(--container-xs), 80vw);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    :is(& > *) {
+      scroll-snap-align: center;
+    }
+    :is(& > *) {
+      @media (width >= 48rem) {
+        scroll-snap-align: start;
+      }
+    }
   }
   .pagination {
     display: flex;
@@ -1203,6 +1252,79 @@
       animation: var(--animate-pulse);
     }
   }
+  .max-md\:carousel-scroll-marker {
+    @media (width < 48rem) {
+      --size: 12px;
+      scroll-marker-group: after;
+      &::scroll-marker-group {
+        position: absolute;
+        position-anchor: var(--anchor-name);
+        top: calc(anchor(bottom) + 1rem);
+        justify-self: center;
+        display: flex;
+        align-items: center;
+        gap: 0.5ch;
+      }
+      & > * {
+        &::scroll-marker {
+          content: "";
+          display: block;
+          width: var(--spacing);
+          height: var(--spacing);
+          border-radius: calc(infinity * 1px);
+          background-color: var(--color-foreground);
+          @supports (color: color-mix(in lab, red, red)) {
+            background-color: color-mix(in oklab, var(--color-foreground) 25%, transparent);
+          }
+        }
+        &::scroll-marker:target-current {
+          width: 2ch;
+          background-color: var(--color-foreground);
+          opacity: 100%;
+        }
+      }
+    }
+  }
+  .max-md\:carousel-scroll-buttons {
+    @media (width < 48rem) {
+      @supports (position-anchor: var(--anchor-name)) {
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+        &::scroll-button(*) {
+          cursor: pointer;
+          position: absolute;
+          position-anchor: var(--anchor-name);
+          z-index: 1;
+          display: block;
+          aspect-ratio: 1;
+          width: 1.5lh;
+          margin-inline: -100%;
+          background-color: currentColor;
+        }
+        &::scroll-button(left) {
+          content: "" / "Scroll left";
+          position-area: center start;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23fff' d='M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208 208-93.13 208-208S370.87 48 256 48zm62.63 304L296 374.63 177.37 256 296 137.37 318.63 160l-96 96z'/%3E%3C/svg%3E") center / cover;
+        }
+        &::scroll-button(right) {
+          content: "" / "Scroll right";
+          position-area: center end;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%23fff' d='M256 48C141.13 48 48 141.13 48 256s93.13 208 208 208 208-93.13 208-208S370.87 48 256 48zm-40 326.63L193.37 352l96-96-96-96L216 137.37 334.63 256z'/%3E%3C/svg%3E") center / cover;
+        }
+      }
+    }
+  }
+  .max-md\:section {
+    @media (width < 48rem) {
+      width: 100%;
+      max-width: var(--section-width);
+      padding: var(--section-vertical-padding) var(--section-horizontal-padding);
+      margin-inline: auto;
+    }
+  }
   .max-md\:mt-4 {
     @media (width < 48rem) {
       margin-top: calc(var(--spacing) * 4);
@@ -1213,9 +1335,34 @@
       margin-bottom: calc(var(--spacing) * 4);
     }
   }
+  .max-md\:carousel {
+    @media (width < 48rem) {
+      --anchor-name: attr(data-anchor-name type(<custom-ident>), --carousel);
+      anchor-name: var(--anchor-name);
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: min(var(--container-xs), 80vw);
+      overflow-x: auto;
+      scroll-behavior: smooth;
+      scroll-snap-type: x mandatory;
+      :is(& > *) {
+        scroll-snap-align: center;
+      }
+      :is(& > *) {
+        @media (width >= 48rem) {
+          scroll-snap-align: start;
+        }
+      }
+    }
+  }
   .max-md\:hidden {
     @media (width < 48rem) {
       display: none;
+    }
+  }
+  .max-md\:h-\(--gallery-height\) {
+    @media (width < 48rem) {
+      height: var(--gallery-height);
     }
   }
   .max-md\:anim-fade-to-b {
@@ -1234,6 +1381,11 @@
   .max-md\:flex-col {
     @media (width < 48rem) {
       flex-direction: column;
+    }
+  }
+  .max-md\:overflow-x-auto {
+    @media (width < 48rem) {
+      overflow-x: auto;
     }
   }
   .max-md\:border-l {
@@ -1256,6 +1408,13 @@
     @media (width < 48rem) {
       :is(& > *) {
         width: 100%;
+      }
+    }
+  }
+  .max-md\:\*\:max-w-\[calc\(100vw-2rem\)\] {
+    @media (width < 48rem) {
+      :is(& > *) {
+        max-width: calc(100vw - 2rem);
       }
     }
   }
@@ -1320,9 +1479,22 @@
       position: absolute;
     }
   }
+  .md\:section {
+    @media (width >= 48rem) {
+      width: 100%;
+      max-width: var(--section-width);
+      padding: var(--section-vertical-padding) var(--section-horizontal-padding);
+      margin-inline: auto;
+    }
+  }
   .md\:flex {
     @media (width >= 48rem) {
       display: flex;
+    }
+  }
+  .md\:grid {
+    @media (width >= 48rem) {
+      display: grid;
     }
   }
   .md\:hidden {
@@ -1345,6 +1517,11 @@
       width: 24ch;
     }
   }
+  .md\:w-full {
+    @media (width >= 48rem) {
+      width: 100%;
+    }
+  }
   .md\:max-w-\[24ch\] {
     @media (width >= 48rem) {
       max-width: 24ch;
@@ -1355,6 +1532,11 @@
       min-width: 24ch;
     }
   }
+  .md\:grid-cols-2 {
+    @media (width >= 48rem) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
   .md\:grid-cols-\[1fr_min\(50\%\,24rem\)\] {
     @media (width >= 48rem) {
       grid-template-columns: 1fr min(50%, 24rem);
@@ -1363,6 +1545,11 @@
   .md\:grid-cols-\[repeat\(auto-fill\,minmax\(min\(var\(--column-width\)\,100\%\)\,1fr\)\)\] {
     @media (width >= 48rem) {
       grid-template-columns: repeat(auto-fill,minmax(min(var(--column-width), 100%),1fr));
+    }
+  }
+  .md\:flex-col {
+    @media (width >= 48rem) {
+      flex-direction: column;
     }
   }
   .md\:items-center {
@@ -1412,6 +1599,14 @@
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
   }
+  .\*\:md\:sticky-below-header {
+    :is(& > *) {
+      @media (width >= 48rem) {
+        position: sticky;
+        top: calc(var(--header-height) + var(--offset, 0px));
+      }
+    }
+  }
   .md\:\*\:mb-4 {
     @media (width >= 48rem) {
       :is(& > *) {
@@ -1419,10 +1614,24 @@
       }
     }
   }
+  .\*\:md\:h-\(--gallery-height\) {
+    :is(& > *) {
+      @media (width >= 48rem) {
+        height: var(--gallery-height);
+      }
+    }
+  }
   .md\:\*\:w-\(--column-width\) {
     @media (width >= 48rem) {
       :is(& > *) {
         width: var(--column-width);
+      }
+    }
+  }
+  .md\:\*\:max-w-\[calc\(100vw-2rem\)\] {
+    @media (width >= 48rem) {
+      :is(& > *) {
+        max-width: calc(100vw - 2rem);
       }
     }
   }

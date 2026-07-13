@@ -34,18 +34,18 @@
   data-price-min="{{ closest.product.price_min | money | escape }}"
   data-price-max="{{ closest.product.price_max | money | escape }}"
 >
-  <span data-product-price-display class="contents *:anim-fade">
+  <span data-product-price-display class="contents *:anim-fade [&_span]:text-2xl">
     {%- if show_aggregate -%}
       {%- if block.settings.price_display == 'range' -%}
-        <span class="text-2xl">{{ closest.product.price_min | money }} to {{ closest.product.price_max | money }}</span>
+        <span>{{ closest.product.price_min | money }} to {{ closest.product.price_max | money }}</span>
       {%- else -%}
-        <span class="text-2xl">From {{ closest.product.price_min | money }}</span>
+        <span>From {{ closest.product.price_min | money }}</span>
       {%- endif -%}
     {%- elsif on_sale -%}
-      <span class="text-2xl">{{ price | money }}</span>
+      <span>{{ price | money }}</span>
       <s class="opacity-50">{{ compare_at | money }}</s>
     {%- else -%}
-      <span class="text-2xl">{{ price | money }}</span>
+      <span>{{ price | money }}</span>
     {%- endif -%}
   </span>
 

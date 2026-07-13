@@ -1,32 +1,58 @@
-<figure
-  class="
-    flex items-center gap-(--gallery-gap) overflow-x-auto snap-x snap-mandatory *:snap-center *:shrink-0 carousel-scroll-buttons
-    {% if product.media.size > 1 %} *:max-w-[calc(100vw-2rem)] {% endif %}
-  "
-  style="--gallery-gap: {{ section.settings.gallery_gap }}px;"
->
-  {%- for media in product.media -%}
-    {%- case media.media_type -%}
-      {%- when 'image' -%}
-        {%- liquid
-          if forloop.first
-            assign loading = 'eager'
-          else
-            assign loading = 'lazy'
-          endif
-        -%}
+{%- liquid
+  assign layout = section.settings.layout
+-%}
 
-        {{ media | image_url: width: 800 | image_tag: class: 'md:h-[20lh] w-auto object-contain', loading: loading }}
-    {%- endcase -%}
-  {%- endfor -%}
-</figure>
+<div class="
+  {% if layout == 'vertical' %} md:section grid md:grid-cols-[1fr_min(50%,24rem)] gap-x-[2lh] items-start *:md:sticky-below-header [--offset:1rem] {% endif %}
+">
+  <figure
+    class="
+      flex gap-(--gallery-gap) items-center snap-x snap-mandatory *:snap-center *:shrink-0 overflow-x-auto
+      {% if layout == 'horizontal' %}
+        carousel-scroll-buttons carousel-scroll-marker *:md:h-(--gallery-height)
+        {% if product.media.size > 1 %} *:max-w-[calc(100vw-2rem)] {% endif %}
+      {% else %}
+        {% if product.media.size > 1 %} max-md:*:max-w-[calc(100vw-2rem)] {% endif %}
+        {% if section.settings.enable_carousel %} carousel-scroll-buttons carousel-scroll-marker
+        {% else %}
+          md:flex-col max-md:carousel-scroll-buttons max-md:carousel-scroll-marker
+          {% if section.settings.enable_two_column and product.media.size > 1 %} md:grid md:grid-cols-2 {% endif %}
+        {% endif %}
+      {% endif %}
+    "
+    style="
+      --gallery-height: {{ section.settings.gallery_height }}px;
+      --gallery-gap: {{ section.settings.gallery_gap }}px;
+    "
+  >
+    {%- for media in product.media -%}
+      {%- case media.media_type -%}
+        {%- when 'image' -%}
+          {%- liquid
+            if forloop.first
+              assign loading = 'eager'
+            else
+              assign loading = 'lazy'
+            endif
+          -%}
 
-<div class="section grid md:grid-cols-[1fr_min(50%,24rem)] gap-x-[2lh] gap-y-lh items-start">
-  {% content_for 'block', type: '_product-details', id: 'product-details' %}
+          {{ media | image_url: width: 800 | image_tag: class: 'w-auto object-contain', loading: loading, draggable: false }}
+      {%- endcase -%}
+    {%- endfor -%}
+  </figure>
 
-  <div class="md:sticky-below-header [--offset:1rem]">
-    {% content_for 'block', type: '_product-form', id: 'product-form' %}
-  </div>
+  <article class="
+    grid gap-y-lh
+    {% if layout == 'horizontal' %} section md:grid-cols-[1fr_min(50%,24rem)] gap-x-[2lh] items-start
+    {% else %} max-md:section
+    {% endif %}
+  ">
+    {% content_for 'block', type: '_product-details', id: 'product-details' %}
+
+    <div class="{% if layout == 'horizontal' %} md:sticky-below-header [--offset:1rem] {% else %} contents {% endif %}">
+      {% content_for 'block', type: '_product-form', id: 'product-form' %}
+    </div>
+  </article>
 </div>
 
 {% schema %}
@@ -35,8 +61,50 @@
   "tag": "section",
   "settings": [
     {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "horizontal",
+          "label": "Horizontal"
+        },
+        {
+          "value": "vertical",
+          "label": "Vertical"
+        }
+      ],
+      "default": "horizontal"
+    },
+    {
       "type": "header",
       "content": "Gallery"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_carousel",
+      "label": "Enable carousel",
+      "default": false,
+      "info": "Desktop only",
+      "visible_if": "{{ section.settings.layout == 'vertical' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_two_column",
+      "label": "Enable two-column",
+      "default": false,
+      "info": "Desktop only",
+      "visible_if": "{{ section.settings.enable_carousel == false }}"
+    },
+    {
+      "type": "range",
+      "id": "gallery_height",
+      "label": "Height",
+      "min": 200,
+      "max": 800,
+      "step": 50,
+      "unit": "px",
+      "default": 400
     },
     {
       "type": "range",
