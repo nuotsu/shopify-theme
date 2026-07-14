@@ -1,13 +1,38 @@
-{% if article.excerpt != blank %}
-  <div class="prose md:max-w-(--content-width) mx-auto">
-    {{ article.excerpt }}
+{%- assign item = closest.article | default: article -%}
+
+{%- if item.excerpt != blank -%}
+  <div
+    class="prose leading-normal
+      {% if block.settings.enable_line_clamp %} line-clamp-(--line-clamp) {% endif %}
+      {% unless closest.article %} md:max-w-(--content-width) mx-auto {% endunless %}
+    "
+    style="--line-clamp: {{ block.settings.line_clamp }};"
+  >
+    {{ item.excerpt }}
   </div>
-{% endif %}
+{%- endif -%}
 
 {% schema %}
 {
   "name": "Excerpt",
-  "settings": [],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_line_clamp",
+      "label": "Enable line clamp",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "line_clamp",
+      "label": "Line clamp",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ block.settings.enable_line_clamp == true }}"
+    },
+  ],
   "presets": [
     {
       "name": "Excerpt",

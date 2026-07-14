@@ -1,0 +1,54 @@
+<header class="prose">
+  {%- content_for 'blocks' -%}
+</header>
+
+<ul class="carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap)">
+  {%- for article in blog.articles limit: section.settings.limit -%}
+    {%- content_for 'block', type: '_article-card', id: 'article-card', closest.article: article -%}
+  {%- endfor -%}
+</ul>
+
+<style>
+  @scope {
+    ul {
+      --gap: {{ section.settings.gap }}px;
+
+      li > :not(.article-image) {
+        padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Article list",
+  "tag": "article",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    }
+  ],
+  "blocks": [
+    { "type": "_article-card" },
+    { "type": "@theme" },
+  ]
+}
+{% endschema %}

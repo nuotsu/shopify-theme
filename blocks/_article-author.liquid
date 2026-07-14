@@ -1,5 +1,9 @@
-{% if article.author != blank %}
-  by {{ article.author }}
+{% liquid
+  assign item = closest.article | default: article
+%}
+
+{% if item.author != blank %}
+  by {{ item.author }}
 {% endif %}
 
 {% schema %}

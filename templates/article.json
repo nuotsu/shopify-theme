@@ -58,9 +58,60 @@
           ]
         }
       }
+    },
+    "article-list": {
+      "type": "article-list",
+      "blocks": {
+        "article-card": {
+          "type": "_article-card",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "article-card-image": {
+              "type": "_article-image",
+              "settings": {
+                "aspect_ratio": "4 / 3"
+              },
+              "blocks": {}
+            },
+            "article-card-title": {
+              "type": "_article-title",
+              "settings": {
+                "enable_link": true,
+              },
+              "blocks": {}
+            },
+            "article-card-excerpt": {
+              "type": "_article-excerpt",
+              "settings": {
+                "enable_line_clamp": true,
+              },
+              "blocks": {}
+            },
+            "article-card-date": {
+              "type": "_article-date",
+              "settings": {},
+              "blocks": {}
+            },
+            "article-card-author": {
+              "type": "_article-author",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "article-card-image",
+            "article-card-title",
+            "article-card-excerpt",
+            "article-card-date",
+            "article-card-author"
+          ]
+        }
+      }
     }
   },
   "order": [
-    "article"
+    "article",
+    "article-list"
   ]
 }

@@ -1,0 +1,59 @@
+<li class="flex flex-col gap-4 leading-tight">
+  {% content_for 'blocks', closest.article: closest.article %}
+</li>
+
+{% schema %}
+{
+  "name": "Article card",
+  "tag": "article",
+  "settings": [],
+  "blocks": [
+    { "type": "_article-image" },
+    { "type": "_article-title" },
+    { "type": "_article-excerpt" },
+    { "type": "_article-date" },
+    { "type": "_article-author" }
+  ],
+  "presets": [
+    {
+      "name": "Article card",
+      "category": "Article",
+      "blocks": {
+        "article-card-image": {
+          "type": "_article-image",
+          "name": "Image"
+        },
+        "article-card-title": {
+          "type": "_article-title",
+          "name": "Title",
+          "settings": {
+            "enable_link": true,
+          }
+        },
+        "article-card-excerpt": {
+          "type": "_article-excerpt",
+          "name": "Excerpt",
+          "settings": {
+            "enable_line_clamp": true,
+          }
+        },
+        "article-card-date": {
+          "type": "_article-date",
+          "name": "Date"
+        },
+        "article-card-author": {
+          "type": "_article-author",
+          "name": "Author"
+        }
+      },
+      "block_order": [
+        "article-card-image",
+        "article-card-title",
+        "article-card-excerpt",
+        "article-card-date",
+        "article-card-author"
+      ]
+    }
+  ]
+}
+{% endschema %}

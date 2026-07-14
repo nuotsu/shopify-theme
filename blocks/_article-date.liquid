@@ -1,5 +1,9 @@
-<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
-  {{- article.published_at | date: '%B %d, %Y' -}}
+{% liquid
+  assign item = closest.article | default: article
+%}
+
+<time datetime="{{ item.published_at | date: '%Y-%m-%d' }}">
+  {{- item.published_at | date: '%B %d, %Y' -}}
 </time>
 
 {% schema %}

@@ -23,6 +23,7 @@
     --text-3xl--line-height: calc(2.25 / 1.875);
     --font-weight-bold: 700;
     --leading-tight: 1.25;
+    --leading-normal: 1.5;
     --leading-relaxed: 1.625;
     --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     --default-transition-duration: 150ms;
@@ -531,6 +532,12 @@
       text-decoration-line: underline;
     }
   }
+  .line-clamp-\(--line-clamp\) {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--line-clamp);
+  }
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -731,6 +738,9 @@
   }
   .gap-\(--gallery-gap\) {
     gap: var(--gallery-gap);
+  }
+  .gap-\(--gap\) {
+    gap: var(--gap);
   }
   .gap-1\.5 {
     gap: calc(var(--spacing) * 1.5);
@@ -1006,6 +1016,10 @@
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+  .leading-normal {
+    --tw-leading: var(--leading-normal);
+    line-height: var(--leading-normal);
   }
   .leading-relaxed {
     --tw-leading: var(--leading-relaxed);

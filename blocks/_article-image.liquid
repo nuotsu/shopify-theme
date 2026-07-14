@@ -1,17 +1,60 @@
-{% if article.image %}
-  <figure class="max-md:full-bleed">
-    {{ article.image
-      | image_url: width: 1600
-      | image_tag: class: 'w-full', loading: 'eager'
-    }}
-  </figure>
-{% endif %}
+{%- assign item = closest.article | default: article -%}
+
+{%- if item.image -%}
+  {%- if closest.article -%}
+    <figure class="relative">
+      {{ item.image
+        | image_url: width: 800
+        | image_tag: class: 'w-full object-cover', loading: 'lazy'
+      }}
+      <a href="{{ item.url }}" class="absolute inset-0 text-transparent" rel="nofollow">
+        {{ item.title }}
+      </a>
+    </figure>
+  {%- else -%}
+    <figure class="max-md:full-bleed">
+      {{ item.image
+        | image_url: width: 1600
+        | image_tag: class: 'w-full object-cover', loading: 'eager'
+      }}
+    </figure>
+  {%- endif -%}
+{%- endif -%}
+
+<style>
+  @scope {
+    img {
+      aspect-ratio: {{ block.settings.aspect_ratio }};
+    }
+  }
+</style>
 
 {% schema %}
 {
   "name": "Image",
-  "class": "mt-lh",
-  "settings": [],
+  "class": "article-image",
+  "settings": [
+    {
+      "type": "select",
+      "id": "aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "none",
+          "label": "Original"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+      ],
+      "default": "none"
+    },
+  ],
   "presets": [
     {
       "name": "Image",
