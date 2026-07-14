@@ -1,0 +1,24 @@
+{% if article.tags.size > 0 %}
+  <ul class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm">
+    {% for tag in article.tags %}
+      <li class="contents">
+        <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="hover:underline before:content-['#'] before:text-current/25">
+          {{- tag -}}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Tags",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Tags",
+      "category": "Article"
+    }
+  ]
+}
+{% endschema %}

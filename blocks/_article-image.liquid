@@ -1,0 +1,22 @@
+{% if article.image %}
+  <figure class="max-md:full-bleed">
+    {{ article.image
+      | image_url: width: 1600
+      | image_tag: class: 'w-full', loading: 'eager'
+    }}
+  </figure>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Image",
+  "class": "mt-lh",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Image",
+      "category": "Article"
+    }
+  ]
+}
+{% endschema %}

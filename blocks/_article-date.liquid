@@ -1,0 +1,16 @@
+<time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+  {{- article.published_at | date: '%B %d, %Y' -}}
+</time>
+
+{% schema %}
+{
+  "name": "Date",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Date",
+      "category": "Article"
+    }
+  ]
+}
+{% endschema %}

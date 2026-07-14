@@ -1,7 +1,7 @@
 {%- assign option = closest.product.options_by_name[block.settings.option_name] -%}
 
 {%- if option -%}
-  <div class="flex flex-wrap items-center gap-[.25em] text-sm">
+  <div class="group/options flex flex-wrap items-center gap-[.25em] text-sm">
     {% for value in option.values limit: block.settings.limit %}
       {%- liquid
         assign swatch = nil
@@ -16,6 +16,7 @@
           inline-grid place-items-center px-[.25em] border not-hover:border-current/25
           has-[.swatch]:size-lh has-[.swatch]:rounded-full has-[.swatch]:p-[2px] has-[.swatch]:order-first
           not-has-[.swatch]:min-w-[3ch] not-has-[.swatch]:justify-center
+          {% unless swatch %} non-swatch {% endunless %}
           {% unless value.available %} bg-current/25 opacity-25 {% endunless %}
         "
       >
@@ -33,7 +34,7 @@
       </a>
 
       {%- if swatch -%}
-        <hr class="not-last-of-type:hidden order-first w-full border-none">
+        <hr class="hidden group-has-[.non-swatch]/options:last-of-type:block order-first w-full border-none">
       {%- endif -%}
     {%- endfor -%}
 

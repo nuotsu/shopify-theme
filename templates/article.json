@@ -1,0 +1,66 @@
+{
+  "sections": {
+    "article": {
+      "type": "article",
+      "blocks": {
+        "article-header": {
+          "type": "_article-header",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "article_title": {
+              "type": "_article-title",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_excerpt": {
+              "type": "_article-excerpt",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_group": {
+              "type": "_article-group",
+              "settings": {},
+              "blocks": {
+                "article_date": {
+                  "type": "_article-date",
+                  "settings": {},
+                  "blocks": {}
+                },
+                "article_author": {
+                  "type": "_article-author",
+                  "settings": {},
+                  "blocks": {}
+                },
+                "article_tags": {
+                  "type": "_article-tags",
+                  "settings": {},
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "article_date",
+                "article_author",
+                "article_tags"
+              ]
+            },
+            "article_image": {
+              "type": "_article-image",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "article_title",
+            "article_excerpt",
+            "article_group",
+            "article_image"
+          ]
+        }
+      }
+    }
+  },
+  "order": [
+    "article"
+  ]
+}

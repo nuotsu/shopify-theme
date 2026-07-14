@@ -1,0 +1,24 @@
+{%- content_for 'blocks' -%}
+
+{% schema %}
+{
+  "name": "Article header",
+  "class": "text-center space-y-4",
+  "settings": [],
+  "blocks": [
+    { "type": "_article-title" },
+    { "type": "_article-excerpt" },
+    { "type": "_article-date" },
+    { "type": "_article-author" },
+    { "type": "_article-tags" },
+    { "type": "_article-image" },
+    { "type": "_article-group" },
+  ],
+  "presets": [
+    {
+      "name": "Article header",
+      "category": "Article"
+    }
+  ]
+}
+{% endschema %}

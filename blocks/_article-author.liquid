@@ -1,0 +1,16 @@
+{% if article.author != blank %}
+  by {{ article.author }}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Author",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Author",
+      "category": "Article"
+    }
+  ]
+}
+{% endschema %}

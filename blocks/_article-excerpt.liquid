@@ -1,0 +1,18 @@
+{% if article.excerpt != blank %}
+  <div class="prose md:max-w-(--content-width) mx-auto">
+    {{ article.excerpt }}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Excerpt",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Excerpt",
+      "category": "Article"
+    }
+  ]
+}
+{% endschema %}

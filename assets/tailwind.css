@@ -37,6 +37,10 @@
     }
   }
 
+  :target {
+    scroll-margin-top: calc(var(--header-height) + var(--offset, 0px));
+  }
+
   html {
     scroll-behavior: smooth;
   }
@@ -122,6 +126,15 @@
   }
   h6 {
     @apply h6;
+  }
+
+  :is(ul, ol) {
+    list-style: revert;
+    padding-left: 1em;
+  }
+
+  a:not([class]) {
+    @apply link;
   }
 }
 
