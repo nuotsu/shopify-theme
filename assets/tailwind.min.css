@@ -1259,6 +1259,14 @@
       padding-bottom: var(--spacing-lh);
     }
   }
+  .\*\:not-\[\:is\(\.article-image\,\.article-title\)\]\:text-sm {
+    :is(& > *) {
+      &:not(*:is(:is(.article-image,.article-title))) {
+        font-size: var(--text-sm);
+        line-height: var(--tw-leading, var(--text-sm--line-height));
+      }
+    }
+  }
   .group-not-hover\/image\:opacity-0 {
     &:is(:where(.group\/image):not(*:hover) *) {
       opacity: 0%;

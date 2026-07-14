@@ -2,9 +2,18 @@
   {%- content_for 'blocks' -%}
 </header>
 
-<ul class="carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap)">
-  {%- for article in blog.articles limit: section.settings.limit -%}
-    {%- content_for 'block', type: '_article-card', id: 'article-card', closest.article: article -%}
+<ul class="carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap) max-md:full-bleed max-md:px-4">
+  {%- assign shown = 0 -%}
+  {%- for article_item in blog.articles -%}
+    {%- if template.name == 'article' and article_item.id == article.id -%}
+      {%- continue -%}
+    {%- endif -%}
+    {%- if shown >= section.settings.limit -%}
+      {%- break -%}
+    {%- endif -%}
+
+    {%- content_for 'block', type: '_article-card', id: 'article-card', closest.article: article_item -%}
+    {%- assign shown = shown | plus: 1 -%}
   {%- endfor -%}
 </ul>
 
@@ -24,7 +33,7 @@
 {
   "name": "Article list",
   "tag": "article",
-  "class": "section",
+  "class": "section space-y-lh",
   "settings": [
     {
       "type": "range",
@@ -49,6 +58,24 @@
   "blocks": [
     { "type": "_article-card" },
     { "type": "@theme" },
+  ],
+  "presets": [
+    {
+      "name": "Article list",
+      "category": "Blog",
+      "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "name": "Richtext",
+          "settings": {
+            "content": "<h2>Read this next</h2>"
+          }
+        }
+      },
+      "block_order": [
+        "richtext"
+      ]
+    }
   ]
 }
 {% endschema %}

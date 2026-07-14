@@ -1,11 +1,11 @@
 {%- assign item = closest.article | default: article -%}
 
 {%- if item.image -%}
-  {%- if closest.article -%}
+  {%- if block.settings.enable_link -%}
     <figure class="relative">
       {{ item.image
         | image_url: width: 800
-        | image_tag: class: 'w-full object-cover', loading: 'lazy'
+        | image_tag: class: 'w-full object-cover', loading: 'lazy', draggable: 'false'
       }}
       <a href="{{ item.url }}" class="absolute inset-0 text-transparent" rel="nofollow">
         {{ item.title }}
@@ -15,7 +15,7 @@
     <figure class="max-md:full-bleed">
       {{ item.image
         | image_url: width: 1600
-        | image_tag: class: 'w-full object-cover', loading: 'eager'
+        | image_tag: class: 'w-full object-cover', loading: 'eager', draggable: 'false'
       }}
     </figure>
   {%- endif -%}
@@ -34,6 +34,12 @@
   "name": "Image",
   "class": "article-image",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_link",
+      "label": "Enable link",
+      "default": false
+    },
     {
       "type": "select",
       "id": "aspect_ratio",
