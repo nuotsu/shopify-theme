@@ -1,0 +1,86 @@
+<div class="mt-lh grid gap-lh border-t pt-lh">
+  <h2 class="h4">Comments ({{ article.comments_count }})</h2>
+
+  {%- paginate article.comments by 50 -%}
+    {%- if article.comments_count > 0 -%}
+      <ul class="grid gap-4">
+        {%- for comment in article.comments -%}
+          <li id="{{ comment.id }}" class="grid gap-2 not-last:border-b not-last:pb-4">
+            <div class="flex flex-wrap items-baseline gap-x-2 text-sm text-current/50">
+              <span class="font-bold text-current">{{ comment.author }}</span>
+              <time datetime="{{ comment.created_at | date: '%Y-%m-%d' }}">
+                {{- comment.created_at | date: '%B %d, %Y' -}}
+              </time>
+            </div>
+            <div class="leading-relaxed">
+              {{ comment.content }}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination mt-lh">
+          {{- paginate | default_pagination -}}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endpaginate -%}
+
+  {%- form 'new_comment', article, class: 'grid gap-4' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="text-sm">
+        {%- if blog.moderated? -%}
+          Your comment was posted successfully. We will publish it in a little while, as our blog is moderated.
+        {%- else -%}
+          Your comment was posted successfully. Thank you!
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+
+    {{ form.errors | default_errors }}
+
+    <div class="grid gap-2">
+      <label for="CommentAuthor-{{ article.id }}">Name</label>
+      <input
+        id="CommentAuthor-{{ article.id }}"
+        class="w-full p-[.25em_.5em] border"
+        type="text"
+        name="comment[author]"
+        value="{{ form.author }}"
+        autocomplete="name"
+        required
+      >
+    </div>
+
+    <div class="grid gap-2">
+      <label for="CommentEmail-{{ article.id }}">Email</label>
+      <input
+        id="CommentEmail-{{ article.id }}"
+        class="w-full p-[.25em_.5em] border"
+        type="email"
+        name="comment[email]"
+        value="{{ form.email }}"
+        autocomplete="email"
+        required
+      >
+    </div>
+
+    <div class="grid gap-2">
+      <label for="CommentBody-{{ article.id }}">Comment</label>
+      <textarea
+        id="CommentBody-{{ article.id }}"
+        class="w-full min-h-[calc(1lh+.5em)] max-h-[8lh] p-[.25em_.5em] border"
+        name="comment[body]"
+        rows="4"
+        required
+      >{{ form.body }}</textarea>
+    </div>
+
+    {%- if blog.moderated? -%}
+      <p class="text-sm text-current/50">Comments must be approved before appearing.</p>
+    {%- endif -%}
+
+    <button type="submit" class="action w-fit">Post comment</button>
+  {%- endform -%}
+</div>

@@ -1,0 +1,31 @@
+{% doc %}
+  Renders a search form.
+
+  @param [class] {String} The class to apply to the search form.
+  @param [type] {String} The type of search to perform.
+
+  @example
+  {% render 'search', type: 'article', class: 'mt-lh' %}
+{% enddoc %}
+
+<search class="{{ class }}">
+  <form action="{{ routes.search_url }}" method="get">
+    {%- if type -%}
+      <input type="hidden" name="type" value="{{ type }}">
+    {%- endif -%}
+
+    <label class="grid *:col-span-full *:row-span-full items-center">
+      <input
+        class="w-full py-[.25em] pl-[calc(1lh+0.5em)] pr-[.5em] border"
+        type="search"
+        name="q"
+        placeholder="Search"
+        value="{{ search.terms }}"
+      >
+
+      <span class="grid place-content-center aspect-square h-[calc(1lh+0.5em)]">
+        {{- 'icon-search.svg' | inline_asset_content -}}
+      </span>
+    </label>
+  </form>
+</search>

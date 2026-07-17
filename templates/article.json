@@ -74,35 +74,30 @@
           "static": true,
           "settings": {},
           "blocks": {
-            "article-card-image": {
+            "article-image": {
               "type": "_article-image",
               "settings": {
-                "enable_link": true,
                 "aspect_ratio": "4 / 3"
               },
               "blocks": {}
             },
-            "article-card-title": {
+            "article-title": {
               "type": "_article-title",
-              "settings": {
-                "enable_link": true,
-              },
               "blocks": {}
             },
-            "article-card-excerpt": {
+            "article-excerpt": {
               "type": "_article-excerpt",
               "settings": {
                 "enable_line_clamp": true,
               },
               "blocks": {}
             },
-            "article-card-date": {
+            "article-date": {
               "type": "_article-date",
-              "disabled": true,
               "settings": {},
               "blocks": {}
             },
-            "article-card-author": {
+            "article-author": {
               "type": "_article-author",
               "disabled": true,
               "settings": {},
@@ -110,11 +105,11 @@
             }
           },
           "block_order": [
-            "article-card-image",
-            "article-card-title",
-            "article-card-excerpt",
-            "article-card-date",
-            "article-card-author"
+            "article-image",
+            "article-title",
+            "article-excerpt",
+            "article-date",
+            "article-author"
           ]
         }
       },

@@ -2,7 +2,7 @@
 
 {%- if item.excerpt != blank -%}
   <div
-    class="prose leading-normal
+    class="prose
       {% if block.settings.enable_line_clamp %} line-clamp-(--line-clamp) {% endif %}
       {% unless closest.article %} md:max-w-(--content-width) mx-auto {% endunless %}
     "

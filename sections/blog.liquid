@@ -1,0 +1,133 @@
+<div class="section grid md:grid-cols-[auto_1fr] items-start gap-lh">
+  <aside class="md:sticky-below-header [--offset:1rem] md:w-[24ch] grid gap-lh">
+    <header class="prose">
+      {{ section.settings.content }}
+    </header>
+
+    {% render 'search', type: 'article' %}
+  </aside>
+
+  <div class="grid gap-lh">
+    <div class="grid gap-lh border-b pb-lh not-has-[&>*]:hidden">
+      {%- liquid
+        if section.settings.feature_type == 'newest'
+          assign featured_articles = blog.articles | slice: 0, 1
+        elsif section.settings.feature_type == 'curated'
+          assign featured_articles = section.settings.featured_list
+        endif
+
+        for article in featured_articles
+          content_for 'block', type: '_featured-article', id: 'featured-article', closest.article: article
+        endfor
+      -%}
+    </div>
+
+    {%- paginate blog.articles by section.settings.articles_per_page -%}
+      <ul class="grid grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh">
+        {%- liquid
+          for article in blog.articles limit: section.settings.limit
+            content_for 'block', type: '_article-card', id: 'article-card', closest.article: article
+          endfor
+        -%}
+      </ul>
+
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination">
+          {{- paginate | default_pagination -}}
+        </div>
+      {%- endif -%}
+    {% endpaginate %}
+  </div>
+</div>
+
+<style>
+  @scope {
+    ul {
+      --column-width: {{ section.settings.column_width }}px;
+      --gap: {{ section.settings.gap }}px;
+
+      li > :not(.article-image) {
+        padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h1>{{ blog.title }}</h1>"
+    },
+    {
+      "type": "header",
+      "content": "Featured"
+    },
+    {
+      "type": "select",
+      "id": "feature_type",
+      "label": "Feature type",
+      "options": [
+        {
+          "value": "newest",
+          "label": "Newest"
+        },
+        {
+          "value": "curated",
+          "label": "Curated"
+        }
+      ],
+      "default": "newest"
+    },
+    {
+      "type": "article_list",
+      "id": "featured_list",
+      "label": "Articles",
+      "info": "If featured type is curated",
+      "limit": 3
+    },
+    {
+      "type": "header",
+      "content": "Articles"
+    },
+    {
+      "type": "range",
+      "id": "column_width",
+      "label": "Column width",
+      "min": 100,
+      "max": 600,
+      "step": 50,
+      "unit": "px",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "min": 1,
+      "max": 30,
+      "step": 1,
+      "default": 12
+    }
+  ],
+  "blocks": [
+    { "type": "_featured-article" },
+    { "type": "_article-card" },
+  ]
+}
+{% endschema %}

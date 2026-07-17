@@ -145,9 +145,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5em;
+  gap: .5em;
   text-align: center;
-  padding: 0.25em 0.5em;
+  padding: .5em;
   border: 1px solid transparent;
   @apply active:scale-98 transition-all;
 }

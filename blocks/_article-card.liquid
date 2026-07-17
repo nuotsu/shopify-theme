@@ -1,12 +1,25 @@
-<li class="flex flex-col gap-2 leading-tight *:not-[:is(.article-image,.article-title)]:text-sm">
+<li class="group/card relative grid gap-2 leading-tight *:not-[:is(.article-image,.article-title)]:text-sm">
   {% content_for 'blocks', closest.article: closest.article %}
+
+  {% if block.settings.enable_link %}
+    <a href="{{ closest.article.url }}" class="absolute inset-0 text-transparent">
+      {{ closest.article.title }}
+    </a>
+  {% endif %}
 </li>
 
 {% schema %}
 {
   "name": "Article card",
   "tag": "article",
-  "settings": [],
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable_link",
+      "label": "Enable link",
+      "default": true
+    },
+  ],
   "blocks": [
     { "type": "_article-image" },
     { "type": "_article-title" },
@@ -19,39 +32,36 @@
       "name": "Article card",
       "category": "Article",
       "blocks": {
-        "article-card-image": {
+        "article-image": {
           "type": "_article-image",
           "name": "Image"
         },
-        "article-card-title": {
+        "article-title": {
           "type": "_article-title",
           "name": "Title",
-          "settings": {
-            "enable_link": true,
-          }
         },
-        "article-card-excerpt": {
+        "article-excerpt": {
           "type": "_article-excerpt",
           "name": "Excerpt",
           "settings": {
             "enable_line_clamp": true,
           }
         },
-        "article-card-date": {
+        "article-date": {
           "type": "_article-date",
           "name": "Date"
         },
-        "article-card-author": {
+        "article-author": {
           "type": "_article-author",
           "name": "Author"
         }
       },
       "block_order": [
-        "article-card-image",
-        "article-card-title",
-        "article-card-excerpt",
-        "article-card-date",
-        "article-card-author"
+        "article-image",
+        "article-title",
+        "article-excerpt",
+        "article-date",
+        "article-author"
       ]
     }
   ]

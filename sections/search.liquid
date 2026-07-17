@@ -2,23 +2,7 @@
   {{ section.settings.content }}
 </header>
 
-<search>
-  <form action="{{ routes.search_url }}" method="get">
-    <label class="grid *:col-span-full *:row-span-full items-center">
-      <input
-        class="w-full py-[.25em] pl-[calc(1lh+0.5em)] pr-[.5em] border"
-        type="search"
-        name="q"
-        placeholder="Search"
-        value="{{ search.terms }}"
-      >
-
-      <span class="grid place-content-center aspect-square h-[calc(1lh+0.5em)]">
-        {{- 'icon-search.svg' | inline_asset_content -}}
-      </span>
-    </label>
-  </form>
-</search>
+{% render 'search' %}
 
 {% if search.performed %}
   {% if search.results_count == 0 %}
@@ -57,9 +41,11 @@
           {% endunless %}
         {% endfor %}
 
-        <div class="pagination mt-lh">
-          {{ paginate | default_pagination }}
-        </div>
+        {%- if paginate.pages > 1 -%}
+          <div class="pagination mt-lh">
+            {{- paginate | default_pagination -}}
+          </div>
+        {%- endif -%}
       {% endpaginate %}
     </div>
   {% endif %}

@@ -1,6 +1,4 @@
-{% liquid
-  assign item = closest.article | default: article
-%}
+{%- assign item = closest.article | default: article -%}
 
 <time datetime="{{ item.published_at | date: '%Y-%m-%d' }}">
   {{- item.published_at | date: '%B %d, %Y' -}}

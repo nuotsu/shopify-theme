@@ -1,0 +1,114 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "blog": {
+      "type": "blog",
+      "blocks": {
+        "featured-article": {
+          "type": "_featured-article",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "article_title": {
+              "type": "_article-title",
+              "name": "Title",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_excerpt": {
+              "type": "_article-excerpt",
+              "name": "Excerpt",
+              "settings": {
+                "enable_line_clamp": true,
+                "line_clamp": 3
+              },
+              "blocks": {}
+            },
+            "article_date": {
+              "type": "_article-date",
+              "name": "Date",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "article_title",
+            "article_excerpt",
+            "article_date"
+          ]
+        },
+        "article-card": {
+          "type": "_article-card",
+          "static": true,
+          "settings": {
+            "enable_link": true
+          },
+          "blocks": {
+            "article_image": {
+              "type": "_article-image",
+              "name": "Image",
+              "settings": {
+                "aspect_ratio": "4 / 3"
+              },
+              "blocks": {}
+            },
+            "article_title": {
+              "type": "_article-title",
+              "name": "Title",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_excerpt": {
+              "type": "_article-excerpt",
+              "name": "Excerpt",
+              "settings": {
+                "enable_line_clamp": true,
+                "line_clamp": 3
+              },
+              "blocks": {}
+            },
+            "article_date": {
+              "type": "_article-date",
+              "name": "Date",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_author": {
+              "type": "_article-author",
+              "name": "Author",
+              "disabled": true,
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "article_image",
+            "article_title",
+            "article_excerpt",
+            "article_date",
+            "article_author"
+          ]
+        }
+      },
+      "settings": {
+        "content": "<h1>{{ blog.title }}</h1>",
+        "feature_type": "newest",
+        "featured_list": [],
+        "column_width": 250,
+        "gap": 16,
+        "limit": 12
+      }
+    }
+  },
+  "order": [
+    "blog"
+  ]
+}

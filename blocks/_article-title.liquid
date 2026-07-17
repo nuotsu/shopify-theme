@@ -1,25 +1,14 @@
 {%- assign item = closest.article | default: article -%}
 
-{% if block.settings.enable_link %}
-  <a class="block font-bold leading-normal hover:underline" href="{{ item.url }}">
-    {{ item.title }}
-  </a>
-{% else %}
-  <h1 class="h0 text-balance">{{ item.title }}</h1>
-{% endif %}
+<h1 class="font-bold text-balance group-hover/card:underline">
+  {{- item.title -}}
+</h1>
 
 {% schema %}
 {
   "name": "Title",
   "class": "article-title",
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "enable_link",
-      "label": "Enable link",
-      "default": false
-    },
-  ],
+  "settings": [],
   "presets": [
     {
       "name": "Title",

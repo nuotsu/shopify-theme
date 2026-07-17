@@ -1,12 +1,21 @@
 {% layout none %}
+
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
 <head>
   <meta charset="utf-8">
+
   <title>{{ gift_card.balance | money }}</title>
+
+  {% render 'css-variables' %}
+  {% render 'fonts' %}
+  {{ 'tailwind.min.css' | asset_url | stylesheet_tag: preload: true }}
+
   {{ content_for_header }}
 </head>
 <body>
-  <p>{{ gift_card.code }}</p>
+  <section class="section">
+    <p><code>{{ gift_card.code }}</code></p>
+  </section>
 </body>
 </html>

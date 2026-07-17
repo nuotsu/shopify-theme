@@ -1,11 +1,11 @@
 <div class="section grid md:items-start gap-lh">
-  <header class="md:[grid-area:header] not-has-[figure]:border-b not-has-[figure]:pb-lh">
+  <header class="md:[grid-area:header] not-has-[figure]:border-b not-has-[figure]:pb-lh [&_.article-title]:h0 max-md:[&_figure]:full-bleed">
     {%- content_for 'block', type: '_article-header', id: 'article-header' -%}
   </header>
 
-  <aside class="md:[grid-area:sidebar] md:sticky-below-header [--offset:1rem] grid gap-4">
+  <aside class="md:[grid-area:sidebar] md:sticky-below-header [--offset:1rem] grid gap-4 md:w-[24ch]">
     <div>
-      <a href="{{ article.blog.url }}" class="inline-flex items-center gap-x-2 [&_svg]:shrink-0 hover:underline">
+      <a href="{{ blog.url }}" class="inline-flex items-center gap-x-2 [&_svg]:shrink-0 hover:underline">
         {{ 'icon-chevron-left.svg' | inline_asset_content }}
         Back to blog
       </a>
@@ -28,8 +28,16 @@
     </details>
   </aside>
 
-  <div class="md:[grid-area:content] prose leading-relaxed md:max-w-(--content-width) mx-auto" data-article-content>
-    {{ article.content }}
+  <div class="md:[grid-area:content] md:max-w-(--content-width) mx-auto">
+    <div class="prose leading-relaxed" data-article-content>
+      {{ article.content }}
+    </div>
+
+    {%- liquid
+      if blog.comments_enabled?
+        render 'article-comments'
+      endif
+    -%}
   </div>
 </div>
 
@@ -40,9 +48,15 @@
       --content-width: {{ section.settings.content_width }}px;
 
       @media (width >= 48rem) {
-        grid-template:
-          'sidebar header' auto
-          'sidebar content' auto / 24ch 1fr;
+        {% if section.settings.sidebar_position == 'left' %}
+          grid-template:
+            'sidebar header' auto
+            'sidebar content' auto / auto 1fr;
+        {% else %}
+          grid-template:
+            'header sidebar' auto
+            'content sidebar' auto / 1fr auto;
+        {% endif %}
       }
     }
 
@@ -165,7 +179,23 @@
       "step": 50,
       "unit": "px",
       "default": 650
-    }
+    },
+    {
+      "type": "select",
+      "id": "sidebar_position",
+      "label": "Sidebar position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
   ],
   "blocks": [
     { "type": "_article-header" }

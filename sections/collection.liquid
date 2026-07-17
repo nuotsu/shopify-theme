@@ -1,5 +1,5 @@
 <div
-  class="section grid has-[aside]:md:grid-cols-[auto_1fr] gap-lh items-start"
+  class="section grid has-[aside]:md:grid-cols-[auto_1fr] items-start gap-lh"
   data-section-id="{{ section.id }}"
 >
   {%- if section.settings.enable_filters and section.settings.filter_behavior == 'sidebar' -%}
@@ -24,23 +24,25 @@
       {%- endif -%}
     </div>
 
-    <ul
-      id="collection-product-grid"
-      class="
-        grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh
-        {% if section.settings.mobile_2_column %} grid-cols-2 {% endif %}
-      "
-    >
-      {% paginate collection.products by section.settings.products_per_page %}
+    {% paginate collection.products by section.settings.products_per_page %}
+      <ul
+        id="collection-product-grid"
+        class="
+          grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh
+          {% if section.settings.mobile_2_column %} grid-cols-2 {% endif %}
+        "
+      >
         {%- for product in collection.products -%}
           {% content_for 'block', type: '_product-card', id: 'card', closest.product: product %}
         {%- endfor -%}
+      </ul>
 
-        <div class="pagination col-span-full">
-          {{ paginate | default_pagination }}
+      {%- if paginate.pages > 1 -%}
+        <div class="pagination mt-lh">
+          {{- paginate | default_pagination -}}
         </div>
-      {% endpaginate %}
-    </ul>
+      {%- endif -%}
+    {% endpaginate %}
   </div>
 </div>
 

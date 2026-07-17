@@ -3,18 +3,20 @@
 </header>
 
 <ul class="carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap) max-md:full-bleed max-md:px-4">
-  {%- assign shown = 0 -%}
-  {%- for article_item in blog.articles -%}
-    {%- if template.name == 'article' and article_item.id == article.id -%}
-      {%- continue -%}
-    {%- endif -%}
-    {%- if shown >= section.settings.limit -%}
-      {%- break -%}
-    {%- endif -%}
+  {%- liquid
+    assign shown = 0
+    for article_item in blog.articles
+      if template.name == 'article' and article_item.id == article.id
+        continue
+      endif
+      if shown >= section.settings.limit
+        break
+      endif
 
-    {%- content_for 'block', type: '_article-card', id: 'article-card', closest.article: article_item -%}
-    {%- assign shown = shown | plus: 1 -%}
-  {%- endfor -%}
+      content_for 'block', type: '_article-card', id: 'article-card', closest.article: article_item
+      assign shown = shown | plus: 1
+    endfor
+  -%}
 </ul>
 
 <style>
