@@ -1,12 +1,12 @@
-<div class="group/card relative grid md:grid-cols-2 md:items-center gap-lh">
-  <figure class="group-hover/card:brightness-110 transition-[filter] max-md:full-bleed">
+<div class="group/card relative grid @lg/blog:grid-cols-2 gap-lh">
+  <figure class="group-hover/card:brightness-110 transition-[filter] @max-lg:max-md:full-bleed self-start @lg/blog:sticky-below-header [--offset:1rem]">
     {{ closest.article.image
       | image_url: width: 1600
-      | image_tag: class: 'w-full object-cover', loading: 'eager', draggable: 'false'
+      | image_tag: class: 'w-full object-cover aspect-[4/3]', loading: 'eager', draggable: 'false'
     }}
   </figure>
 
-  <div class="grid gap-2 leading-tight [&_.article-title]:h0">
+  <div class="grid gap-2 leading-tight [&_.article-title]:h0 self-center">
     {% content_for 'blocks', closest.article: closest.article %}
   </div>
 

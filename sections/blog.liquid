@@ -1,29 +1,76 @@
-<div class="section grid md:grid-cols-[auto_1fr] items-start gap-lh">
+{%- liquid
+  if section.settings.feature_type == 'newest'
+    assign featured_articles = blog.articles | slice: 0, 1
+  elsif section.settings.feature_type == 'curated'
+    assign featured_articles = section.settings.featured_list
+  endif
+-%}
+
+<div class="section grid md:grid-cols-[auto_1fr] items-start gap-[2lh]">
   <aside class="md:sticky-below-header [--offset:1rem] md:w-[24ch] grid gap-lh">
     <header class="prose">
       {{ section.settings.content }}
     </header>
 
-    {% render 'search', type: 'article' %}
+    {% render 'search-form', type: 'article' %}
+
+    {%- if blog.tags.size > 0 -%}
+      <div class="grid gap-2 text-sm">
+        <div>Tags</div>
+
+        <ul class="flex flex-wrap gap-x-2 gap-y-1 max-h-[8lh] md:max-h-[12lh] pb-lh overflow-y-auto mask-b-from-[calc(100%-2rem)]">
+          {%- for tag in blog.tags -%}
+            <li>
+              <a
+                href="{{ blog.url }}/tagged/{{ tag | handle }}"
+                class="
+                  inline-block p-[.25em] bg-current/5 before:content-['#'] before:text-current/50 hover:underline
+                  {% if current_tags contains tag %} font-bold {% endif %}
+                "
+              >
+                {{- tag -}}
+              </a>
+            </li>
+          {%- endfor -%}
+
+          {%- if current_tags -%}
+            <li class="w-full">
+              <a href="{{ blog.url }}" class="block p-[.25em] hover:underline text-current/50">
+                Clear tags
+              </a>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+    {%- endif -%}
+
+    <div class="prose text-center border-t pt-lh {% if featured_articles != blank %} max-md:hidden {% endif %}">
+      {{ section.settings.subscribe_content }}
+
+      {% render 'contact-form' %}
+    </div>
   </aside>
 
-  <div class="grid gap-lh">
-    <div class="grid gap-lh border-b pb-lh not-has-[&>*]:hidden">
-      {%- liquid
-        if section.settings.feature_type == 'newest'
-          assign featured_articles = blog.articles | slice: 0, 1
-        elsif section.settings.feature_type == 'curated'
-          assign featured_articles = section.settings.featured_list
-        endif
+  <div class="@container/blog grid gap-lh">
+    {%- if featured_articles != blank -%}
+      <div class="grid gap-lh border-b pb-lh">
+        {%- liquid
+          for article in featured_articles
+            content_for 'block', type: '_featured-article', id: 'featured-article', closest.article: article
+          endfor
+        -%}
+      </div>
 
-        for article in featured_articles
-          content_for 'block', type: '_featured-article', id: 'featured-article', closest.article: article
-        endfor
-      -%}
-    </div>
+      <div class="prose text-center md:hidden">
+        {{ section.settings.subscribe_content }}
+
+        {% render 'contact-form' %}
+      </div>
+    {%- endif -%}
+
 
     {%- paginate blog.articles by section.settings.articles_per_page -%}
-      <ul class="grid grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh">
+      <ul class="article-list grid grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh">
         {%- liquid
           for article in blog.articles limit: section.settings.limit
             content_for 'block', type: '_article-card', id: 'article-card', closest.article: article
@@ -42,7 +89,7 @@
 
 <style>
   @scope {
-    ul {
+    .article-list {
       --column-width: {{ section.settings.column_width }}px;
       --gap: {{ section.settings.gap }}px;
 
@@ -123,6 +170,16 @@
       "max": 30,
       "step": 1,
       "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Subscribe",
+    },
+    {
+      "type": "richtext",
+      "id": "subscribe_content",
+      "label": "Content",
+      "default": "<p>Subscribe to our newsletter to get the latest news and updates.</p>"
     }
   ],
   "blocks": [

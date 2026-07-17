@@ -28,7 +28,7 @@
       <ul
         id="collection-product-grid"
         class="
-          grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh
+          product-list grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh
           {% if section.settings.mobile_2_column %} grid-cols-2 {% endif %}
         "
       >
@@ -48,7 +48,7 @@
 
 <style>
   @scope {
-    ul {
+    .product-list {
       --column-width: {{ section.settings.column_width }}px;
       --gap: {{ section.settings.gap }}px;
 

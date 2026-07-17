@@ -31,18 +31,17 @@
                   "type": "_article-author",
                   "settings": {},
                   "blocks": {}
-                },
-                "article_tags": {
-                  "type": "_article-tags",
-                  "settings": {},
-                  "blocks": {}
                 }
               },
               "block_order": [
                 "article_date",
                 "article_author",
-                "article_tags"
               ]
+            },
+            "article_tags": {
+              "type": "_article-tags",
+              "settings": {},
+              "blocks": {}
             },
             "article_image": {
               "type": "_article-image",
@@ -54,6 +53,7 @@
             "article_title",
             "article_excerpt",
             "article_group",
+            "article_tags",
             "article_image"
           ]
         }
