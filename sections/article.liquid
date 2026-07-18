@@ -1,9 +1,9 @@
 <div class="section grid md:items-start gap-lh">
-  <header class="md:[grid-area:header] not-has-[figure]:border-b not-has-[figure]:pb-lh [&_.article-title]:h0 max-md:[&_figure]:full-bleed">
-    {%- content_for 'block', type: '_article-header', id: 'article-header' -%}
+  <header class="md:[grid-area:top] [&_.article-title]:h0 max-md:[&_figure]:full-bleed">
+    {%- content_for 'block', type: '_article-top', id: 'article-top' -%}
   </header>
 
-  <aside class="md:[grid-area:sidebar] md:sticky-below-header [--offset:1rem] grid gap-4 md:w-[24ch]">
+  <aside class="md:[grid-area:sidebar] md:sticky-below-header [--offset:1rem] grid gap-4 md:w-(--sidebar-width)">
     <div>
       <a href="{{ blog.url }}" class="inline-flex items-center gap-x-2 [&_svg]:shrink-0 hover:underline">
         {{ 'icon-chevron-left.svg' | inline_asset_content }}
@@ -28,10 +28,12 @@
     </details>
   </aside>
 
-  <div class="md:[grid-area:content] md:max-w-(--content-width) mx-auto">
+  <div class="md:[grid-area:content] max-w-(--content-width) mx-auto">
     <div class="prose leading-relaxed" data-article-content>
       {{ article.content }}
     </div>
+
+    {%- content_for 'block', type: '_article-bottom', id: 'article-bottom' -%}
 
     {%- liquid
       if blog.comments_enabled?
@@ -50,11 +52,11 @@
       @media (width >= 48rem) {
         {% if section.settings.sidebar_position == 'left' %}
           grid-template:
-            'sidebar header' auto
+            'sidebar top' auto
             'sidebar content' auto / auto 1fr;
         {% else %}
           grid-template:
-            'header sidebar' auto
+            'top sidebar' auto
             'content sidebar' auto / 1fr auto;
         {% endif %}
       }
@@ -72,6 +74,12 @@
         &:hover {
           text-decoration: underline;
         }
+      }
+    }
+
+    [data-article-content] {
+      a {
+        overflow-wrap: anywhere;
       }
     }
   }
@@ -198,7 +206,8 @@
     },
   ],
   "blocks": [
-    { "type": "_article-header" }
+    { "type": "_article-top" },
+    { "type": "_article-bottom" }
   ]
 }
 {% endschema %}

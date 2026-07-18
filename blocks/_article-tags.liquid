@@ -1,5 +1,5 @@
 {% if article.tags.size > 0 %}
-  <ul class="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm">
+  <ul class="flex flex-wrap items-center gap-x-2 gap-y-1 justify-[inherit]">
     {% for tag in article.tags %}
       <li class="contents">
         <a href="{{ blog.url }}/tagged/{{ tag | handleize }}" class="hover:underline before:content-['#'] before:text-current/25">
@@ -10,10 +10,35 @@
   </ul>
 {% endif %}
 
+<style>
+  @scope {
+    :scope {
+      justify-content: {{ block.settings.alignment }};
+
+      &::before {
+        content: 'Tags:';
+      }
+    }
+  }
+</style>
+
 {% schema %}
 {
   "name": "Tags",
-  "settings": [],
+  "class": "flex items-start gap-2 text-sm",
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "Right" },
+      ],
+      "default": "center"
+    }
+  ],
   "presets": [
     {
       "name": "Tags",

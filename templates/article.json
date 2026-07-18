@@ -3,8 +3,8 @@
     "article": {
       "type": "article",
       "blocks": {
-        "article-header": {
-          "type": "_article-header",
+        "article-top": {
+          "type": "_article-top",
           "static": true,
           "settings": {},
           "blocks": {
@@ -38,11 +38,6 @@
                 "article_author",
               ]
             },
-            "article_tags": {
-              "type": "_article-tags",
-              "settings": {},
-              "blocks": {}
-            },
             "article_image": {
               "type": "_article-image",
               "settings": {},
@@ -53,8 +48,24 @@
             "article_title",
             "article_excerpt",
             "article_group",
-            "article_tags",
             "article_image"
+          ]
+        },
+        "article-bottom": {
+          "type": "_article-bottom",
+          "static": true,
+          "settings": {},
+          "blocks": {
+            "article_tags": {
+              "type": "_article-tags",
+              "settings": {
+                "alignment": "start",
+              },
+              "blocks": {}
+            },
+          },
+          "block_order": [
+            "article_tags",
           ]
         }
       }

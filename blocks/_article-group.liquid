@@ -1,10 +1,30 @@
 {%- content_for 'blocks' -%}
 
+<style>
+  @scope {
+    :scope {
+      justify-content: {{ block.settings.alignment }};
+    }
+  }
+</style>
+
 {% schema %}
 {
   "name": "Group",
-  "class": "flex flex-wrap justify-center gap-x-4 gap-y-2",
-  "settings": [],
+  "class": "flex flex-wrap gap-x-4 gap-y-2",
+  "settings": [
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "Alignment",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "Right" },
+      ],
+      "default": "center"
+    }
+  ],
   "blocks": [
     { "type": "_article-date" },
     { "type": "_article-author" },

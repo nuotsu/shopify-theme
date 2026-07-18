@@ -1,0 +1,40 @@
+{%- content_for 'blocks' -%}
+
+<style>
+  @scope {
+    :scope {
+       > *:not(:is(.article-title, .article-image)) {
+        max-width: var(--content-width);
+        margin-inline: auto;
+      }
+
+      &:not(:has(figure)) {
+        border-top: 1px solid;
+        padding-bottom: 1lh;
+      }
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Article top",
+  "class": "text-center space-y-4",
+  "settings": [],
+  "blocks": [
+    { "type": "_article-title" },
+    { "type": "_article-excerpt" },
+    { "type": "_article-date" },
+    { "type": "_article-author" },
+    { "type": "_article-tags" },
+    { "type": "_article-image" },
+    { "type": "_article-group" },
+  ],
+  "presets": [
+    {
+      "name": "Article top",
+      "category": "Article"
+    }
+  ]
+}
+{% endschema %}

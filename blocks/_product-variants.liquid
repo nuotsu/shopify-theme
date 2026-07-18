@@ -29,7 +29,7 @@
       <div class="grid gap-4">
         {%- for option in closest.product.options_with_values -%}
           <fieldset>
-            <legend>
+            <legend class="py-1">
               {{ option.name }}:
               <b class="anim-fade" data-option-value>{{ option.selected_value }}</b>
             </legend>

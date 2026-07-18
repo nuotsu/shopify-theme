@@ -105,6 +105,20 @@
         "step": 1,
         "unit": "rem",
         "default": 1,
+      },
+      {
+        "type": "header",
+        "content": "Sidebar"
+      },
+      {
+        "type": "range",
+        "id": "sidebar_width",
+        "label": "Width",
+        "min": 150,
+        "max": 400,
+        "step": 10,
+        "unit": "px",
+        "default": 250
       }
     ]
   },

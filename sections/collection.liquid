@@ -3,7 +3,7 @@
   data-section-id="{{ section.id }}"
 >
   {%- if section.settings.enable_filters and section.settings.filter_behavior == 'sidebar' -%}
-    <aside class="md:sticky-below-header md:w-[24ch] [--offset:1rem] grid gap-2">
+    <aside class="md:sticky-below-header md:w-(--sidebar-width) [--offset:1rem] grid gap-2">
       <div class="inline-flex items-center gap-2 py-1">
         {{ 'icon-filter.svg' | inline_asset_content }}
         Filter by

@@ -7,7 +7,7 @@
 -%}
 
 <div class="section grid md:grid-cols-[auto_1fr] items-start gap-[2lh]">
-  <aside class="md:sticky-below-header [--offset:1rem] md:w-[24ch] grid gap-lh">
+  <aside class="md:sticky-below-header [--offset:1rem] md:w-(--sidebar-width) flex flex-col gap-lh">
     <header class="prose">
       {{ section.settings.content }}
     </header>
@@ -15,16 +15,16 @@
     {% render 'search-form', type: 'article' %}
 
     {%- if blog.tags.size > 0 -%}
-      <div class="grid gap-2 text-sm">
-        <div>Tags</div>
+      <div class="grid text-sm grow overflow-y-auto mask-b-from-[calc(100%-2rem)] max-md:max-h-[7.5lh]">
+        <div class="sticky top-0 z-1 pb-2 bg-background">Tags</div>
 
-        <ul class="flex flex-wrap gap-x-2 gap-y-1 max-h-[8lh] md:max-h-[12lh] pb-lh overflow-y-auto mask-b-from-[calc(100%-2rem)]">
+        <ul class="flex flex-wrap gap-1 pb-lh">
           {%- for tag in blog.tags -%}
             <li>
               <a
                 href="{{ blog.url }}/tagged/{{ tag | handle }}"
                 class="
-                  inline-block p-[.25em] bg-current/5 before:content-['#'] before:text-current/50 hover:underline
+                  inline-block p-[.125em_.25em] bg-current/5 before:content-['#'] before:text-current/50 hover:underline
                   {% if current_tags contains tag %} font-bold {% endif %}
                 "
               >
@@ -95,6 +95,12 @@
 
       li > :not(.article-image) {
         padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
+    }
+
+    aside {
+      @media (width >= 48rem) {
+        max-height: calc(100svh - var(--header-height) - max(2rem, 1rem + env(safe-area-inset-bottom)));
       }
     }
   }
