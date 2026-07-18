@@ -32,36 +32,41 @@
       "name": "Article card",
       "category": "Article",
       "blocks": {
-        "article-image": {
+        "article_image": {
           "type": "_article-image",
-          "name": "Image"
+          "name": "Image",
+          "settings": {
+            "aspect_ratio": "4 / 3"
+          },
+          "blocks": {}
         },
-        "article-title": {
+        "article_title": {
           "type": "_article-title",
           "name": "Title",
+          "settings": {},
+          "blocks": {}
         },
-        "article-excerpt": {
+        "article_excerpt": {
           "type": "_article-excerpt",
           "name": "Excerpt",
           "settings": {
             "enable_line_clamp": true,
-          }
+            "line_clamp": 3
+          },
+          "blocks": {}
         },
-        "article-date": {
+        "article_date": {
           "type": "_article-date",
-          "name": "Date"
+          "name": "Date",
+          "settings": {},
+          "blocks": {}
         },
-        "article-author": {
-          "type": "_article-author",
-          "name": "Author"
-        }
       },
       "block_order": [
-        "article-image",
-        "article-title",
-        "article-excerpt",
-        "article-date",
-        "article-author"
+        "article_image",
+        "article_title",
+        "article_excerpt",
+        "article_date",
       ]
     }
   ]

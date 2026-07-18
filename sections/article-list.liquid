@@ -4,8 +4,16 @@
 
 <ul class="article-list carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap) max-md:full-bleed max-md:px-4">
   {%- liquid
+    if template.name == 'blog'
+      assign articles_blog = blog
+    elsif section.settings.blog != blank
+      assign articles_blog = section.settings.blog
+    else
+      assign articles_blog = blog
+    endif
+
     assign shown = 0
-    for article_item in blog.articles
+    for article_item in articles_blog.articles
       if template.name == 'article' and article_item.id == article.id
         continue
       endif
@@ -38,6 +46,11 @@
   "class": "section space-y-lh",
   "settings": [
     {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
       "type": "range",
       "id": "limit",
       "label": "Limit",
@@ -65,13 +78,127 @@
     {
       "name": "Article list",
       "category": "Blog",
+      "settings": {
+        "blog": "blog"
+      },
+      "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "name": "Richtext",
+          "settings": {
+            "content": "<h2>Blog</h2>"
+          },
+          "blocks": {}
+        },
+        "article-card": {
+          "type": "_article-card",
+          "static": true,
+          "settings": {
+            "enable_link": true
+          },
+          "blocks": {
+            "article_image": {
+              "type": "_article-image",
+              "name": "Image",
+              "settings": {
+                "aspect_ratio": "4 / 3"
+              },
+              "blocks": {}
+            },
+            "article_title": {
+              "type": "_article-title",
+              "name": "Title",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_excerpt": {
+              "type": "_article-excerpt",
+              "name": "Excerpt",
+              "settings": {
+                "enable_line_clamp": true,
+                "line_clamp": 3
+              },
+              "blocks": {}
+            },
+            "article_date": {
+              "type": "_article-date",
+              "name": "Date",
+              "settings": {},
+              "blocks": {}
+            },
+          },
+          "block_order": [
+            "article_image",
+            "article_title",
+            "article_excerpt",
+            "article_date",
+          ]
+        }
+      },
+      "block_order": [
+        "richtext"
+      ]
+    },
+    {
+      "name": "Read more articles",
+      "category": "Blog",
       "blocks": {
         "richtext": {
           "type": "richtext",
           "name": "Richtext",
           "settings": {
             "content": "<h2>Read this next</h2>"
-          }
+          },
+          "blocks": {}
+        },
+        "article-card": {
+          "type": "_article-card",
+          "static": true,
+          "settings": {
+            "enable_link": true
+          },
+          "blocks": {
+            "article_image": {
+              "type": "_article-image",
+              "name": "Image",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_title": {
+              "type": "_article-title",
+              "name": "Title",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_excerpt": {
+              "type": "_article-excerpt",
+              "name": "Excerpt",
+              "settings": {
+                "enable_line_clamp": true,
+                "line_clamp": 3
+              },
+              "blocks": {}
+            },
+            "article_date": {
+              "type": "_article-date",
+              "name": "Date",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_author": {
+              "type": "_article-author",
+              "name": "Author",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "article_image",
+            "article_title",
+            "article_excerpt",
+            "article_date",
+            "article_author"
+          ]
         }
       },
       "block_order": [
