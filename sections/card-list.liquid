@@ -1,0 +1,379 @@
+<div class="section space-y-lh">
+  {%- if section.settings.content != blank -%}
+    <header class="prose text-center max-w-5xl mx-auto">
+      {{ section.settings.content }}
+    </header>
+  {%- endif -%}
+
+  <div class="
+    card-list gap-x-(--gap) gap-y-lh
+    {% if section.settings.layout == "carousel" %}
+      carousel carousel-scroll-buttons carousel-scroll-marker max-md:full-bleed max-md:px-4
+      {% if section.settings.masked_edge %} md:mask-r-from-[calc(100%-2rem)] {% endif %}
+    {% else %} grid
+      {% if section.settings.fixed_columns %} md:grid-cols-[repeat(var(--column-count),minmax(0px,1fr))]
+      {% else %} md:grid-cols-[repeat(auto-fit,minmax(min(var(--column-width),100%),1fr))]
+      {% endif %}
+    {% endif %}
+  ">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+<style>
+  @scope {
+    .card-list {
+      --column-width: {{ section.settings.column_width }}px;
+      --gap: {{ section.settings.gap }}px;
+      {% if section.settings.fixed_columns %}
+        --column-count: {{ section.settings.column_count }};
+      {% endif %}
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Card list",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h2>Card list</h2><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "grid"
+    },
+    {
+      "type": "checkbox",
+      "id": "fixed_columns",
+      "label": "Fixed columns",
+      "default": false,
+      "visible_if": "{{ section.settings.layout == 'grid' }}"
+    },
+    {
+      "type": "number",
+      "id": "column_count",
+      "label": "Column count",
+      "default": 3,
+      "visible_if": "{{ section.settings.layout == 'grid' and section.settings.fixed_columns == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "masked_edge",
+      "label": "Masked edge",
+      "default": true,
+      "visible_if": "{{ section.settings.layout == 'carousel' }}"
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "column_width",
+      "label": "Column width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+  ],
+  "blocks": [
+    { "type": "_card" }
+  ],
+  "presets": [
+    {
+      "name": "Card grid",
+      "settings": {
+        "layout": "grid"
+      },
+      "blocks": {
+        "card_1": {
+          "type": "_card",
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "card_2": {
+          "type": "_card",
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "card_3": {
+          "type": "_card",
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ]
+    },
+    {
+      "name": "Card carousel",
+      "settings": {
+        "layout": "carousel",
+      },
+      "blocks": {
+        "card_1": {
+          "type": "_card",
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "card_2": {
+          "type": "_card",
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "card_3": {
+          "type": "_card",
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "card_4": {
+          "type": "_card",
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+              }
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
+      ]
+    }
+  ]
+}
+{% endschema %}

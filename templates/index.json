@@ -16,22 +16,44 @@
           "type": "_hero-backdrop",
           "name": "Hero",
           "settings": {
-            "enable_scheduling": false
+            "content_width": 500,
+            "horizontal_alignment": "start",
+            "vertical_alignment": "center",
+            "image_loading": "lazy",
+            "image_fit": "cover",
+            "image_opacity": 100,
+            "enable_scheduling": false,
+            "start_datetime": "",
+            "end_datetime": "",
+            "daylight_savings": false
           },
           "blocks": {
             "richtext": {
               "type": "richtext",
               "name": "Richtext",
               "settings": {
-                "content": "<h1>Heading 1</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
-              }
+                "content": "<h1>Heading 1</h1><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>",
+                "text_align": "inherit",
+                "font_size": "",
+                "enable_h0": true
+              },
+              "blocks": {}
             },
             "button_list": {
               "type": "button-list",
               "name": "Button list",
+              "settings": {
+                "justify_content": "start"
+              },
               "blocks": {
                 "button": {
-                  "type": "_button"
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
@@ -49,9 +71,154 @@
         "hero_backdrop"
       ],
       "settings": {}
+    },
+    "card-list": {
+      "type": "card-list",
+      "blocks": {
+        "card_1": {
+          "type": "_card",
+          "settings": {
+            "column_span": 1,
+            "row_span": 1
+          },
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>",
+                "text_align": "inherit",
+                "font_size": "",
+                "enable_h0": false
+              },
+              "blocks": {}
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "card_2": {
+          "type": "_card",
+          "settings": {
+            "column_span": 1,
+            "row_span": 1
+          },
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>",
+                "text_align": "inherit",
+                "font_size": "",
+                "enable_h0": false
+              },
+              "blocks": {}
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        },
+        "card_3": {
+          "type": "_card",
+          "settings": {
+            "column_span": 1,
+            "row_span": 1
+          },
+          "blocks": {
+            "richtext": {
+              "type": "richtext",
+              "name": "Richtext",
+              "settings": {
+                "content": "<h3>Heading</h3><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>",
+                "text_align": "inherit",
+                "font_size": "",
+                "enable_h0": false
+              },
+              "blocks": {}
+            },
+            "button_list": {
+              "type": "button-list",
+              "name": "Button list",
+              "blocks": {
+                "button": {
+                  "type": "_button",
+                  "settings": {
+                    "label": "Shop now",
+                    "link": "",
+                    "style": "action"
+                  },
+                  "blocks": {}
+                }
+              },
+              "block_order": [
+                "button"
+              ]
+            }
+          },
+          "block_order": [
+            "richtext",
+            "button_list"
+          ]
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3"
+      ],
+      "settings": {
+        "content": "<h2>Card list</h2><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>",
+        "layout": "grid",
+        "fixed_columns": false,
+        "column_count": 3,
+        "column_width": 250,
+        "gap": 16
+      }
     }
   },
   "order": [
-    "hero_backdrop"
+    "hero_backdrop",
+    "card-list"
   ]
 }

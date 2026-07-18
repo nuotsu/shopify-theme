@@ -50,13 +50,13 @@
                   "type": "_accordion",
                   "name": "Accordion",
                   "settings": {
-                    "summary": "Detail 1"
+                    "summary": "Description"
                   },
                   "blocks": {
                     "richtext": {
                       "type": "richtext",
                       "settings": {
-                        "content": "<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>"
+                        "content": "{{ closest.product.description }}"
                       },
                       "blocks": {}
                     }
@@ -69,7 +69,7 @@
                   "type": "_accordion",
                   "name": "Accordion",
                   "settings": {
-                    "summary": "Detail 2"
+                    "summary": "Detail 1"
                   },
                   "blocks": {
                     "richtext": {
@@ -88,7 +88,7 @@
                   "type": "_accordion",
                   "name": "Accordion",
                   "settings": {
-                    "summary": "Detail 3"
+                    "summary": "Detail 2"
                   },
                   "blocks": {
                     "richtext": {

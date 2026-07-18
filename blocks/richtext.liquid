@@ -1,4 +1,4 @@
-<div class="prose" style="text-align: {{ block.settings.text_align }};">
+<div class="prose {% if block.settings.enable_h0 %} [&_h1,h2]:h0 {% endif %}">
   {{ block.settings.content }}
 </div>
 
@@ -7,6 +7,7 @@
     @scope {
       .prose {
         font-size: {{ block.settings.font_size }};
+        text-align: {{ block.settings.text_align }};
       }
     }
   </style>
@@ -65,6 +66,13 @@
         }
       ],
       "default": "",
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_h0",
+      "label": "Large heading",
+      "default": false,
+      "info": "Applied to H1 and H2 only"
     },
   ],
   "presets": [

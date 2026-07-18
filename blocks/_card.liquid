@@ -1,0 +1,75 @@
+{%- content_for 'blocks' -%}
+
+<style>
+  @scope {
+    :scope {
+      {% if block.settings.column_span > 1 %}
+        grid-column: span {{ block.settings.column_span }};
+      {% endif %}
+      {% if block.settings.row_span > 1 %}
+        grid-row: span {{ block.settings.row_span }};
+      {% endif %}
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Card",
+  "tag": "article",
+  "class": "space-y-4",
+  "settings": [
+    {
+      "type": "number",
+      "id": "column_span",
+      "label": "Column span",
+      "default": 1
+    },
+    {
+      "type": "number",
+      "id": "row_span",
+      "label": "Row span",
+      "default": 1
+    }
+  ],
+  "blocks": [
+    { "type": "@theme" },
+  ],
+  "presets": [
+    {
+      "name": "Card",
+      "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "name": "Richtext",
+          "settings": {
+            "content": "<h3>Heading</h3><p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>"
+          }
+        },
+        "button_list": {
+          "type": "button-list",
+          "name": "Button list",
+          "blocks": {
+            "button": {
+              "type": "_button",
+              "settings": {
+                "label": "Shop now",
+                "link": "",
+                "style": "action"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "button"
+          ]
+        }
+      },
+      "block_order": [
+        "richtext",
+        "button_list"
+      ]
+    }
+  ]
+}
+{% endschema %}

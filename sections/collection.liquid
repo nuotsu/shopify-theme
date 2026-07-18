@@ -66,88 +66,86 @@
 </style>
 
 {% javascript %}
-  (() => {
-    const productList = document.querySelector('#collection-product-grid')
-    if (!productList) return
+  const productList = document.querySelector('#collection-product-grid')
+  if (!productList) return
 
-    const root = productList.closest('[data-section-id]')
-    const sectionId = root?.dataset.sectionId
-    if (!root || !sectionId) return
+  const root = productList.closest('[data-section-id]')
+  const sectionId = root?.dataset.sectionId
+  if (!root || !sectionId) return
 
-    const form = document.querySelector('#collection-filters')
+  const form = document.querySelector('#collection-filters')
 
-    async function fetchAndReplace(urlString) {
-      const fetchUrl = new URL(urlString, window.location.origin)
-      fetchUrl.searchParams.set('section_id', sectionId)
+  async function fetchAndReplace(urlString) {
+    const fetchUrl = new URL(urlString, window.location.origin)
+    fetchUrl.searchParams.set('section_id', sectionId)
 
-      productList.classList.add('animate-pulse')
+    productList.classList.add('animate-pulse')
 
-      try {
-        const response = await fetch(fetchUrl.toString())
-        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+    try {
+      const response = await fetch(fetchUrl.toString())
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
-        const html = await response.text()
-        const doc = new DOMParser().parseFromString(html, 'text/html')
+      const html = await response.text()
+      const doc = new DOMParser().parseFromString(html, 'text/html')
 
-        const newProductGrid = doc.querySelector('#collection-product-grid')
-        const newFilters = doc.querySelector('#collection-filters')
-        const newSorting = doc.querySelector('#collection-sorting')
-        const sorting = document.querySelector('#collection-sorting')
+      const newProductGrid = doc.querySelector('#collection-product-grid')
+      const newFilters = doc.querySelector('#collection-filters')
+      const newSorting = doc.querySelector('#collection-sorting')
+      const sorting = document.querySelector('#collection-sorting')
 
-        if (newProductGrid) {
-          productList.innerHTML = newProductGrid.innerHTML
-        }
-
-        if (newFilters && form) {
-          form.innerHTML = newFilters.innerHTML
-        }
-
-        if (newSorting && sorting) {
-          sorting.innerHTML = newSorting.innerHTML
-        }
-      } catch (error) {
-        console.error('Collection AJAX error:', error)
-      } finally {
-        productList.classList.remove('animate-pulse')
+      if (newProductGrid) {
+        productList.innerHTML = newProductGrid.innerHTML
       }
+
+      if (newFilters && form) {
+        form.innerHTML = newFilters.innerHTML
+      }
+
+      if (newSorting && sorting) {
+        sorting.innerHTML = newSorting.innerHTML
+      }
+    } catch (error) {
+      console.error('Collection AJAX error:', error)
+    } finally {
+      productList.classList.remove('animate-pulse')
     }
+  }
 
-    root.addEventListener('change', async (e) => {
-      if (!e.target.matches('#collection-sorting')) return
+  root.addEventListener('change', async (e) => {
+    if (!e.target.matches('#collection-sorting')) return
 
-      const url = new URL(window.location.href)
-      url.searchParams.set('sort_by', e.target.value)
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort_by', e.target.value)
+
+    history.pushState({}, '', url.toString())
+    await fetchAndReplace(url.toString())
+  })
+
+  if (form) {
+    form.addEventListener('change', async () => {
+      const url = new URL(form.action, window.location.origin)
+      const params = new URLSearchParams(new FormData(form))
+      url.search = params.toString()
 
       history.pushState({}, '', url.toString())
       await fetchAndReplace(url.toString())
     })
+  }
 
-    if (form) {
-      form.addEventListener('change', async () => {
-        const url = new URL(form.action, window.location.origin)
-        const params = new URLSearchParams(new FormData(form))
-        url.search = params.toString()
+  document.addEventListener('click', async (e) => {
+    const removeLink = e.target.closest('[data-filter-remove]')
+    if (!removeLink || !root.contains(removeLink)) return
 
-        history.pushState({}, '', url.toString())
-        await fetchAndReplace(url.toString())
-      })
-    }
+    e.preventDefault()
+    const url = removeLink.href
 
-    document.addEventListener('click', async (e) => {
-      const removeLink = e.target.closest('[data-filter-remove]')
-      if (!removeLink || !root.contains(removeLink)) return
+    history.pushState({}, '', url)
+    await fetchAndReplace(url)
+  })
 
-      e.preventDefault()
-      const url = removeLink.href
-
-      history.pushState({}, '', url)
-      await fetchAndReplace(url)
-    })
-
-    window.addEventListener('popstate', () => {
-      fetchAndReplace(window.location.href)
-    })
-  })()
+  window.addEventListener('popstate', () => {
+    fetchAndReplace(window.location.href)
+  })
 {% endjavascript %}
 
 {% schema %}
