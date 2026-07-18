@@ -4,7 +4,7 @@
   {% if block.settings.enable_hover and closest.product.images.size > 1 %}
     {{
       closest.product.images[1]
-      | image_url: width: 600
+      | image_url: width: 800
       | image_tag: class: 'group-not-hover/image:opacity-0 transition-opacity bg-background', loading: 'lazy'
     }}
   {% endif %}

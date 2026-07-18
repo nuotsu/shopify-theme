@@ -882,6 +882,9 @@
   .gap-y-4 {
     row-gap: calc(var(--spacing) * 4);
   }
+  .gap-y-\[2lh\] {
+    row-gap: 2lh;
+  }
   .gap-y-lh {
     row-gap: var(--spacing-lh);
   }
@@ -924,6 +927,12 @@
   }
   .bg-background {
     background-color: var(--color-background);
+  }
+  .bg-current\/2 {
+    background-color: currentcolor;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, currentcolor 2%, transparent);
+    }
   }
   .bg-current\/5 {
     background-color: currentcolor;
@@ -970,6 +979,9 @@
   }
   .p-\[\.125em_\.25em\] {
     padding: .125em .25em;
+  }
+  .p-lh {
+    padding: var(--spacing-lh);
   }
   .px-4 {
     padding-inline: calc(var(--spacing) * 4);
@@ -1114,8 +1126,18 @@
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
+  .transition-colors {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
   .transition-opacity {
     transition-property: opacity;
+    transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+    transition-duration: var(--tw-duration, var(--default-transition-duration));
+  }
+  .transition-transform {
+    transition-property: transform, translate, scale, rotate;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
     transition-duration: var(--tw-duration, var(--default-transition-duration));
   }
@@ -1252,6 +1274,18 @@
   .group-open\/note\:font-bold:is(:where(.group\/note):is([open], :popover-open, :open) *) {
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
+  }
+  .group-hover\/card\:scale-105:is(:where(.group\/card):hover *) {
+    --tw-scale-x: 105%;
+    --tw-scale-y: 105%;
+    --tw-scale-z: 105%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+  .group-hover\/card\:bg-current\/5:is(:where(.group\/card):hover *) {
+    background-color: currentcolor;
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, currentcolor 5%, transparent);
+    }
   }
   .group-hover\/card\:underline:is(:where(.group\/card):hover *) {
     text-decoration-line: underline;

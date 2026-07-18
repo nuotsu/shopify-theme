@@ -1,0 +1,158 @@
+{%- if section.settings.content != blank -%}
+  <header class="prose text-center">
+    {{ section.settings.content }}
+  </header>
+{% endif %}
+
+{%- paginate collections by section.settings.collections_per_page -%}
+  <ul class="collection-list grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-stretch gap-x-(--gap) gap-y-[2lh] leading-tight">
+    {%- for collection in collections -%}
+      <li class="group/card relative grid gap-2">
+        {%- if collection.image != blank -%}
+          <figure>
+            {{- collection.image
+              | image_url: width: 800
+              | image_tag: class: 'w-full object-cover group-hover/card:brightness-110 transition-[filter]', loading: 'lazy'
+            -}}
+          </figure>
+        {%- endif -%}
+
+        <div class="{% if collection.image == blank %} no-image {% endif %}">
+          <a
+            href="{{ collection.url }}"
+            class="
+              flex items-center after:absolute after:inset-0 hover:underline font-bold
+              {% if collection.image == blank %} h-full p-lh bg-current/2 group-hover/card:bg-current/5 transition-colors {% endif %}
+            "
+          >
+            {{ collection.title }}
+          </a>
+        </div>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  {%- if paginate.pages > 1 -%}
+    <div class="pagination mt-lh">
+      {{- paginate | default_pagination -}}
+    </div>
+  {%- endif -%}
+{%- endpaginate -%}
+
+<style>
+  @scope {
+    .collection-list {
+      --column-width: {{ section.settings.column_width }}px;
+      --gap: {{ section.settings.gap }}px;
+
+      li > :not(:is(figure, .no-image)) {
+        padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
+
+      img {
+        object-fit: {{ section.settings.image_fit }};
+        aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      }
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection list",
+  "tag": "section",
+  "class": "section space-y-lh",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h1>Collections</h1>"
+    },
+    {
+      "type": "header",
+      "content": "Collection grid"
+    },
+    {
+      "type": "range",
+      "id": "collections_per_page",
+      "label": "Collections per page",
+      "min": 1,
+      "max": 100,
+      "step": 1,
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "column_width",
+      "label": "Column width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 250
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_2_column",
+      "label": "2-columns on mobile",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Collection card"
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Aspect ratio",
+      "options": [
+        {
+          "value": "none",
+          "label": "Original"
+        },
+        {
+          "value": "4 / 3",
+          "label": "Landscape"
+        },
+        {
+          "value": "1 / 1",
+          "label": "Square"
+        },
+        {
+          "value": "3 / 4",
+          "label": "Portrait"
+        }
+      ],
+      "default": "1 / 1"
+    },
+    {
+      "type": "select",
+      "id": "image_fit",
+      "label": "Fit",
+      "options": [
+        {
+          "value": "contain",
+          "label": "Contain"
+        },
+        {
+          "value": "cover",
+          "label": "Cover"
+        }
+      ],
+      "default": "cover",
+      "visible_if": "{{ section.settings.image_aspect_ratio != 'none' }}"
+    },
+  ]
+}
+{% endschema %}

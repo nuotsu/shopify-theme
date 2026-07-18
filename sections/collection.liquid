@@ -15,16 +15,18 @@
 
   <div class="grid gap-lh">
     <div class="flex flex-wrap md:items-center md:justify-end gap-2 max-md:*:grow empty:hidden">
-      {%- if section.settings.enable_filters and section.settings.filter_behavior == 'drawer' -%}
-        {%- render 'collection-filter-drawer' -%}
-      {%- endif -%}
+      {%- liquid
+        if section.settings.enable_filters and section.settings.filter_behavior == 'drawer'
+          render 'collection-filter-drawer'
+        endif
 
-      {%- if section.settings.enable_sorting -%}
-        {%- render 'collection-sorting' -%}
-      {%- endif -%}
+        if section.settings.enable_sorting
+          render 'collection-sorting'
+        endif
+      -%}
     </div>
 
-    {% paginate collection.products by section.settings.products_per_page %}
+    {%- paginate collection.products by section.settings.products_per_page -%}
       <ul
         id="collection-product-grid"
         class="
@@ -42,7 +44,7 @@
           {{- paginate | default_pagination -}}
         </div>
       {%- endif -%}
-    {% endpaginate %}
+    {%- endpaginate -%}
   </div>
 </div>
 
