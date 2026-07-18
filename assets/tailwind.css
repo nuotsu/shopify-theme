@@ -317,6 +317,11 @@
   top: calc(var(--header-height) + var(--offset, 0px));
 }
 
+@utility masked-edge-r {
+  --edge: 2rem;
+  @apply mask-r-from-[calc(100%-var(--edge))] pr-(--edge);
+}
+
 /* anims */
 
 @utility anim-fade {

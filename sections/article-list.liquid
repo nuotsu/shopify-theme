@@ -2,7 +2,7 @@
   {%- content_for 'blocks' -%}
 </header>
 
-<ul class="article-list carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap) max-md:full-bleed max-md:px-4">
+<ul class="article-list carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap) md:masked-edge-r max-md:full-bleed max-md:px-4">
   {%- liquid
     if template.name == 'blog'
       assign articles_blog = blog

@@ -1,6 +1,6 @@
 <div class="section space-y-lh">
   {%- if section.settings.content != blank -%}
-    <header class="prose text-center max-w-5xl mx-auto">
+    <header class="prose text-center max-w-3xl mx-auto">
       {{ section.settings.content }}
     </header>
   {%- endif -%}
@@ -9,7 +9,7 @@
     card-list gap-x-(--gap) gap-y-lh
     {% if section.settings.layout == "carousel" %}
       carousel carousel-scroll-buttons carousel-scroll-marker max-md:full-bleed max-md:px-4
-      {% if section.settings.masked_edge %} md:mask-r-from-[calc(100%-2rem)] {% endif %}
+      {% if section.settings.masked_edge %} md:masked-edge-r {% endif %}
     {% else %} grid
       {% if section.settings.fixed_columns %} md:grid-cols-[repeat(var(--column-count),minmax(0px,1fr))]
       {% else %} md:grid-cols-[repeat(auto-fit,minmax(min(var(--column-width),100%),1fr))]

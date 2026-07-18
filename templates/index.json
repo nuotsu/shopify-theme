@@ -96,6 +96,9 @@
             "button_list": {
               "type": "button-list",
               "name": "Button list",
+              "settings": {
+                "justify_content": "start"
+              },
               "blocks": {
                 "button": {
                   "type": "_button",
@@ -138,6 +141,9 @@
             "button_list": {
               "type": "button-list",
               "name": "Button list",
+              "settings": {
+                "justify_content": "start"
+              },
               "blocks": {
                 "button": {
                   "type": "_button",
@@ -180,6 +186,9 @@
             "button_list": {
               "type": "button-list",
               "name": "Button list",
+              "settings": {
+                "justify_content": "start"
+              },
               "blocks": {
                 "button": {
                   "type": "_button",
@@ -212,13 +221,84 @@
         "layout": "grid",
         "fixed_columns": false,
         "column_count": 3,
+        "masked_edge": true,
         "column_width": 250,
+        "gap": 16
+      }
+    },
+    "article_list": {
+      "type": "article-list",
+      "blocks": {
+        "richtext": {
+          "type": "richtext",
+          "name": "Richtext",
+          "settings": {
+            "content": "<h2>Blog</h2>",
+            "text_align": "inherit",
+            "font_size": "",
+            "enable_h0": false
+          },
+          "blocks": {}
+        },
+        "article-card": {
+          "type": "_article-card",
+          "static": true,
+          "settings": {
+            "enable_link": true
+          },
+          "blocks": {
+            "article_image": {
+              "type": "_article-image",
+              "name": "Image",
+              "settings": {
+                "aspect_ratio": "4 / 3"
+              },
+              "blocks": {}
+            },
+            "article_title": {
+              "type": "_article-title",
+              "name": "Title",
+              "settings": {},
+              "blocks": {}
+            },
+            "article_excerpt": {
+              "type": "_article-excerpt",
+              "name": "Excerpt",
+              "settings": {
+                "enable_line_clamp": true,
+                "line_clamp": 3
+              },
+              "blocks": {}
+            },
+            "article_date": {
+              "type": "_article-date",
+              "name": "Date",
+              "settings": {},
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "article_image",
+            "article_title",
+            "article_excerpt",
+            "article_date"
+          ]
+        }
+      },
+      "block_order": [
+        "richtext"
+      ],
+      "name": "Article list",
+      "settings": {
+        "blog": "blog",
+        "limit": 6,
         "gap": 16
       }
     }
   },
   "order": [
     "hero_backdrop",
-    "card-list"
+    "card-list",
+    "article_list"
   ]
 }
