@@ -1,0 +1,170 @@
+<div class="section space-y-8 text-center">
+  {%- if section.settings.content != blank -%}
+    <header class="prose mx-auto max-w-3xl">
+      {{ section.settings.content }}
+    </header>
+  {%- endif -%}
+
+  <figure
+    class="
+      mx-auto flex items-center
+      {% if section.settings.auto_scroll %} track max-w-max overflow-hidden mask-x-from-[calc(100%-2rem)]
+      {% else %} flex-wrap justify-center gap-x-4 gap-y-4
+      {% endif %}
+    "
+    style="--count: {{ section.blocks.size }}; --duration: {{ section.settings.duration }}s;"
+  >
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when "logo" -%}
+          {%- assign fetch_width = section.settings.logo_width | times: 2 -%}
+
+          {%- capture logo_content -%}
+            {%- if block.settings.logo != blank -%}
+              {{- block.settings.logo
+                | image_url: width: fetch_width
+                | image_tag: class: 'h-full w-full object-contain', loading: 'lazy'
+              -}}
+            {%- else -%}
+              {{- 'image' | placeholder_svg_tag: 'h-full w-full object-contain' -}}
+            {%- endif -%}
+          {%- endcapture -%}
+
+          {%- capture logo_attrs -%}
+            class="logo flex h-[2lh] shrink-0 items-center px-4"
+            style="--index: {{ forloop.index0 }}"
+          {%- endcapture -%}
+
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" {{ logo_attrs }}>
+              {{- logo_content -}}
+            </a>
+          {%- else -%}
+            <div {{ logo_attrs }}>
+              {{- logo_content -}}
+            </div>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </figure>
+</div>
+
+<style>
+  @scope {
+    .track {
+      &>* {
+        --xi: calc((var(--count) - var(--index)) * 100%);
+        --xf: calc((var(--index) + 1) * -100%);
+
+        translate: var(--xi) 0;
+        animation: scroll var(--duration) linear infinite;
+        animation-delay: calc(var(--duration) / var(--count) * var(--index) - var(--count) * 2s);
+      }
+
+      &:hover>* {
+        animation-play-state: paused;
+      }
+    }
+
+    .logo {
+      width: 150px;
+
+      @media (width >= 48rem) {
+        width: {{ section.settings.logo_width }}px;
+      }
+    }
+  }
+
+  @keyframes scroll {
+    to {
+      translate: var(--xf) 0;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Logo List",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 200
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_scroll",
+      "label": "Auto-scroll",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "duration",
+      "label": "Duration",
+      "min": 4,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "default": 12,
+      "visible_if": "{{ section.settings.auto_scroll }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "logo",
+          "label": "Logo"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo List",
+      "settings": {
+        "content": "<h2>Logo list</h2>",
+      },
+      "blocks": {
+        "logo_1": {
+          "type": "logo"
+        },
+        "logo_2": {
+          "type": "logo"
+        },
+        "logo_3": {
+          "type": "logo"
+        }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_3"
+      ]
+    }
+  ]
+}
+{% endschema %}

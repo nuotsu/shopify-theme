@@ -72,6 +72,28 @@
       ],
       "settings": {}
     },
+    "logo-list": {
+      "type": "logo-list",
+      "settings": {
+        "content": "<h2>Logo list</h2>",
+      },
+      "blocks": {
+        "logo_1": {
+          "type": "logo"
+        },
+        "logo_2": {
+          "type": "logo"
+        },
+        "logo_3": {
+          "type": "logo"
+        }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_3"
+      ]
+    },
     "card-list": {
       "type": "card-list",
       "blocks": {
@@ -298,6 +320,7 @@
   },
   "order": [
     "hero_backdrop",
+    "logo-list",
     "card-list",
     "article_list"
   ]
