@@ -69,6 +69,82 @@ const syncDetails = () => {
 syncDetails()
 desktopMq.addEventListener('change', syncDetails)
 
+// table of contents [data-toc] + [data-toc-content]
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '') || 'heading'
+
+const uniqueTocId = (base, used, element) => {
+  let id = base
+  let n = 2
+  while (
+    used.has(id) ||
+    (document.getElementById(id) && document.getElementById(id) !== element)
+  ) {
+    id = `${base}-${n++}`
+  }
+  used.add(id)
+  return id
+}
+
+const buildTocList = (headings) => {
+  const root = document.createElement('ul')
+
+  const stack = [root]
+  const usedIds = new Set()
+  let count = 0
+
+  headings.forEach((heading) => {
+    const text = heading.textContent.trim()
+    if (!text) return
+
+    const level = Number(heading.tagName[1])
+    const depth = level - 1
+
+    while (stack.length > depth) stack.pop()
+    while (stack.length < depth) {
+      const nested = document.createElement('ul')
+      const lastLi = stack[stack.length - 1].lastElementChild
+      if (lastLi) {
+        lastLi.appendChild(nested)
+      } else {
+        stack[stack.length - 1].appendChild(nested)
+      }
+      stack.push(nested)
+    }
+
+    const id = uniqueTocId(heading.id || slugify(text), usedIds, heading)
+    heading.id = id
+
+    const li = document.createElement('li')
+    const a = document.createElement('a')
+    a.href = `#${id}`
+    a.textContent = text
+    li.appendChild(a)
+    stack[stack.length - 1].appendChild(li)
+    count++
+  })
+
+  return count > 0 ? root : null
+}
+
+document.querySelectorAll('[data-toc]').forEach((nav) => {
+  const section = nav.closest('.section')
+  const content = section?.querySelector('[data-toc-content]')
+  const list = nav.querySelector('ul')
+  if (!content || !list) return
+
+  const headings = content.querySelectorAll('h2, h3, h4, h5, h6')
+  const toc = buildTocList(headings)
+  if (!toc) return
+
+  list.replaceWith(toc)
+  nav.removeAttribute('hidden')
+})
+
 // set CSS custom properties from [data-height-var]
 const heightVarObserver = new ResizeObserver((entries) => {
   for (const entry of entries) {

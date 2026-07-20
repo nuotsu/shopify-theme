@@ -11,6 +11,7 @@
     --color-white: #fff;
     --spacing: 0.25rem;
     --container-xs: 20rem;
+    --container-sm: 24rem;
     --container-lg: 32rem;
     --container-3xl: 48rem;
     --container-5xl: 64rem;
@@ -655,6 +656,9 @@
   }
   .max-w-max {
     max-width: max-content;
+  }
+  .max-w-sm {
+    max-width: var(--container-sm);
   }
   .shrink-0 {
     flex-shrink: 0;

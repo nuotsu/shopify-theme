@@ -21,7 +21,7 @@
         class="text-sm leading-tight max-md:group-open/toc:anim-fade-to-b md:not-empty:anim-fade-to-r pb-4"
         aria-label="Table of contents"
         hidden
-        data-article-toc
+        data-toc
       >
         <ul></ul>
       </nav>
@@ -29,7 +29,7 @@
   </aside>
 
   <div class="md:[grid-area:content] max-w-(--content-width) mx-auto">
-    <div class="prose leading-relaxed" data-article-content>
+    <div class="prose leading-relaxed" data-toc-content>
       {{ article.content }}
     </div>
 
@@ -77,91 +77,13 @@
       }
     }
 
-    [data-article-content] {
+    [data-toc-content] {
       a {
         overflow-wrap: anywhere;
       }
     }
   }
 </style>
-
-{% javascript %}
-  // generate table of contents
-  const slugify = (text) =>
-    text
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '') || 'heading'
-
-  const uniqueId = (base, used, element) => {
-    let id = base
-    let n = 2
-    while (
-      used.has(id) ||
-      (document.getElementById(id) && document.getElementById(id) !== element)
-    ) {
-      id = `${base}-${n++}`
-    }
-    used.add(id)
-    return id
-  }
-
-  const buildNestedList = (headings) => {
-    const root = document.createElement('ul')
-
-    const stack = [root]
-    const usedIds = new Set()
-    let count = 0
-
-    headings.forEach((heading) => {
-      const text = heading.textContent.trim()
-      if (!text) return
-
-      const level = Number(heading.tagName[1])
-      const depth = level - 1
-
-      while (stack.length > depth) stack.pop()
-      while (stack.length < depth) {
-        const nested = document.createElement('ul')
-        const lastLi = stack[stack.length - 1].lastElementChild
-        if (lastLi) {
-          lastLi.appendChild(nested)
-        } else {
-          stack[stack.length - 1].appendChild(nested)
-        }
-        stack.push(nested)
-      }
-
-      const id = uniqueId(heading.id || slugify(text), usedIds, heading)
-      heading.id = id
-
-      const li = document.createElement('li')
-      const a = document.createElement('a')
-      a.href = `#${id}`
-      a.textContent = text
-      li.appendChild(a)
-      stack[stack.length - 1].appendChild(li)
-      count++
-    })
-
-    return count > 0 ? root : null
-  }
-
-  document.querySelectorAll('[data-article-toc]').forEach((nav) => {
-    const section = nav.closest('.section')
-    const content = section?.querySelector('[data-article-content]')
-    const list = nav.querySelector('ul')
-    if (!content || !list) return
-
-    const headings = content.querySelectorAll('h2, h3, h4, h5, h6')
-    const toc = buildNestedList(headings)
-    if (!toc) return
-
-    list.replaceWith(toc)
-    nav.removeAttribute('hidden')
-  })
-{% endjavascript %}
 
 {% schema %}
 {

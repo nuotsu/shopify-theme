@@ -3,10 +3,6 @@
 {% form 'contact', class: class %}
   {{ form.errors | default_errors }}
 
-  {%- if form.posted_successfully? -%}
-    <p>Thanks for subscribing.</p>
-  {%- endif -%}
-
   <label>
     <span class="sr-only">Email</span>
     <input
@@ -22,4 +18,8 @@
   <button class="action w-full" type="submit">
     Subscribe
   </button>
+
+  {%- if form.posted_successfully? -%}
+    <p>Thanks for subscribing.</p>
+  {%- endif -%}
 {% endform %}

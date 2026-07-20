@@ -1,5 +1,25 @@
-<div class="section prose">
-  {{ section.settings.content }}
+<div class="section grid gap-lh">
+  {% if section.settings.enable_toc %}
+    <details class="group/toc accordion px-4 bg-current/5" data-mobile-only-details>
+      <summary class="py-2 font-bold md:[&_svg]:hidden">
+        On this page
+        {{ 'icon-chevron-down.svg' | inline_asset_content }}
+      </summary>
+
+      <nav
+        class="text-sm leading-tight max-md:group-open/toc:anim-fade-to-b md:not-empty:anim-fade-to-r pb-4"
+        aria-label="Table of contents"
+        hidden
+        data-toc
+      >
+        <ul></ul>
+      </nav>
+    </details>
+  {% endif %}
+
+  <div class="prose" data-toc-content>
+    {{ section.settings.content }}
+  </div>
 
   {% content_for 'blocks' %}
 </div>
@@ -13,6 +33,21 @@
       {%- endif -%};
       text-align: {{ section.settings.text_align }};
     }
+
+    .group\/toc {
+      ul ul {
+        padding-left: 1em;
+      }
+
+      a {
+        display: block;
+        padding-block: 0.25em;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 </style>
 
@@ -24,6 +59,12 @@
       "type": "richtext",
       "id": "content",
       "label": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_toc",
+      "label": "Enable table of contents",
+      "default": false
     },
     {
       "type": "select",

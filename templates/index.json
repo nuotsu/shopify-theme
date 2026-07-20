@@ -316,12 +316,19 @@
         "limit": 6,
         "gap": 16
       }
+    },
+    "newsletter_form": {
+      "type": "newsletter-form",
+      "settings": {
+        "content": "<h2>Newsletter</h2><p>Sign up for updates and offers.</p>"
+      }
     }
   },
   "order": [
     "hero_backdrop",
     "logo-list",
     "card-list",
-    "article_list"
+    "article_list",
+    "newsletter_form"
   ]
 }

@@ -1,0 +1,27 @@
+<div class="section space-y-lh text-center">
+  {%- if section.settings.content != blank -%}
+    <header class="prose mx-auto max-w-3xl">
+      {{ section.settings.content }}
+    </header>
+  {%- endif -%}
+
+  {% render 'contact-form', class: 'mx-auto max-w-sm' %}
+</div>
+
+{% schema %}
+{
+  "name": "Newsletter form",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h2>Newsletter</h2><p>Sign up for updates and offers.</p>"
+    }
+  ],
+  "presets": [
+    { "name": "Newsletter form" }
+  ]
+}
+{% endschema %}
