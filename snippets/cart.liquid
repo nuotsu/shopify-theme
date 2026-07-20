@@ -1,4 +1,14 @@
-{%- unless cart.empty? -%}
+{%- if cart.empty? -%}
+  <div class="prose text-center" data-cart-empty>
+    {{ settings.cart_empty_content }}
+
+    {%- if settings.cart_empty_link != blank -%}
+      <p>
+        <a href="{{ settings.cart_empty_link }}" class="action">Continue shopping</a>
+      </p>
+    {%- endif -%}
+  </div>
+{%- else -%}
   {%- form 'cart',
     cart,
     class: 'grid @4xl/section:grid-cols-[1fr_min(50%,24rem)] items-start gap-y-lh gap-x-[2lh] *:@4xl/section:sticky-below-header [--offset:1rem] data-loading:animate-pulse',
@@ -108,4 +118,4 @@
       {% endif %}
     </div>
   {%- endform -%}
-{%- endunless -%}
+{%- endif -%}

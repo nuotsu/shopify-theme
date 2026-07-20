@@ -12,46 +12,6 @@
     "cart": {
       "type": "cart",
       "blocks": {
-        "cart-empty": {
-          "type": "_cart-header-empty",
-          "static": true,
-          "settings": {},
-          "blocks": {
-            "richtext": {
-              "type": "richtext",
-              "settings": {
-                "content": "<h1>Cart</h1><p>Your cart is empty.</p>",
-                "text_align": "inherit",
-                "font_size": ""
-              },
-              "blocks": {}
-            },
-            "button_list": {
-              "type": "button-list",
-              "settings": {
-                "justify_content": "center"
-              },
-              "blocks": {
-                "button": {
-                  "type": "_button",
-                  "settings": {
-                    "label": "Continue shopping",
-                    "link": "shopify://collections",
-                    "style": "action"
-                  },
-                  "blocks": {}
-                }
-              },
-              "block_order": [
-                "button"
-              ]
-            }
-          },
-          "block_order": [
-            "richtext",
-            "button_list"
-          ]
-        },
         "cart-content": {
           "type": "_cart-header",
           "static": true,

@@ -10,6 +10,7 @@
 {
   "current": {
     "content_for_index": [],
+    "cart_empty_link": "shopify://collections",
     "color_schemes": {
       "scheme-1": {
         "settings": {

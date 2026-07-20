@@ -5,13 +5,17 @@
   data-hover-details
 >
   <summary class="py-1">
-    Account
-    {{ 'icon-chevron-down.svg' | inline_asset_content }}
+    {% if section.settings.display == 'text' %}
+      Account
+      {{ 'icon-chevron-down.svg' | inline_asset_content }}
+    {% else %}
+      <div class="*:size-lh">{{ 'icon-person.svg' | inline_asset_content }}</div>
+    {% endif %}
   </summary>
 
   <ul class="
     max-md:anim-fade-to-b p-4 max-md:py-0 max-md:border-l max-md:mb-4
-    [&_a]:block [&_a]:py-1 [&_a]:hover:underline
+    [&_a]:block [&_a]:py-1 [&_a]:hover:underline md:-ml-4
   ">
     {% if customer %}
       <li>{{ 'My Account' | link_to: routes.account_url }}</li>

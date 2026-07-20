@@ -184,12 +184,12 @@
     justify-content: space-between;
     gap: 0.5em;
 
-    & svg {
+    & > svg {
       @apply shrink-0 transition-[rotate];
     }
   }
 
-  &:open > summary svg {
+  &:open > summary > svg {
     rotate: 0.5turn;
   }
 }

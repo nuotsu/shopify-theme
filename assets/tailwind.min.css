@@ -14,7 +14,6 @@
     --container-sm: 24rem;
     --container-lg: 32rem;
     --container-3xl: 48rem;
-    --container-5xl: 64rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
     --text-lg: 1.125rem;
@@ -400,6 +399,9 @@
   .mx-auto {
     margin-inline: auto;
   }
+  .my-auto {
+    margin-block: auto;
+  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -420,14 +422,14 @@
     align-items: center;
     justify-content: space-between;
     gap: 0.5em;
-    & svg {
+    & > svg {
       flex-shrink: 0;
       transition-property: rotate;
       transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
       transition-duration: var(--tw-duration, var(--default-transition-duration));
     }
   }
-  .accordion:open > summary svg {
+  .accordion:open > summary > svg {
     rotate: 0.5turn;
   }
   .action-outline {
@@ -633,9 +635,6 @@
   .w-3\.5 {
     width: calc(var(--spacing) * 3.5);
   }
-  .w-\[200px\] {
-    width: 200px;
-  }
   .w-auto {
     width: auto;
   }
@@ -790,6 +789,9 @@
   }
   .gap-8 {
     gap: calc(var(--spacing) * 8);
+  }
+  .gap-\[\.5ch\] {
+    gap: .5ch;
   }
   .gap-\[\.25em\] {
     gap: .25em;
@@ -1183,6 +1185,10 @@
   :is(.\*\:inline-block > *) {
     display: inline-block;
   }
+  :is(.\*\:size-lh > *) {
+    width: var(--spacing-lh);
+    height: var(--spacing-lh);
+  }
   :is(.\*\:max-w-\[calc\(100vw-2rem\)\] > *) {
     max-width: calc(100vw - 2rem);
   }
@@ -1374,6 +1380,9 @@
   .has-disabled\:opacity-25:has(:disabled) {
     opacity: 25%;
   }
+  .has-data-cart-empty\:my-auto:has([data-cart-empty]) {
+    margin-block: auto;
+  }
   .has-\[\.discount\]\:items-center:has(:is(.discount)) {
     align-items: center;
   }
@@ -1543,11 +1552,6 @@
       }
     }
   }
-  @media (width < 40rem) {
-    .max-sm\:w-\[150px\] {
-      width: 150px;
-    }
-  }
   @media (width >= 48rem) {
     .md\:sticky-below-header {
       position: sticky;
@@ -1592,6 +1596,9 @@
       max-width: var(--section-width);
       padding: var(--section-vertical-padding) var(--section-horizontal-padding);
       margin-inline: auto;
+    }
+    .md\:-ml-4 {
+      margin-left: calc(var(--spacing) * -4);
     }
     .md\:flex {
       display: flex;

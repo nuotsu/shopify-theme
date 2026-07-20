@@ -5,43 +5,50 @@
 {%- endcapture -%}
 
 <button
-  class="cursor-pointer"
+  class="cursor-pointer inline-flex items-center gap-[.5ch]"
   type="button"
   commandfor="cart-drawer"
   command="show-modal"
 >
-  Cart
+  {% if section.settings.display == 'text' %}
+    Cart
+  {% else %}
+    <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
+  {% endif %}
+
   {{ cart_count }}
 </button>
 
 <dialog
   id="cart-drawer"
-  class="anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto w-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
+  class="anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto size-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
   closedby="any"
   data-section-id="{{ section_id }}"
 >
-  <header class="sticky top-0 z-1 bg-background flex items-center gap-4 justify-between p-4 border-b">
-    <a href="{{ routes.cart_url }}" class="block py-1 hover:underline">
-      Cart
-      {{ cart_count }}
-    </a>
+  <div class="flex flex-col h-full">
+    <header class="sticky top-0 z-1 bg-background flex items-center gap-4 justify-between p-4 border-b">
+      <a href="{{ routes.cart_url }}" class="block py-1 hover:underline">
+        Cart
+        {{ cart_count }}
+      </a>
 
-    <button
-      class="cursor-pointer"
-      type="button"
-      commandfor="cart-drawer"
-      command="close"
-      aria-label="Close cart"
+      <button
+        class="cursor-pointer"
+        type="button"
+        commandfor="cart-drawer"
+        command="close"
+        aria-label="Close cart"
+      >
+        {{ 'icon-close.svg' | inline_asset_content }}
+      </button>
+    </header>
+
+    <div
+      class="@container/cart p-4 has-data-cart-empty:my-auto"
+      data-cart-lines
+      data-section-id="{{ section_id }}"
     >
-      {{ 'icon-close.svg' | inline_asset_content }}
-    </button>
-  </header>
-
-  <div
-    class="@container/cart p-4"
-    data-cart-lines
-    data-section-id="{{ section_id }}"
-  >
-    {%- render 'cart' -%}
+      {%- render 'cart' -%}
+    </div>
   </div>
 </dialog>

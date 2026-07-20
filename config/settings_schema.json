@@ -140,6 +140,17 @@
           }
         ],
         "default": "drawer"
+      },
+      {
+        "type": "richtext",
+        "id": "cart_empty_content",
+        "label": "Empty cart content",
+        "default": "<h1>Cart</h1><p>Your cart is empty.</p>"
+      },
+      {
+        "type": "url",
+        "id": "cart_empty_link",
+        "label": "Empty cart link"
       }
     ]
   }

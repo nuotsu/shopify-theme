@@ -119,7 +119,12 @@
       {% render 'cart-drawer', section_id: section.id %}
     {% else %}
       <a href="{{ routes.cart_url }}">
-        Cart
+        {% if section.settings.display == 'text' %}
+          Cart
+        {% else %}
+          <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
+        {% endif %}
+
         <span class="{% unless cart.item_count > 0 %} hidden {% endunless %}">({{ cart.item_count }})</span>
       </a>
     {% endif %}
@@ -144,7 +149,27 @@
       "label": "Menu",
       "default": "main-menu",
       "info": "1 level of nesting = dropdown; 2 levels = megamenu."
-    }
+    },
+    {
+      "type": "header",
+      "content": "Actions menu",
+    },
+    {
+      "type": "select",
+      "id": "display",
+      "label": "Display",
+      "options": [
+        {
+          "value": "text",
+          "label": "Text"
+        },
+        {
+          "value": "icon",
+          "label": "Icon"
+        }
+      ],
+      "default": "icon"
+    },
   ],
   "blocks": [
     {

@@ -3,11 +3,9 @@
   data-cart-lines
   data-section-id="{{ section.id }}"
 >
-  {%- if cart.empty? -%}
-    {% content_for 'block', type: '_cart-header-empty', id: 'cart-empty' %}
-  {%- else -%}
+  {%- unless cart.empty? -%}
     {% content_for 'block', type: '_cart-header', id: 'cart-content' %}
-  {%- endif -%}
+  {%- endunless -%}
 
   {%- render 'cart' -%}
 </div>
@@ -19,8 +17,7 @@
   "class": "section",
   "settings": [],
   "blocks": [
-    { "type": "_cart-header" },
-    { "type": "_cart-header-empty" }
+    { "type": "_cart-header" }
   ]
 }
 {% endschema %}
