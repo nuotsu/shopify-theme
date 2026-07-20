@@ -1,3 +1,20 @@
+<style>
+  @scope {
+    .product-list {
+      --column-width: {{ section.settings.column_width }}px;
+      --gap: {{ section.settings.gap }}px;
+
+      li > :not(.product-card-image) {
+        padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
+    }
+
+    .product-card-variants:not(:has(*)) {
+      display: none;
+    }
+  }
+</style>
+
 <div
   class="section grid has-[aside]:md:grid-cols-[auto_1fr] items-start gap-lh"
   data-section-id="{{ section.id }}"
@@ -47,23 +64,6 @@
     {%- endpaginate -%}
   </div>
 </div>
-
-<style>
-  @scope {
-    .product-list {
-      --column-width: {{ section.settings.column_width }}px;
-      --gap: {{ section.settings.gap }}px;
-
-      li > :not(.product-card-image) {
-        padding-inline: max(0px, calc(.5rem - var(--gap)));
-      }
-    }
-
-    .product-card-variants:not(:has(*)) {
-      display: none;
-    }
-  }
-</style>
 
 {% javascript %}
   const productList = document.querySelector('#collection-product-grid')

@@ -1,3 +1,13 @@
+<style>
+  @scope {
+    :scope {
+      --column-width: {{ section.settings.column_width }}px;
+      --gallery-height: {{ section.settings.gallery_height }}px;
+      --gallery-gap: {{ section.settings.gallery_gap }}px;
+    }
+  }
+</style>
+
 {%- assign layout = section.settings.layout -%}
 
 <div class="
@@ -28,16 +38,6 @@
     </div>
   </article>
 </div>
-
-<style>
-  @scope {
-    :scope {
-      --column-width: {{ section.settings.column_width }}px;
-      --gallery-height: {{ section.settings.gallery_height }}px;
-      --gallery-gap: {{ section.settings.gallery_gap }}px;
-    }
-  }
-</style>
 
 {% schema %}
 {

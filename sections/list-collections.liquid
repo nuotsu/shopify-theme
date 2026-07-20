@@ -1,3 +1,21 @@
+<style>
+  @scope {
+    .collection-list {
+      --column-width: {{ section.settings.column_width }}px;
+      --gap: {{ section.settings.gap }}px;
+
+      li > :not(:is(figure, .no-image)) {
+        padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
+
+      img {
+        object-fit: {{ section.settings.image_fit }};
+        aspect-ratio: {{ section.settings.image_aspect_ratio }};
+      }
+    }
+  }
+</style>
+
 {%- if section.settings.content != blank -%}
   <header class="prose text-center">
     {{ section.settings.content }}
@@ -38,24 +56,6 @@
     </div>
   {%- endif -%}
 {%- endpaginate -%}
-
-<style>
-  @scope {
-    .collection-list {
-      --column-width: {{ section.settings.column_width }}px;
-      --gap: {{ section.settings.gap }}px;
-
-      li > :not(:is(figure, .no-image)) {
-        padding-inline: max(0px, calc(.5rem - var(--gap)));
-      }
-
-      img {
-        object-fit: {{ section.settings.image_fit }};
-        aspect-ratio: {{ section.settings.image_aspect_ratio }};
-      }
-    }
-  }
-</style>
 
 {% schema %}
 {

@@ -1,3 +1,15 @@
+<style>
+  @scope {
+    .article-list {
+      --gap: {{ section.settings.gap }}px;
+
+      li > :not(.article-image) {
+        padding-inline: max(0px, calc(.5rem - var(--gap)));
+      }
+    }
+  }
+</style>
+
 <header class="prose">
   {%- content_for 'blocks' -%}
 </header>
@@ -26,18 +38,6 @@
     endfor
   -%}
 </ul>
-
-<style>
-  @scope {
-    .article-list {
-      --gap: {{ section.settings.gap }}px;
-
-      li > :not(.article-image) {
-        padding-inline: max(0px, calc(.5rem - var(--gap)));
-      }
-    }
-  }
-</style>
 
 {% schema %}
 {

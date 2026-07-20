@@ -1,3 +1,17 @@
+<style>
+  @scope {
+    .header-layout {
+      grid-template: 'logo menu actions' / auto 1fr auto;
+
+      @media (width < 48rem) {
+        grid-template:
+          'logo actions toggle' auto
+          'menu menu menu' auto / 1fr auto auto;
+      }
+    }
+  }
+</style>
+
 {%- assign megamenu_cards = section.blocks | where: 'type', 'megamenu_card' -%}
 
 <div
@@ -117,20 +131,6 @@
     <span class="menu-not-open:hidden">{{ 'icon-close.svg' | inline_asset_content }}</span>
   </label>
 </div>
-
-<style>
-  @scope {
-    .header-layout {
-      grid-template: 'logo menu actions' / auto 1fr auto;
-
-      @media (width < 48rem) {
-        grid-template:
-          'logo actions toggle' auto
-          'menu menu menu' auto / 1fr auto auto;
-      }
-    }
-  }
-</style>
 
 {% schema %}
 {

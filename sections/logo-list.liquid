@@ -1,3 +1,36 @@
+<style>
+  @scope {
+    .track {
+      &>* {
+        --xi: calc((var(--count) - var(--index)) * 100%);
+        --xf: calc((var(--index) + 1) * -100%);
+
+        translate: var(--xi) 0;
+        animation: scroll var(--duration) linear infinite;
+        animation-delay: calc(var(--duration) / var(--count) * var(--index) - var(--count) * 2s);
+      }
+
+      &:hover>* {
+        animation-play-state: paused;
+      }
+    }
+
+    .logo {
+      width: 150px;
+
+      @media (width >= 48rem) {
+        width: {{ section.settings.logo_width }}px;
+      }
+    }
+  }
+
+  @keyframes scroll {
+    to {
+      translate: var(--xf) 0;
+    }
+  }
+</style>
+
 <div class="section space-y-8 text-center">
   {%- if section.settings.content != blank -%}
     <header class="prose mx-auto max-w-3xl">
@@ -48,39 +81,6 @@
     {%- endfor -%}
   </figure>
 </div>
-
-<style>
-  @scope {
-    .track {
-      &>* {
-        --xi: calc((var(--count) - var(--index)) * 100%);
-        --xf: calc((var(--index) + 1) * -100%);
-
-        translate: var(--xi) 0;
-        animation: scroll var(--duration) linear infinite;
-        animation-delay: calc(var(--duration) / var(--count) * var(--index) - var(--count) * 2s);
-      }
-
-      &:hover>* {
-        animation-play-state: paused;
-      }
-    }
-
-    .logo {
-      width: 150px;
-
-      @media (width >= 48rem) {
-        width: {{ section.settings.logo_width }}px;
-      }
-    }
-  }
-
-  @keyframes scroll {
-    to {
-      translate: var(--xf) 0;
-    }
-  }
-</style>
 
 {% schema %}
 {

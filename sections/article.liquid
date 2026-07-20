@@ -1,3 +1,45 @@
+<style>
+  @scope {
+    .section {
+      --section-width: {{ section.settings.section_width }}px;
+      --content-width: {{ section.settings.content_width }}px;
+
+      @media (width >= 48rem) {
+        {% if section.settings.sidebar_position == 'left' %}
+          grid-template:
+            'sidebar top' auto
+            'sidebar content' auto / auto 1fr;
+        {% else %}
+          grid-template:
+            'top sidebar' auto
+            'content sidebar' auto / 1fr auto;
+        {% endif %}
+      }
+    }
+
+    .group\/toc {
+      ul ul {
+        padding-left: 1em;
+      }
+
+      a {
+        display: block;
+        padding-block: 0.25em;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    [data-toc-content] {
+      a {
+        overflow-wrap: anywhere;
+      }
+    }
+  }
+</style>
+
 <div class="section grid md:items-start gap-lh">
   <header class="md:[grid-area:top] [&_.article-title]:h0 max-md:[&_figure]:full-bleed">
     {%- content_for 'block', type: '_article-top', id: 'article-top' -%}
@@ -42,48 +84,6 @@
     -%}
   </div>
 </div>
-
-<style>
-  @scope {
-    .section {
-      --section-width: {{ section.settings.section_width }}px;
-      --content-width: {{ section.settings.content_width }}px;
-
-      @media (width >= 48rem) {
-        {% if section.settings.sidebar_position == 'left' %}
-          grid-template:
-            'sidebar top' auto
-            'sidebar content' auto / auto 1fr;
-        {% else %}
-          grid-template:
-            'top sidebar' auto
-            'content sidebar' auto / 1fr auto;
-        {% endif %}
-      }
-    }
-
-    .group\/toc {
-      ul ul {
-        padding-left: 1em;
-      }
-
-      a {
-        display: block;
-        padding-block: 0.25em;
-
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-    }
-
-    [data-toc-content] {
-      a {
-        overflow-wrap: anywhere;
-      }
-    }
-  }
-</style>
 
 {% schema %}
 {

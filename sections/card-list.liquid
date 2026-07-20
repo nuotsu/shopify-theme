@@ -1,3 +1,15 @@
+<style>
+  @scope {
+    .card-list {
+      --column-width: {{ section.settings.column_width }}px;
+      --gap: {{ section.settings.gap }}px;
+      {% if section.settings.fixed_columns %}
+        --column-count: {{ section.settings.column_count }};
+      {% endif %}
+    }
+  }
+</style>
+
 <div class="section space-y-lh">
   {%- if section.settings.content != blank -%}
     <header class="prose text-center max-w-3xl mx-auto">
@@ -19,18 +31,6 @@
     {% content_for 'blocks' %}
   </div>
 </div>
-
-<style>
-  @scope {
-    .card-list {
-      --column-width: {{ section.settings.column_width }}px;
-      --gap: {{ section.settings.gap }}px;
-      {% if section.settings.fixed_columns %}
-        --column-count: {{ section.settings.column_count }};
-      {% endif %}
-    }
-  }
-</style>
 
 {% schema %}
 {

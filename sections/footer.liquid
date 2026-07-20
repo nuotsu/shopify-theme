@@ -1,3 +1,11 @@
+<style>
+  @scope {
+    :scope {
+      padding-bottom: max(env(safe-area-inset-bottom), 1rem);
+    }
+  }
+</style>
+
 <div class="section grid gap-8">
   <div class="flex flex-wrap max-md:flex-col md:items-start justify-between gap-4">
     <div class="md:min-w-[24ch]">
@@ -58,14 +66,6 @@
     {%- endif -%}
   </div>
 </div>
-
-<style>
-  @scope {
-    :scope {
-      padding-bottom: max(env(safe-area-inset-bottom), 1rem);
-    }
-  }
-</style>
 
 {% schema %}
 {
