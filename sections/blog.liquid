@@ -31,7 +31,7 @@
       {{ section.settings.content }}
     </header>
 
-    {% render 'search-form', type: 'article' %}
+    {% render 'search-form', type: 'article', google_scope_path: blog.url %}
 
     {%- if blog.tags.size > 0 -%}
       <div class="grid text-sm grow overflow-y-auto mask-b-from-[calc(100%-2rem)] max-md:max-h-[7.5lh]">

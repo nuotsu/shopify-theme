@@ -113,6 +113,8 @@
   </nav>
 
   <nav class="[grid-area:actions] flex items-center gap-x-4">
+    {% render 'search-drawer', section: section %}
+
     {% render 'account-dropdown', section: section, class: 'max-md:hidden' %}
 
     {% if settings.cart_behavior == 'drawer' and template != 'cart' %}

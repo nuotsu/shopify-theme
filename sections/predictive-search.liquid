@@ -1,0 +1,102 @@
+{%- if predictive_search.performed -%}
+  {%- liquid
+    assign products = predictive_search.resources.products
+    assign articles = predictive_search.resources.articles
+    assign pages = predictive_search.resources.pages
+    assign collections = predictive_search.resources.collections
+    assign results_count = products.size | plus: articles.size | plus: pages.size | plus: collections.size
+  -%}
+
+  {%- if results_count == 0 -%}
+    <p class="p-4 text-center text-current/50">
+      No results found for "{{ predictive_search.terms }}"
+    </p>
+  {%- else -%}
+    <div class="p-2">
+      {%- for product in products -%}
+        <div class="relative flex items-center gap-4 py-1 border-b">
+          <div class="grow grid">
+            <a href="{{ product.url }}" class="line-clamp-1 break-all hover:underline after:absolute after:inset-0">
+              {{ product.title }}
+            </a>
+            <span class="uppercase text-current/50">product</span>
+          </div>
+
+          {%- if product.featured_image -%}
+            <figure class="shrink-0">
+              {{ product.featured_image
+                | image_url: width: 300
+                | image_tag: class: 'size-[2lh] aspect-square object-cover', loading: 'lazy', alt: product.featured_image.alt
+              }}
+            </figure>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+
+      {%- for article in articles -%}
+        <div class="relative flex items-center gap-4 py-1 border-b">
+          <div class="grow grid">
+            <a href="{{ article.url }}" class="line-clamp-1 break-all hover:underline after:absolute after:inset-0">
+              {{ article.title }}
+            </a>
+            <span class="uppercase text-current/50">article</span>
+          </div>
+
+          {%- if article.image -%}
+            <figure class="shrink-0">
+              {{ article.image
+                | image_url: width: 300
+                | image_tag: class: 'size-[2lh] aspect-square object-cover', loading: 'lazy', alt: article.image.alt
+              }}
+            </figure>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+
+      {%- for page in pages -%}
+        <div class="relative flex items-center gap-4 py-1 border-b">
+          <div class="grow grid">
+            <a href="{{ page.url }}" class="line-clamp-1 break-all hover:underline after:absolute after:inset-0">
+              {{ page.title }}
+            </a>
+            <span class="uppercase text-current/50">page</span>
+          </div>
+        </div>
+      {%- endfor -%}
+
+      {%- for collection in collections -%}
+        <div class="relative flex items-center gap-4 py-1 border-b">
+          <div class="grow grid">
+            <a href="{{ collection.url }}" class="line-clamp-1 break-all hover:underline after:absolute after:inset-0">
+              {{ collection.title }}
+            </a>
+            <span class="uppercase text-current/50">collection</span>
+          </div>
+
+          {%- assign image = collection.featured_image | default: collection.image -%}
+          {%- if image -%}
+            <figure class="shrink-0">
+              {{ image
+                | image_url: width: 300
+                | image_tag: class: 'size-[2lh] aspect-square object-cover', loading: 'lazy', alt: image.alt
+              }}
+            </figure>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <a
+      href="{{ routes.search_url }}?q={{ predictive_search.terms | url_param_escape }}"
+      class="block p-4 text-center hover:underline"
+    >
+      View all results
+    </a>
+  {%- endif -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Predictive search"
+}
+{% endschema %}

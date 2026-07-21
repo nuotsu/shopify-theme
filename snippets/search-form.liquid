@@ -3,12 +3,29 @@
 
   @param [class] {String} The class to apply to the search form.
   @param [type] {String} The type of search to perform.
+  @param [ajax_search] {Boolean} Whether to use AJAX search.
+  @param [results_class] {String} Classes for the AJAX results panel. Defaults to an absolute dropdown.
+  @param [autofocus] {Boolean} Whether to autofocus the search input.
+  @param [google_scope_path] {String} A path to scope the "Search on Google" fallback link to (e.g. blog.url).
 
   @example
   {% render 'search', type: 'article', class: 'mt-lh' %}
 {% enddoc %}
 
-<search class="{{ class }}">
+{%- liquid
+  assign results_class = results_class | default: 'results anim-fade group-not-hover/search:group-not-has-[:is(:focus,.results:hover)]/search:hidden absolute top-full inset-x-0 z-10 origin-top border-x border-b starting:-translate-y-1 starting:scale-95 max-h-[50vh] overflow-y-auto bg-background shadow-lg hidden'
+-%}
+
+<search
+  class="group/search relative {{ class }}"
+  {% if ajax_search %}
+    data-ajax-search
+    data-url="{{ routes.predictive_search_url }}"
+    data-origin="{{ request.origin }}"
+    {% if type %}data-type="{{ type }}"{% endif %}
+    {% if google_scope_path %}data-google-scope-path="{{ google_scope_path }}"{% endif %}
+  {% endif %}
+>
   <form action="{{ routes.search_url }}" method="get">
     {%- if type -%}
       <input type="hidden" name="type" value="{{ type }}">
@@ -21,6 +38,7 @@
         name="q"
         placeholder="Search"
         value="{{ search.terms }}"
+        {% if autofocus %}autofocus{% endif %}
       >
 
       <span class="grid place-content-center aspect-square h-[calc(1lh+0.5em)]">
@@ -28,4 +46,129 @@
       </span>
     </label>
   </form>
+
+  {% if ajax_search %}
+    <div
+      data-ajax-search-results
+      class="{{ results_class }}"
+      hidden
+    >
+      <div data-ajax-search-results-content></div>
+
+      <p class="text-center p-4">
+        <a
+          data-ajax-search-google-link
+          href="https://www.google.com/search"
+          target="_blank"
+          rel="noopener"
+          class="link"
+        >
+          Search on Google
+        </a>
+      </p>
+    </div>
+  {% endif %}
 </search>
+
+{% javascript %}
+  const roots = document.querySelectorAll('[data-ajax-search]')
+  if (!roots.length) return
+
+  const SECTION_ID = 'predictive-search'
+
+  roots.forEach((root) => {
+    const input = root.querySelector('input[name="q"]')
+    const results = root.querySelector('[data-ajax-search-results]')
+    const resultsContent = root.querySelector('[data-ajax-search-results-content]')
+    const googleLink = root.querySelector('[data-ajax-search-google-link]')
+    const suggestUrl = root.dataset.url
+    const origin = root.dataset.origin
+    const googleScopePath = root.dataset.googleScopePath
+    if (!input || !results || !resultsContent || !suggestUrl) return
+
+    let debounceTimer
+    let abortController
+
+    const open = () => {
+      results.hidden = false
+      results.classList.remove('hidden')
+    }
+
+    const close = () => {
+      results.hidden = true
+      results.classList.add('hidden')
+      resultsContent.innerHTML = ''
+    }
+
+    const updateGoogleLink = (term) => {
+      if (!googleLink) return
+      const params = new URLSearchParams()
+      params.set('q', `${term} site:${origin}${googleScopePath || ''}`)
+      googleLink.href = `https://www.google.com/search?${params.toString()}`
+    }
+
+    const fetchResults = async (term) => {
+      abortController?.abort()
+      abortController = new AbortController()
+
+      const url = new URL(suggestUrl, window.location.origin)
+      url.searchParams.set('q', term)
+      url.searchParams.set('section_id', SECTION_ID)
+
+      const type = root.dataset.type
+      if (type) {
+        url.searchParams.set('resources[type]', type)
+      }
+
+      resultsContent.classList.add('animate-pulse')
+      open()
+
+      try {
+        const response = await fetch(url.toString(), { signal: abortController.signal })
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
+
+        const html = await response.text()
+        const doc = new DOMParser().parseFromString(html, 'text/html')
+        const section = doc.querySelector(`#shopify-section-${SECTION_ID}`)
+
+        if (section?.innerHTML.trim()) {
+          resultsContent.innerHTML = section.innerHTML
+          open()
+        } else {
+          close()
+        }
+      } catch (error) {
+        if (error.name === 'AbortError') return
+        console.error('AJAX search error:', error)
+        close()
+      } finally {
+        resultsContent.classList.remove('animate-pulse')
+      }
+    }
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer)
+      const term = input.value.trim()
+
+      if (!term.length) {
+        abortController?.abort()
+        close()
+        return
+      }
+
+      updateGoogleLink(term)
+      debounceTimer = setTimeout(() => fetchResults(term), 1000)
+    })
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        close()
+        input.blur()
+      }
+    })
+
+    document.addEventListener('click', (e) => {
+      if (!root.contains(e.target)) close()
+    })
+  })
+{% endjavascript %}
