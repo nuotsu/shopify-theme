@@ -8,6 +8,12 @@
 
   <link rel="canonical" href="{{ canonical_url }}">
 
+  {%- if settings.favicon -%}
+    <link rel="icon" href="{{ settings.favicon | image_url: width: 32 }}" sizes="32x32">
+    <link rel="icon" href="{{ settings.favicon | image_url: width: 96 }}" sizes="96x96">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180 }}">
+  {%- endif -%}
+
   {% render 'css-variables' %}
   {% render 'fonts' %}
   {{ 'tailwind.min.css' | asset_url | stylesheet_tag: preload: true }}
