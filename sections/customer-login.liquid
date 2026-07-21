@@ -1,0 +1,99 @@
+<style>
+  #recover:not(:target) {
+    display: none;
+  }
+
+  #recover:target ~ #login {
+    display: none;
+  }
+</style>
+
+<div class="section grid gap-lh justify-center text-center">
+  <div id="recover" class="grid gap-2 max-w-[24rem] mx-auto text-left">
+    <div class="prose">
+      <h1>Reset your password</h1>
+    </div>
+
+    {% form 'recover_customer_password', class: 'grid gap-2' %}
+      {%- assign recover_success = form.posted_successfully? -%}
+
+      {% if recover_success %}
+        <p>We've sent you an email with a link to update your password.</p>
+      {% endif %}
+
+      {{ form.errors | default_errors }}
+
+      <label>
+        <span class="sr-only">Email</span>
+        <input
+          class="w-full p-[.25em_.5em] border"
+          type="email"
+          name="email"
+          autocomplete="email"
+          placeholder="Email"
+          required
+        >
+      </label>
+
+      <button class="action w-full" type="submit">
+        Send reset link
+      </button>
+    {% endform %}
+
+    <a class="ghost" href="#login">Back to login</a>
+  </div>
+
+  <div id="login" class="grid gap-lh">
+    <div class="prose">
+      <h1>Login</h1>
+    </div>
+
+    {% if recover_success %}
+      <p>We've sent you an email with a link to update your password.</p>
+    {% endif %}
+
+    {% form 'customer_login', class: 'grid gap-2 max-w-[24rem] mx-auto text-left' %}
+      {{ form.errors | default_errors }}
+
+      <label>
+        <span class="sr-only">Email</span>
+        <input
+          class="w-full p-[.25em_.5em] border"
+          type="email"
+          name="customer[email]"
+          autocomplete="email"
+          placeholder="Email"
+          required
+        >
+      </label>
+
+      <label>
+        <span class="sr-only">Password</span>
+        <input
+          class="w-full p-[.25em_.5em] border"
+          type="password"
+          name="customer[password]"
+          autocomplete="current-password"
+          placeholder="Password"
+          required
+        >
+      </label>
+
+      <button class="action w-full" type="submit">
+        Login
+      </button>
+    {% endform %}
+
+    <a class="ghost" href="#recover">Forgot your password?</a>
+
+    <p>
+      Don't have an account? {{ 'Create one' | link_to: routes.account_register_url }}
+    </p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Customer login"
+}
+{% endschema %}

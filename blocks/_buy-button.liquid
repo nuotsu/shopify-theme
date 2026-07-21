@@ -1,11 +1,22 @@
+{%- liquid
+  assign variant = closest.product.selected_or_first_available_variant
+  assign sold_out = false
+  if variant.available == false
+    assign sold_out = true
+  endif
+-%}
+
 <button
   type="submit"
-  class="{{ block.settings.style }} w-full"
+  class="{{ block.settings.style }} w-full disabled:opacity-25"
   data-buy-button
   data-cart-behavior="{{ settings.cart_behavior }}"
   data-cart-url="{{ routes.cart_url }}"
+  data-add-to-cart-label="Add to cart"
+  data-sold-out-label="Sold out"
+  {% if sold_out %} disabled {% endif %}
 >
-  Add to cart
+  {%- if sold_out -%} Sold out {%- else -%} Add to cart {%- endif -%}
 </button>
 
 {% javascript %}
@@ -51,12 +62,30 @@
     }
   }
 
+  const updateAvailability = (button, selectedOption) => {
+    const soldOut = selectedOption?.disabled === true
+    button.disabled = soldOut
+    button.textContent = soldOut ? button.dataset.soldOutLabel : button.dataset.addToCartLabel
+  }
+
+  const bindVariantAvailability = (button, form) => {
+    const select = form.querySelector('select[name="id"]')
+    if (!select) return
+
+    updateAvailability(button, select.selectedOptions[0])
+    select.addEventListener('change', () => {
+      updateAvailability(button, select.selectedOptions[0])
+    })
+  }
+
   const bindBuyButton = (button) => {
     if (button.dataset.buyButtonBound === 'true') return
     button.dataset.buyButtonBound = 'true'
 
     const form = button.closest('form')
     if (!form) return
+
+    bindVariantAvailability(button, form)
 
     form.addEventListener('submit', async (event) => {
       if (button.dataset.cartBehavior !== 'drawer') return

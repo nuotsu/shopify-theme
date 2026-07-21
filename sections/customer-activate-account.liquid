@@ -1,0 +1,43 @@
+<div class="section grid gap-lh justify-center text-center">
+  <div class="prose">
+    <h1>Activate account</h1>
+  </div>
+
+  {% form 'activate_customer_password', class: 'grid gap-2 max-w-[24rem] mx-auto text-left' %}
+    {{ form.errors | default_errors }}
+
+    <label>
+      <span class="sr-only">Password</span>
+      <input
+        class="w-full p-[.25em_.5em] border"
+        type="password"
+        name="customer[password]"
+        autocomplete="new-password"
+        placeholder="Password"
+        required
+      >
+    </label>
+
+    <label>
+      <span class="sr-only">Confirm password</span>
+      <input
+        class="w-full p-[.25em_.5em] border"
+        type="password"
+        name="customer[password_confirmation]"
+        autocomplete="new-password"
+        placeholder="Confirm password"
+        required
+      >
+    </label>
+
+    <button class="action w-full" type="submit">
+      Activate account
+    </button>
+  {% endform %}
+</div>
+
+{% schema %}
+{
+  "name": "Customer activate account"
+}
+{% endschema %}

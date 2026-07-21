@@ -1,0 +1,148 @@
+<div class="section grid gap-lh">
+  <div class="prose">
+    <h1>Addresses</h1>
+  </div>
+
+  <div class="grid gap-4">
+    {% for address in customer.addresses %}
+      <details class="accordion border p-4">
+        <summary class="py-1">
+          {{ address | format_address }}
+        </summary>
+
+        {% form 'customer_address', address, class: 'grid gap-2 max-w-[24rem] mt-4' %}
+          {{ form.errors | default_errors }}
+
+          <label>
+            <span class="sr-only">First name</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[first_name]" value="{{ form.first_name }}" autocomplete="given-name" placeholder="First name">
+          </label>
+
+          <label>
+            <span class="sr-only">Last name</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[last_name]" value="{{ form.last_name }}" autocomplete="family-name" placeholder="Last name">
+          </label>
+
+          <label>
+            <span class="sr-only">Company</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[company]" value="{{ form.company }}" autocomplete="organization" placeholder="Company">
+          </label>
+
+          <label>
+            <span class="sr-only">Address</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[address1]" value="{{ form.address1 }}" autocomplete="address-line1" placeholder="Address" required>
+          </label>
+
+          <label>
+            <span class="sr-only">Apartment, suite, etc.</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[address2]" value="{{ form.address2 }}" autocomplete="address-line2" placeholder="Apartment, suite, etc.">
+          </label>
+
+          <label>
+            <span class="sr-only">City</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[city]" value="{{ form.city }}" autocomplete="address-level2" placeholder="City" required>
+          </label>
+
+          <label>
+            <span class="sr-only">Country</span>
+            <select class="w-full p-[.25em_.5em] border" name="address[country]" autocomplete="country">
+              {{ country_option_tags }}
+            </select>
+          </label>
+
+          <label>
+            <span class="sr-only">Province</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[province]" value="{{ form.province }}" autocomplete="address-level1" placeholder="Province">
+          </label>
+
+          <label>
+            <span class="sr-only">Postal/Zip code</span>
+            <input class="w-full p-[.25em_.5em] border" type="text" name="address[zip]" value="{{ form.zip }}" autocomplete="postal-code" placeholder="Postal/Zip code">
+          </label>
+
+          <label>
+            <span class="sr-only">Phone</span>
+            <input class="w-full p-[.25em_.5em] border" type="tel" name="address[phone]" value="{{ form.phone }}" autocomplete="tel" placeholder="Phone">
+          </label>
+
+          <div class="flex gap-2">
+            <button class="action w-full" type="submit">Save</button>
+            <button class="action-outline w-full" type="submit" name="_method" value="delete">Delete</button>
+          </div>
+        {% endform %}
+      </details>
+    {% else %}
+      <p>You don't have any addresses saved yet.</p>
+    {% endfor %}
+  </div>
+
+  <details class="accordion border p-4">
+    <summary class="py-1">Add a new address</summary>
+
+    {% form 'customer_address', customer.new_address_object, class: 'grid gap-2 max-w-[24rem] mt-4' %}
+      {{ form.errors | default_errors }}
+
+      <label>
+        <span class="sr-only">First name</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[first_name]" autocomplete="given-name" placeholder="First name">
+      </label>
+
+      <label>
+        <span class="sr-only">Last name</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[last_name]" autocomplete="family-name" placeholder="Last name">
+      </label>
+
+      <label>
+        <span class="sr-only">Company</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[company]" autocomplete="organization" placeholder="Company">
+      </label>
+
+      <label>
+        <span class="sr-only">Address</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[address1]" autocomplete="address-line1" placeholder="Address" required>
+      </label>
+
+      <label>
+        <span class="sr-only">Apartment, suite, etc.</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[address2]" autocomplete="address-line2" placeholder="Apartment, suite, etc.">
+      </label>
+
+      <label>
+        <span class="sr-only">City</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[city]" autocomplete="address-level2" placeholder="City" required>
+      </label>
+
+      <label>
+        <span class="sr-only">Country</span>
+        <select class="w-full p-[.25em_.5em] border" name="address[country]" autocomplete="country">
+          {{ country_option_tags }}
+        </select>
+      </label>
+
+      <label>
+        <span class="sr-only">Province</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[province]" autocomplete="address-level1" placeholder="Province">
+      </label>
+
+      <label>
+        <span class="sr-only">Postal/Zip code</span>
+        <input class="w-full p-[.25em_.5em] border" type="text" name="address[zip]" autocomplete="postal-code" placeholder="Postal/Zip code">
+      </label>
+
+      <label>
+        <span class="sr-only">Phone</span>
+        <input class="w-full p-[.25em_.5em] border" type="tel" name="address[phone]" autocomplete="tel" placeholder="Phone">
+      </label>
+
+      <button class="action w-full" type="submit">Add address</button>
+    {% endform %}
+  </details>
+
+  <a class="action-outline w-fit" href="{{ routes.account_url }}">Back to account</a>
+</div>
+
+{% schema %}
+{
+  "name": "Customer addresses"
+}
+{% endschema %}

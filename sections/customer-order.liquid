@@ -1,0 +1,51 @@
+<div class="section grid gap-lh">
+  <div class="prose">
+    <h1>Order {{ order.name }}</h1>
+    <p>Placed on {{ order.created_at | date: '%B %d, %Y' }}</p>
+  </div>
+
+  <table class="w-full text-left">
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for line_item in order.line_items %}
+        <tr>
+          <td>
+            {{ line_item.title }}
+            {% if line_item.variant.title != 'Default Title' %}
+              <br><small>{{ line_item.variant.title }}</small>
+            {% endif %}
+          </td>
+          <td>{{ line_item.quantity }}</td>
+          <td>{{ line_item.final_line_price | money }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="grid gap-1 justify-end text-right">
+    <p>Payment status: {{ order.financial_status_label }}</p>
+    <p>Fulfillment status: {{ order.fulfillment_status_label }}</p>
+    <p>Total: {{ order.total_price | money }}</p>
+  </div>
+
+  {% if order.shipping_address %}
+    <div>
+      <h2>Shipping address</h2>
+      {{ order.shipping_address | format_address }}
+    </div>
+  {% endif %}
+
+  <a class="action-outline" href="{{ routes.account_url }}">Back to account</a>
+</div>
+
+{% schema %}
+{
+  "name": "Customer order"
+}
+{% endschema %}

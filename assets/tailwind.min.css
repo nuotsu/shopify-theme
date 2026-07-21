@@ -13,6 +13,7 @@
     --container-xs: 20rem;
     --container-sm: 24rem;
     --container-lg: 32rem;
+    --container-2xl: 42rem;
     --container-3xl: 48rem;
     --text-sm: 0.875rem;
     --text-sm--line-height: calc(1.25 / 0.875);
@@ -399,9 +400,6 @@
   .mx-auto {
     margin-inline: auto;
   }
-  .my-auto {
-    margin-block: auto;
-  }
   .mt-2 {
     margin-top: calc(var(--spacing) * 2);
   }
@@ -647,8 +645,14 @@
   .max-w-\(--content-width\) {
     max-width: var(--content-width);
   }
+  .max-w-2xl {
+    max-width: var(--container-2xl);
+  }
   .max-w-3xl {
     max-width: var(--container-3xl);
+  }
+  .max-w-\[24rem\] {
+    max-width: 24rem;
   }
   .max-w-lg {
     max-width: var(--container-lg);
@@ -768,6 +772,9 @@
   }
   .justify-center {
     justify-content: center;
+  }
+  .justify-end {
+    justify-content: flex-end;
   }
   .gap-\(--gallery-gap\) {
     gap: var(--gallery-gap);
@@ -994,6 +1001,9 @@
   .p-0 {
     padding: 0px;
   }
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
+  }
   .p-4 {
     padding: calc(var(--spacing) * 4);
   }
@@ -1065,6 +1075,9 @@
   }
   .text-left {
     text-align: left;
+  }
+  .text-right {
+    text-align: right;
   }
   .h1 {
     font-size: var(--text-2xl);
@@ -1370,6 +1383,9 @@
   }
   .hover\:underline:hover {
     text-decoration-line: underline;
+  }
+  .disabled\:opacity-25:disabled {
+    opacity: 25%;
   }
   .has-disabled\:bg-current\/25:has(:disabled) {
     background-color: currentcolor;

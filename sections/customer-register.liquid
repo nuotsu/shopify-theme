@@ -1,0 +1,69 @@
+<div class="section grid gap-lh justify-center text-center">
+  <div class="prose">
+    <h1>Create account</h1>
+  </div>
+
+  {% form 'create_customer', class: 'grid gap-2 max-w-[24rem] mx-auto text-left' %}
+    {{ form.errors | default_errors }}
+
+    <label>
+      <span class="sr-only">First name</span>
+      <input
+        class="w-full p-[.25em_.5em] border"
+        type="text"
+        name="customer[first_name]"
+        autocomplete="given-name"
+        placeholder="First name"
+      >
+    </label>
+
+    <label>
+      <span class="sr-only">Last name</span>
+      <input
+        class="w-full p-[.25em_.5em] border"
+        type="text"
+        name="customer[last_name]"
+        autocomplete="family-name"
+        placeholder="Last name"
+      >
+    </label>
+
+    <label>
+      <span class="sr-only">Email</span>
+      <input
+        class="w-full p-[.25em_.5em] border"
+        type="email"
+        name="customer[email]"
+        autocomplete="email"
+        placeholder="Email"
+        required
+      >
+    </label>
+
+    <label>
+      <span class="sr-only">Password</span>
+      <input
+        class="w-full p-[.25em_.5em] border"
+        type="password"
+        name="customer[password]"
+        autocomplete="new-password"
+        placeholder="Password"
+        required
+      >
+    </label>
+
+    <button class="action w-full" type="submit">
+      Create account
+    </button>
+  {% endform %}
+
+  <p>
+    Already have an account? {{ 'Login' | link_to: routes.account_login_url }}
+  </p>
+</div>
+
+{% schema %}
+{
+  "name": "Customer register"
+}
+{% endschema %}
