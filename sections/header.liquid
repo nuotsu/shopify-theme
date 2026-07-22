@@ -120,14 +120,21 @@
     {% if settings.cart_behavior == 'drawer' and template != 'cart' %}
       {% render 'cart-drawer', section_id: section.id %}
     {% else %}
-      <a href="{{ routes.cart_url }}">
+      <a href="{{ routes.cart_url }}" class="relative">
         {% if section.settings.display == 'text' %}
           Cart
         {% else %}
           <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
         {% endif %}
 
-        <span class="{% unless cart.item_count > 0 %} hidden {% endunless %}">({{ cart.item_count }})</span>
+        <span
+          class="
+            absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 grid place-content-center min-w-lh min-h-lh px-[.5ch] text-center rounded-full bg-alert text-white text-xs
+            {% unless cart.item_count > 0 %} hidden {% endunless %}
+          "
+        >
+          {{- cart.item_count -}}
+        </span>
       </a>
     {% endif %}
   </nav>

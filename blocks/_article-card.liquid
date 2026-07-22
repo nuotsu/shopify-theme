@@ -1,4 +1,4 @@
-<li class="group/card relative grid gap-2 leading-tight *:not-[:is(.article-image,.article-title)]:text-sm">
+<li class="group/card relative flex flex-col gap-2 leading-tight *:not-[:is(.article-image,.article-title)]:text-sm">
   {% content_for 'blocks', closest.article: closest.article %}
 
   {% if block.settings.enable_link %}

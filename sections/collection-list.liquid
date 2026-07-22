@@ -1,8 +1,13 @@
+{%- assign collections = section.settings.collections | default: collections -%}
+
 <style>
   @scope {
     .collection-list {
       --column-width: {{ section.settings.column_width }}px;
       --gap: {{ section.settings.gap }}px;
+      {% if section.settings.fixed_columns %}
+        --column-count: {{ section.settings.column_count }};
+      {% endif %}
 
       li > :not(:is(figure, .no-image)) {
         padding-inline: max(0px, calc(.5rem - var(--gap)));
@@ -16,14 +21,24 @@
   }
 </style>
 
-{%- if section.settings.content != blank -%}
-  <header class="prose text-center">
-    {{ section.settings.content }}
-  </header>
-{% endif %}
+<div class="section space-y-lh">
+  {%- if section.settings.content != blank -%}
+    <header class="prose text-center max-w-3xl mx-auto">
+      {{ section.settings.content }}
+    </header>
+  {%- endif -%}
 
-{%- paginate collections by section.settings.collections_per_page -%}
-  <ul class="collection-list grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-stretch gap-x-(--gap) gap-y-[2lh] leading-tight">
+  <ul class="
+    collection-list items-stretch gap-x-(--gap) gap-y-[2lh] leading-tight
+    {% if section.settings.layout == "carousel" %}
+      carousel carousel-scroll-buttons carousel-scroll-marker max-md:full-bleed max-md:px-4
+      {% if section.settings.masked_edge %} md:masked-edge-r {% endif %}
+    {% else %} grid
+      {% if section.settings.fixed_columns %} md:grid-cols-[repeat(var(--column-count),minmax(0px,1fr))]
+      {% else %} md:grid-cols-[repeat(auto-fit,minmax(min(var(--column-width),100%),1fr))]
+      {% endif %}
+    {% endif %}
+  ">
     {%- for collection in collections -%}
       <li class="group/card relative flex flex-col gap-2">
         {%- if collection.image != blank -%}
@@ -49,38 +64,65 @@
       </li>
     {%- endfor -%}
   </ul>
-
-  {%- if paginate.pages > 1 -%}
-    <div class="pagination mt-lh">
-      {{- paginate | default_pagination -}}
-    </div>
-  {%- endif -%}
-{%- endpaginate -%}
+</div>
 
 {% schema %}
 {
   "name": "Collection list",
   "tag": "section",
-  "class": "section space-y-lh",
   "settings": [
     {
       "type": "richtext",
       "id": "content",
       "label": "Content",
-      "default": "<h1>Collections</h1>"
+      "default": "<h2>Collection list</h2>"
+    },
+    {
+      "type": "collection_list",
+      "id": "collections",
+      "label": "Collections",
+      "info": "Leave blank to show all collections"
     },
     {
       "type": "header",
       "content": "Collection grid"
     },
     {
-      "type": "range",
-      "id": "collections_per_page",
-      "label": "Collections per page",
-      "min": 1,
-      "max": 100,
-      "step": 1,
-      "default": 12
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "checkbox",
+      "id": "fixed_columns",
+      "label": "Fixed columns",
+      "default": false,
+      "visible_if": "{{ section.settings.layout == 'grid' }}"
+    },
+    {
+      "type": "number",
+      "id": "column_count",
+      "label": "Column count",
+      "default": 3,
+      "visible_if": "{{ section.settings.layout == 'grid' and section.settings.fixed_columns == true }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "masked_edge",
+      "label": "Masked edge",
+      "default": true,
+      "visible_if": "{{ section.settings.layout == 'carousel' }}"
     },
     {
       "type": "range",
@@ -147,6 +189,12 @@
       "default": "cover",
       "visible_if": "{{ section.settings.image_aspect_ratio != 'none' }}"
     },
+  ],
+  "presets": [
+    {
+      "name": "Collection list",
+      "category": "Collection",
+    }
   ]
 }
 {% endschema %}

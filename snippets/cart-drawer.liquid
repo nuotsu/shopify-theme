@@ -1,11 +1,5 @@
-{%- capture cart_count -%}
-  <span data-cart-count class="{% unless cart.item_count > 0 %} hidden {% endunless %}">
-    ({{ cart.item_count }})
-  </span>
-{%- endcapture -%}
-
 <button
-  class="cursor-pointer inline-flex items-center gap-[.5ch]"
+  class="relative cursor-pointer inline-flex items-center gap-[.5ch]"
   type="button"
   commandfor="cart-drawer"
   command="show-modal"
@@ -16,7 +10,15 @@
     <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
   {% endif %}
 
-  {{ cart_count }}
+  <span
+    class="
+      absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 grid place-content-center min-w-lh min-h-lh px-[.5ch] text-center rounded-full bg-alert text-white text-xs
+      {% unless cart.item_count > 0 %} hidden {% endunless %}
+    "
+    data-cart-count
+  >
+    {{- cart.item_count -}}
+  </span>
 </button>
 
 <dialog
@@ -29,7 +31,9 @@
     <header class="sticky top-0 z-1 bg-background flex items-center gap-4 justify-between p-4 border-b">
       <a href="{{ routes.cart_url }}" class="block py-1 hover:underline">
         Cart
-        {{ cart_count }}
+        <span data-cart-count class="{% unless cart.item_count > 0 %} hidden {% endunless %}">
+          ({{ cart.item_count }})
+        </span>
       </a>
 
       <button

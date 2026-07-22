@@ -22,7 +22,7 @@
     {% else %} max-md:section
     {% endif %}
   ">
-    <div class="{% if layout == 'horizontal' %} md:sticky-below-header grid gap-4 max-md:contents {% else %} contents {% endif %}">
+    <div class="{% if layout == 'horizontal' %} md:sticky-below-header grid gap-4 max-md:contents md:max-w-2xl md:mx-auto {% else %} contents {% endif %}">
       {%- content_for 'block', type: '_product-top', id: 'product-top' -%}
 
       <div class="

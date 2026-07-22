@@ -72,7 +72,7 @@
       ],
       "settings": {}
     },
-    "logo-list": {
+    "logo_list": {
       "type": "logo-list",
       "settings": {
         "content": "<h2>Logo list</h2>",
@@ -94,7 +94,7 @@
         "logo_3"
       ]
     },
-    "card-list": {
+    "card_list": {
       "type": "card-list",
       "blocks": {
         "card_1": {
@@ -248,6 +248,9 @@
         "gap": 16
       }
     },
+    "collection_list": {
+      "type": "collection-list",
+    },
     "article_list": {
       "type": "article-list",
       "blocks": {
@@ -326,8 +329,9 @@
   },
   "order": [
     "hero_backdrop",
-    "logo-list",
-    "card-list",
+    "logo_list",
+    "card_list",
+    "collection_list",
     "article_list",
     "newsletter_form"
   ]
