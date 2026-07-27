@@ -1,28 +1,16 @@
-{% doc %}
-  Renders a search drawer trigger and dialog.
-
-  @param {object} section - The parent header section (for display setting).
-
-  @example
-  {% render 'search-drawer', section: section %}
-{% enddoc %}
-
 <button
   class="cursor-pointer inline-flex items-center gap-[.5ch]"
   type="button"
   commandfor="search-drawer"
   command="show-modal"
+  aria-label="Search"
 >
-  {% if section.settings.display == 'text' %}
-    Search
-  {% else %}
-    <div class="*:size-lh">{{ 'icon-search.svg' | inline_asset_content }}</div>
-  {% endif %}
+  <div class="md:text-sm *:size-lh">{{ 'icon-search.svg' | inline_asset_content }}</div>
 </button>
 
 <dialog
   id="search-drawer"
-  class="anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto size-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
+  class="color-scheme-1 anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto size-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
   closedby="any"
 >
   <div class="flex flex-col h-full">

@@ -2,6 +2,7 @@
 
 @theme {
   --font-primary: var(--font-primary);
+  --font-mono: var(--font-mono);
 
   --color-background: var(--color-background);
   --color-foreground: var(--color-foreground);
@@ -9,6 +10,7 @@
   --color-primary-foreground: var(--color-primary-foreground);
   --color-secondary: var(--color-secondary);
   --color-secondary-foreground: var(--color-secondary-foreground);
+  --color-accent: var(--color-accent);
 
   --color-alert: red;
 
@@ -19,8 +21,8 @@
 
 @custom-variant hover (&:hover);
 
-@variant menu-open (body:has(#menu-open:checked) &);
-@variant menu-not-open (body:has(#menu-open:not(:checked)) &);
+@custom-variant menu-open (body:has(#menu-open:checked) &);
+@custom-variant menu-not-open (body:has(#menu-open:not(:checked)) &);
 
 @layer base {
   :root {
@@ -35,6 +37,11 @@
     :open::details-content {
       height: auto;
     }
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-foreground);
   }
 
   :target {
@@ -82,25 +89,31 @@
 /* typography */
 
 @utility h-base {
-  @apply font-bold;
+  @apply uppercase font-bold;
+
+  & strong {
+    font-weight: inherit;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-foreground);
+  }
 }
 @utility h0 {
-  @apply h-base text-3xl;
+  @apply h-base text-7xl;
 }
 @utility h1 {
-  @apply h-base text-2xl;
+  @apply h-base text-5xl;
 }
 @utility h2 {
-  @apply h-base text-xl;
+  @apply h-base text-3xl;
 }
 @utility h3 {
-  @apply h-base text-lg;
+  @apply h-base text-2xl;
 }
 @utility h4 {
-  @apply h-base;
+  @apply h-base text-xl;
 }
 @utility h5 {
-  @apply h-base;
+  @apply h-base text-lg;
 }
 @utility h6 {
   @apply h-base;
@@ -147,13 +160,26 @@
   justify-content: center;
   gap: .5em;
   text-align: center;
-  padding: .5em;
+  padding: .25lh 2ch;
   border: 1px solid transparent;
   @apply active:scale-98 transition-all;
 }
 
 @utility action {
-  @apply action-base bg-primary text-primary-foreground;
+  @apply relative action-base bg-primary text-primary-foreground uppercase font-mono;
+
+  &::after {
+    content: '';
+    @apply inline-block absolute inset-0 -z-1 bg-accent transition-transform;
+  }
+
+  &:not(:hover)::after {
+    @apply translate-[.75ch];
+  }
+
+  .bg-foreground & {
+    @apply bg-background text-foreground;
+  }
 }
 
 @utility action-outline {

@@ -1,29 +1,21 @@
 <button
-  class="relative cursor-pointer inline-flex items-center gap-[.5ch]"
+  class="relative action px-ch after:content-none md:text-sm"
   type="button"
   commandfor="cart-drawer"
   command="show-modal"
 >
-  {% if section.settings.display == 'text' %}
-    Cart
-  {% else %}
-    <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
-  {% endif %}
+  <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
 
-  <span
-    class="
-      absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 grid place-content-center min-w-lh min-h-lh px-[.5ch] text-center rounded-full bg-alert text-white text-xs
-      {% unless cart.item_count > 0 %} hidden {% endunless %}
-    "
-    data-cart-count
-  >
-    {{- cart.item_count -}}
+  <span class="max-md:hidden">Cart</span>
+
+  <span data-cart-count>
+    ({{- cart.item_count -}})
   </span>
 </button>
 
 <dialog
   id="cart-drawer"
-  class="anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto size-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
+  class="color-scheme-1 anim-fade-to-l fixed inset-y-0 right-0 m-0 ml-auto size-full max-w-lg min-h-svh bg-background pb-[env(safe-area-inset-bottom)] backdrop:transition-opacity backdrop:starting:opacity-0"
   closedby="any"
   data-section-id="{{ section_id }}"
 >

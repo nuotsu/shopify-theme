@@ -13,7 +13,9 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
     }
   },
   "order": [

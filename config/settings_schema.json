@@ -57,6 +57,12 @@
             "type": "color",
             "id": "secondary_foreground",
             "label": "Secondary foreground"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "Accent",
+            "default": "#ff0000"
           }
         ],
         "role": {
@@ -81,6 +87,12 @@
         "id": "font_primary",
         "label": "Primary Font",
         "default": "geist_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "font_mono",
+        "label": "Mono Font",
+        "default": "geist_mono_n4"
       },
       {
         "type": "header",

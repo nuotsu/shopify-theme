@@ -1,10 +1,34 @@
+<style>
+  @scope {
+    :scope {
+      --color-background: {{ section.settings.color_scheme.settings.background }};
+      --color-foreground: {{ section.settings.color_scheme.settings.foreground }};
+      --color-primary: {{ section.settings.color_scheme.settings.primary }};
+      --color-primary-foreground: {{ section.settings.color_scheme.settings.primary_foreground }};
+      --color-secondary: {{ section.settings.color_scheme.settings.secondary }};
+      --color-secondary-foreground: {{ section.settings.color_scheme.settings.secondary_foreground }};
+      --color-accent: {{ section.settings.color_scheme.settings.accent }};
+
+      background-color: var(--color-background);
+      color: var(--color-foreground);
+    }
+  }
+</style>
+
 {% content_for 'blocks' %}
 
 {% schema %}
 {
   "name": "Hero (backdrop)",
   "tag": "section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
   "blocks": [{ "type": "_hero-backdrop" }],
   "presets": [
     {

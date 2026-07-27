@@ -4,8 +4,14 @@
   {{ settings.font_primary | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.font_primary | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
+  {{ settings.font_mono | font_face: font_display: 'swap' }}
+  {{ settings.font_mono | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {{ settings.font_mono | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.font_mono | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+
   :root {
     --font-primary: {{ settings.font_primary.family }}, {{ settings.font_primary.fallback_families }};
+    --font-mono: {{ settings.font_mono.family }}, {{ settings.font_mono.fallback_families }};
 
     --color-background: {{ settings.color_schemes.scheme-1.settings.background }};
     --color-foreground: {{ settings.color_schemes.scheme-1.settings.foreground }};
@@ -13,6 +19,7 @@
     --color-primary-foreground: {{ settings.color_schemes.scheme-1.settings.primary_foreground }};
     --color-secondary: {{ settings.color_schemes.scheme-1.settings.secondary }};
     --color-secondary-foreground: {{ settings.color_schemes.scheme-1.settings.secondary_foreground }};
+    --color-accent: {{ settings.color_schemes.scheme-1.settings.accent }};
 
     --section-width: {{ settings.section_width }}px;
     --section-vertical-padding: {{ settings.section_vertical_padding }}rem;
@@ -20,4 +27,16 @@
 
     --sidebar-width: {{ settings.sidebar_width }}px;
   }
+
+  {% for scheme in settings.color_schemes %}
+    .color-{{ scheme.id }} {
+      --color-background: {{ scheme.settings.background }};
+      --color-foreground: {{ scheme.settings.foreground }};
+      --color-primary: {{ scheme.settings.primary }};
+      --color-primary-foreground: {{ scheme.settings.primary_foreground }};
+      --color-secondary: {{ scheme.settings.secondary }};
+      --color-secondary-foreground: {{ scheme.settings.secondary_foreground }};
+      --color-accent: {{ scheme.settings.accent }};
+    }
+  {% endfor %}
 {% endstyle %}

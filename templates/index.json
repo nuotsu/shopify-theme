@@ -70,7 +70,9 @@
       "block_order": [
         "hero_backdrop"
       ],
-      "settings": {}
+      "settings": {
+        "color_scheme": "scheme-2"
+      }
     },
     "logo_list": {
       "type": "logo-list",

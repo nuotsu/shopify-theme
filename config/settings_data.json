@@ -19,7 +19,19 @@
           "primary": "#000000",
           "primary_foreground": "#ffffff",
           "secondary": "#ffffff",
-          "secondary_foreground": "#000000"
+          "secondary_foreground": "#000000",
+          "accent": "#ff0000"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#000000",
+          "foreground": "#ffffff",
+          "primary": "#ffffff",
+          "primary_foreground": "#000000",
+          "secondary": "#000000",
+          "secondary_foreground": "#ffffff",
+          "accent": "#ff0000"
         }
       }
     }
