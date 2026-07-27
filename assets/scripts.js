@@ -91,7 +91,7 @@ const uniqueTocId = (base, used, element) => {
 }
 
 const buildTocList = (headings) => {
-  const root = document.createElement('ul')
+  const root = document.createElement('ol')
 
   const stack = [root]
   const usedIds = new Set()
@@ -106,7 +106,7 @@ const buildTocList = (headings) => {
 
     while (stack.length > depth) stack.pop()
     while (stack.length < depth) {
-      const nested = document.createElement('ul')
+      const nested = document.createElement('ol')
       const lastLi = stack[stack.length - 1].lastElementChild
       if (lastLi) {
         lastLi.appendChild(nested)
@@ -122,7 +122,7 @@ const buildTocList = (headings) => {
     const li = document.createElement('li')
     const a = document.createElement('a')
     a.href = `#${id}`
-    a.textContent = text
+    a.innerHTML = `<span>${text}</span>`
     li.appendChild(a)
     stack[stack.length - 1].appendChild(li)
     count++
@@ -134,7 +134,7 @@ const buildTocList = (headings) => {
 document.querySelectorAll('[data-toc]').forEach((nav) => {
   const section = nav.closest('.section')
   const content = section?.querySelector('[data-toc-content]')
-  const list = nav.querySelector('ul')
+  const list = nav.querySelector('ol')
   if (!content || !list) return
 
   const headings = content.querySelectorAll('h2, h3, h4, h5, h6')

@@ -47,10 +47,7 @@
         <div class="{% if collection.image == blank %} no-image {% endif %}">
           <a
             href="{{ collection.url }}"
-            class="
-              flex items-center after:absolute after:inset-0 hover:underline font-bold
-              {% if collection.image == blank %} h-full p-lh bg-current/2 group-hover/card:bg-current/5 transition-colors {% endif %}
-            "
+            class="flex items-center after:absolute after:inset-0 hover:underline font-bold uppercase"
           >
             {{ collection.title }}
           </a>

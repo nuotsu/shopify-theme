@@ -18,8 +18,24 @@
     }
 
     .group\/toc {
-      ul ul {
-        padding-left: 1em;
+      ol ol {
+        padding-left: 2em;
+      }
+
+      nav > ol > li {
+        counter-increment: toc;
+
+        > a {
+          display: flex;
+          align-items: start;
+          gap: .25em;
+
+          &::before {
+            content: counter(toc, decimal-leading-zero);
+            color: color-mix(in srgb, var(--color-foreground) 50%, transparent);
+            font-family: var(--font-technical);
+          }
+        }
       }
 
       a {
@@ -41,31 +57,31 @@
 </style>
 
 <div class="section grid md:items-start gap-lh">
-  <header class="md:[grid-area:top] [&_.article-title]:h0 max-md:[&_figure]:full-bleed">
+  <header class="md:[grid-area:top] [&_.article-title]:h1 max-md:[&_figure]:full-bleed">
     {%- content_for 'block', type: '_article-top', id: 'article-top' -%}
   </header>
 
   <aside class="md:[grid-area:sidebar] md:sticky-below-header [--offset:1rem] grid gap-4 md:w-(--sidebar-width)">
     <div>
-      <a href="{{ blog.url }}" class="inline-flex items-center gap-x-2 [&_svg]:shrink-0 hover:underline">
+      <a href="{{ blog.url }}" class="inline-flex items-center gap-x-2 [&_svg]:shrink-0 hover:underline font-technical uppercase">
         {{ 'icon-chevron-left.svg' | inline_asset_content }}
         Back to blog
       </a>
     </div>
 
-    <details class="group/toc accordion px-4 bg-current/5" data-mobile-only-details>
-      <summary class="py-2 font-bold md:[&_svg]:hidden">
+    <details class="group/toc accordion px-4 border text-sm" data-mobile-only-details>
+      <summary class="py-2 font-technical uppercase group-open/toc:font-bold md:[&_svg]:hidden">
         On this page
         {{ 'icon-chevron-down.svg' | inline_asset_content }}
       </summary>
 
       <nav
-        class="text-sm leading-tight max-md:group-open/toc:anim-fade-to-b md:not-empty:anim-fade-to-r pb-4"
+        class="leading-tight max-md:group-open/toc:anim-fade-to-b md:not-empty:anim-fade-to-r pb-4 [&_a>span]:line-clamp-1"
         aria-label="Table of contents"
         hidden
         data-toc
       >
-        <ul></ul>
+        <ol></ol>
       </nav>
     </details>
   </aside>

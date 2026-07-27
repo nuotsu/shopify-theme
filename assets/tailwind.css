@@ -50,6 +50,8 @@
 
   html {
     scroll-behavior: smooth;
+    accent-color: var(--color-accent);
+    caret-color: var(--color-accent);
   }
 
   body {
@@ -205,6 +207,7 @@
 
 @utility accordion {
   & > summary {
+    user-select: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -240,14 +243,18 @@
 }
 
 @utility pagination {
-  @apply flex items-center justify-center gap-px bg-foreground border font-technical uppercase max-w-max mx-auto;
+  @apply flex flex-wrap items-center justify-center gap-px bg-foreground border font-technical uppercase mx-auto max-w-max *:shrink-0 text-sm;
 
-  & > * {
+  a, .deco {
     @apply action-base bg-background;
   }
 
+  .deco {
+    pointer-events: none;
+  }
+
   .current {
-    @apply bg-foreground text-background font-bold;
+    @apply action-base bg-foreground text-background font-bold;
   }
 }
 

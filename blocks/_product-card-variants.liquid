@@ -1,7 +1,7 @@
 {%- assign option = closest.product.options_by_name[block.settings.option_name] -%}
 
 {%- if option -%}
-  <div class="group/options flex flex-wrap items-center gap-[.25em] text-sm">
+  <div class="group/options flex flex-wrap items-center text-sm">
     {% for value in option.values limit: block.settings.limit %}
       {%- liquid
         assign swatch = nil
@@ -13,8 +13,8 @@
       <a
         href="{{ closest.product.url }}?variant={{ value.variant.id }}"
         class="
-          inline-grid place-items-center px-[.25em] border not-hover:border-current/25
-          has-[.swatch]:size-lh has-[.swatch]:rounded-full has-[.swatch]:p-[2px] has-[.swatch]:order-first
+          inline-grid place-items-center px-[.25em] border -mt-px -ml-px hover:z-1 not-hover:border-current/25
+          has-[.swatch]:size-lh has-[.swatch]:rounded-full has-[.swatch]:p-0.5 has-[.swatch]:order-first has-[.swatch]:mr-[.25em] has-[.swatch]:mb-[.25em]
           not-has-[.swatch]:min-w-[3ch] not-has-[.swatch]:justify-center
           {% unless swatch %} non-swatch {% endunless %}
           {% unless value.available %} bg-current/25 opacity-25 {% endunless %}
@@ -39,7 +39,7 @@
     {%- endfor -%}
 
     {%- if option.values.size > block.settings.limit -%}
-      <span>{{ option.values.size | minus: block.settings.limit }} more</span>
+      <span class="inline-block ml-[.5ch]">{{ option.values.size | minus: block.settings.limit }} more</span>
     {%- endif -%}
   </div>
 {%- endif -%}

@@ -32,13 +32,13 @@
       <div class="grid text-sm grow overflow-y-auto mask-b-from-[calc(100%-2rem)] max-md:max-h-[7.5lh]">
         <div class="sticky top-0 z-1 pb-2 bg-background">Tags</div>
 
-        <ul class="flex flex-wrap gap-1 pb-lh">
+        <ul class="flex flex-wrap pt-px pl-px pb-lh leading-tight">
           {%- for tag in blog.tags -%}
             <li>
               <a
                 href="{{ blog.url }}/tagged/{{ tag | handle }}"
                 class="
-                  inline-block p-[.125em_.25em] bg-current/5 before:content-['#'] before:text-current/50 hover:underline
+                  inline-block border bg-background font-sans normal-case p-[.125em_.25em] -mt-px -ml-px before:content-['#'] before:text-current/50 hover:bg-foreground hover:text-background hover:border-foreground
                   {% if current_tags contains tag %} font-bold {% endif %}
                 "
               >
@@ -84,7 +84,7 @@
 
 
     {%- paginate blog.articles by section.settings.articles_per_page -%}
-      <ul class="article-list grid grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-px bg-foreground border">
+      <ul class="article-list grid grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-stretch gap-px bg-foreground border">
         {%- liquid
           for article in blog.articles limit: section.settings.limit
             content_for 'block', type: '_article-card', id: 'article-card', closest.article: article

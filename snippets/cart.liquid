@@ -16,7 +16,7 @@
   -%}
     <div class="@container/cart">
       <ul class="grid @lg/cart:grid-cols-[auto_1fr_auto_auto] gap-y-4 gap-x-lh leading-tight">
-        <li class="hidden @lg/cart:grid col-span-full grid-cols-subgrid *:text-current/50 border-b py-1">
+        <li class="hidden @lg/cart:grid col-span-full grid-cols-subgrid *:text-current/50 border-b py-1 font-technical uppercase">
           <div class="col-span-2">Product</div>
           <div class="text-center">Quantity</div>
           <div class="text-center">Price</div>
@@ -35,7 +35,7 @@
             <div class="@lg/cart:contents grid gap-2">
               <dl class="relative">
                 <dt>
-                  <a href="{{ line_item.url }}" class="after:absolute after:inset-0 hover:underline">
+                  <a href="{{ line_item.url }}" class="after:absolute after:inset-0 hover:underline font-bold">
                     {{- line_item.product.title -}}
                   </a>
                 </dt>
@@ -81,19 +81,22 @@
     </div>
 
     <div class="grid gap-4 sticky bottom-0 bg-background @max-md:pt-4 @max-lg/cart:pt-4 pb-[max(env(safe-area-inset-bottom),1rem)] @max-md:border-t @max-lg/cart:border-t">
-      <dl class="grid grid-cols-[1fr_auto] gap-x-4 [&_dd]:font-bold tabular-nums">
+      <dl class="grid grid-cols-[1fr_auto] gap-x-4 tabular-nums [&_dt]:font-technical [&_dt]:uppercase">
         <dt>Subtotal</dt>
-        <dd>{{ cart.total_price | money }}</dd>
+        <dd class="font-bold">{{ cart.total_price | money }}</dd>
 
         {%- for discount in cart.cart_level_discount_applications -%}
-          <dd class="text-alert">
+          <dd class="text-alert font-bold">
             -{{ discount.total_allocated_amount | money }}
           </dd>
         {%- endfor -%}
+
+        <dt>Shipping</dt>
+        <dd>Calculated at checkout</dd>
       </dl>
 
       <details class="accordion group/note">
-        <summary class="py-1 leading-tight group-open/note:font-bold">
+        <summary class="justify-start! py-1 leading-tight group-open/note:font-bold font-technical uppercase">
           Cart notes
           {{ 'icon-chevron-down.svg' | inline_asset_content }}
         </summary>
@@ -103,9 +106,8 @@
             rows="3"
             placeholder="Add a note to your order"
             class="w-full min-h-[calc(1lh+.5em)] max-h-[4lh] p-[.25em_.5em] border"
-          >
-            {{- cart.note -}}
-          </textarea>
+            data-cart-note
+          >{{- cart.note -}}</textarea>
         </div>
       </details>
 
@@ -119,3 +121,66 @@
     </div>
   {%- endform -%}
 {%- endif -%}
+
+{% javascript %}
+  const rootPath = window.Shopify?.routes?.root || '/'
+  const updateUrl = `${rootPath}cart/update.js`
+  const DEBOUNCE_MS = 3000
+
+  const bindCartNote = (textarea) => {
+    if (textarea.dataset.noteBound === 'true') return
+    textarea.dataset.noteBound = 'true'
+
+    let savedNote = textarea.value
+    let debounceTimer = null
+    let requestId = 0
+
+    const saveNote = async () => {
+      const note = textarea.value
+      if (note === savedNote) return
+
+      const id = ++requestId
+
+      try {
+        const response = await fetch(updateUrl, {
+          method: 'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ note }),
+        })
+        if (!response.ok) throw new Error(`Cart note update failed: ${response.status}`)
+
+        await response.json()
+        if (id !== requestId) return
+
+        savedNote = note
+      } catch {
+        // Keep the local value; the next successful sync or page refresh will correct state.
+      }
+    }
+
+    const scheduleSave = () => {
+      clearTimeout(debounceTimer)
+      debounceTimer = setTimeout(saveNote, DEBOUNCE_MS)
+    }
+
+    const flushSave = () => {
+      clearTimeout(debounceTimer)
+      debounceTimer = null
+      saveNote()
+    }
+
+    textarea.addEventListener('input', scheduleSave)
+    textarea.addEventListener('change', flushSave)
+    textarea.addEventListener('blur', flushSave)
+  }
+
+  const bindAllCartNotes = () => {
+    document.querySelectorAll('[data-cart-note]').forEach(bindCartNote)
+  }
+
+  bindAllCartNotes()
+  document.addEventListener('cart:updated', bindAllCartNotes)
+{% endjavascript %}

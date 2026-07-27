@@ -13,7 +13,7 @@
 {% enddoc %}
 
 <div
-  class="inline-flex items-stretch border"
+  class="inline-flex items-stretch border font-technical"
   data-quantity-selector
   {% if line_item_key != blank %}
     data-line-item-key="{{ line_item_key }}"
@@ -22,7 +22,7 @@
   <label class="sr-only" for="Quantity-{{ id }}">Quantity</label>
 
   <button
-    class="ghost"
+    class="ghost px-ch"
     type="button"
     data-qty-increment
     aria-label="Increase quantity"
@@ -37,12 +37,12 @@
     value="{{ value | default: 1 }}"
     min="{{ min | default: 1 }}"
     max="{{ max | default: 100 }}"
-    class="text-center"
+    class="text-center px-ch"
     data-qty-input
   >
 
   <button
-    class="ghost"
+    class="ghost px-ch"
     type="button"
     data-qty-decrement
     aria-label="Decrease quantity"

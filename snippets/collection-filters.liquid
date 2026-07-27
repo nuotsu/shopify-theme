@@ -111,13 +111,13 @@
 
   <a
     href="{{ collection.url }}{% if collection.sort_by != collection.default_sort_by %}?sort_by={{ collection.sort_by }}{% endif %}"
-    class="action-outline"
+    class="action-outline text-sm"
     data-filter-remove
   >
     Clear all
   </a>
 
   <noscript>
-    <button type="submit" class="action w-full">Apply Filters</button>
+    <button type="submit" class="action w-full text-sm">Apply Filters</button>
   </noscript>
 </form>

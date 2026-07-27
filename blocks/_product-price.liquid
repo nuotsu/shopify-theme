@@ -1,3 +1,16 @@
+<style>
+  @scope {
+    .discount {
+      {% if block.settings.discount_prefix != blank %}
+        --before: {{ block.settings.discount_prefix }};
+      {% endif %}
+      {% if block.settings.discount_suffix != blank %}
+        --after: {{ block.settings.discount_suffix }};
+      {% endif %}
+    }
+  }
+</style>
+
 {%- liquid
   assign variant = closest.product.selected_or_first_available_variant
   assign show_aggregate = false
@@ -34,7 +47,7 @@
   data-price-min="{{ closest.product.price_min | money | escape }}"
   data-price-max="{{ closest.product.price_max | money | escape }}"
 >
-  <span data-product-price-display class="contents *:anim-fade [&_span]:text-2xl">
+  <span data-product-price-display class="contents font-technical *:anim-fade">
     {%- if show_aggregate -%}
       {%- if block.settings.price_display == 'range' -%}
         <span>{{ closest.product.price_min | money }} to {{ closest.product.price_max | money }}</span>
@@ -42,7 +55,7 @@
         <span>From {{ closest.product.price_min | money }}</span>
       {%- endif -%}
     {%- elsif on_sale -%}
-      <span>{{ price | money }}</span>
+      <strong class="h2">{{ price | money }}</strong>
       <s class="opacity-50">{{ compare_at | money }}</s>
     {%- else -%}
       <span>{{ price | money }}</span>
@@ -50,7 +63,7 @@
   </span>
 
   <span
-    class="discount *:anim-fade-to-l *:inline-block *:px-[.25em] *:bg-alert *:text-white *:before:content-(--before) *:after:content-(--after)"
+    class="discount font-technical *:anim-fade-to-l *:inline-block *:px-[.25em] *:bg-alert *:text-white *:before:content-(--before) *:after:content-(--after)"
     data-product-price-discount
     {% if block.settings.discount_display == 'none' or on_sale == false %}hidden{% endif %}
   >
@@ -92,20 +105,6 @@
     ]
   </script>
 </div>
-
-<style>
-  @scope {
-
-    .discount {
-      {% if block.settings.discount_prefix != blank %}
-        --before: {{ block.settings.discount_prefix }};
-      {% endif %}
-      {% if block.settings.discount_suffix != blank %}
-        --after: {{ block.settings.discount_suffix }};
-      {% endif %}
-    }
-  }
-</style>
 
 {% javascript %}
   if (!window.__productPriceBound) {

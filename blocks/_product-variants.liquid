@@ -26,15 +26,15 @@
     </label>
 
     {%- if block.settings.display == 'radio' -%}
-      <div class="grid gap-4">
+      <div class="grid gap-4 text-center">
         {%- for option in closest.product.options_with_values -%}
           <fieldset>
-            <legend class="py-1">
+            <legend class="py-1 font-technical uppercase">
               {{ option.name }}:
               <b class="anim-fade" data-option-value>{{ option.selected_value }}</b>
             </legend>
 
-            <div class="flex flex-wrap items-center gap-[.25em] leading-tight">
+            <div class="flex flex-wrap items-center leading-tight">
               {%- for value in option.values -%}
                 {%- liquid
                   assign swatch = nil
@@ -44,8 +44,8 @@
                 -%}
 
                 <label class="
-                  action-outline not-has-checked:border-current/25 has-disabled:opacity-25 has-disabled:bg-current/25
-                  has-[.swatch]:size-[1.5lh] has-[.swatch]:rounded-full has-[.swatch]:p-[3px] has-[.swatch]:order-first
+                  action-outline font-sans normal-case border -mt-px -ml-px has-checked:z-1 not-has-checked:border-current/25 has-disabled:opacity-25 has-disabled:bg-current/25 has-[.swatch]:mr-[.25em] has-[.swatch]:mb-[.25em]
+                  has-[.swatch]:size-[1.5lh] has-[.swatch]:rounded-full has-[.swatch]:p-0.75 has-[.swatch]:order-first
                   not-has-[.swatch]:min-w-[3ch]
                 ">
                   <input

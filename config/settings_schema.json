@@ -167,7 +167,7 @@
         "type": "richtext",
         "id": "cart_empty_content",
         "label": "Empty cart content",
-        "default": "<h1>Cart</h1><p>Your cart is empty.</p>"
+        "default": "<h1>Empty</h1><p>There's nothing in your cart.</p>"
       },
       {
         "type": "url",

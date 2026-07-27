@@ -5,9 +5,7 @@
   command="show-modal"
 >
   <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
-
   <span class="max-md:hidden">Cart</span>
-
   <span data-cart-count>
     ({{- cart.item_count -}})
   </span>
@@ -21,7 +19,8 @@
 >
   <div class="flex flex-col h-full">
     <header class="sticky top-0 z-1 bg-background flex items-center gap-4 justify-between p-4 border-b">
-      <a href="{{ routes.cart_url }}" class="block py-1 hover:underline">
+      <a href="{{ routes.cart_url }}" class="inline-flex gap-x-[.5em] py-1 font-technical uppercase">
+        <div class="*:size-lh">{{ 'icon-bag.svg' | inline_asset_content }}</div>
         Cart
         <span data-cart-count class="{% unless cart.item_count > 0 %} hidden {% endunless %}">
           ({{ cart.item_count }})
