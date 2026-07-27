@@ -2,11 +2,6 @@
   @scope {
     .product-list {
       --column-width: {{ section.settings.column_width }}px;
-      --gap: {{ section.settings.gap }}px;
-
-      li > :not(.product-card-image) {
-        padding-inline: max(0px, calc(.5rem - var(--gap)));
-      }
     }
 
     .product-card-variants:not(:has(*)) {
@@ -31,23 +26,31 @@
   {%- endif -%}
 
   <div class="grid gap-lh">
-    <div class="flex flex-wrap md:items-center md:justify-end gap-2 max-md:*:grow empty:hidden">
-      {%- liquid
-        if section.settings.enable_filters and section.settings.filter_behavior == 'drawer'
-          render 'collection-filter-drawer'
-        endif
+    <div class="flex flex-wrap items-center justify-between gap-ch">
+      <div class="font-technical uppercase text-sm text-current/50">
+        Showing {{ collection.products.size }} of {{ collection.products.size }}
+      </div>
 
-        if section.settings.enable_sorting
-          render 'collection-sorting'
-        endif
-      -%}
+      <div class="
+        flex flex-wrap md:items-stretch md:justify-end gap-px bg-foreground border max-md:*:grow empty:hidden
+        {% if section.settings.enable_filters and section.settings.filter_behavior == 'drawer' %} md:grid-cols-2 {% endif %}
+      ">
+        {%- liquid
+          if section.settings.enable_filters and section.settings.filter_behavior == 'drawer'
+            render 'collection-filter-drawer'
+          endif
+          if section.settings.enable_sorting
+            render 'collection-sorting'
+          endif
+        -%}
+      </div>
     </div>
 
     {%- paginate collection.products by section.settings.products_per_page -%}
       <ul
         id="collection-product-grid"
         class="
-          product-list grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh
+          product-list grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-stretch gap-px bg-foreground border
           {% if section.settings.mobile_2_column %} grid-cols-2 {% endif %}
         "
       >
@@ -57,7 +60,7 @@
       </ul>
 
       {%- if paginate.pages > 1 -%}
-        <div class="pagination mt-lh">
+        <div class="pagination">
           {{- paginate | default_pagination -}}
         </div>
       {%- endif -%}
@@ -181,16 +184,6 @@
       "id": "mobile_2_column",
       "label": "2-columns on mobile",
       "default": true
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "Gap",
-      "min": 0,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "default": 16
     },
     {
       "type": "header",

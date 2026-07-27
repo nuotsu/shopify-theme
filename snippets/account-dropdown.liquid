@@ -4,12 +4,14 @@
   name="header-{{ section.id }}"
   data-hover-details
 >
-  <summary class="py-1 md:text-sm" aria-label="Account">
+  <summary class="py-1 md:text-sm justify-start!">
     <div class="*:size-lh">{{ 'icon-person.svg' | inline_asset_content }}</div>
+    <span class="font-technical uppercase md:hidden">Account</span>
+    <span class="shrink-0 ml-auto md:hidden">{{ 'icon-chevron-down.svg' | inline_asset_content }}</span>
   </summary>
 
   <ul class="
-    max-md:anim-fade-to-b p-4 max-md:py-0 max-md:border-l max-md:mb-4 md:border
+    max-md:anim-fade-to-b px-4 py-[.5lh] max-md:py-0 max-md:border-l max-md:mb-4 md:border
     [&_a]:block [&_a]:py-1 [&_a]:hover:underline md:-ml-4
   ">
     {% if customer %}

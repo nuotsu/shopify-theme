@@ -14,7 +14,7 @@
         class="accordion group/filter"
         {% if filter.active_values.size > 0 or filter.min_value.value != blank or filter.max_value.value != blank -%} open {%- endif %}
       >
-        <summary class="py-1 group-open/filter:font-bold">
+        <summary class="py-1 group-open/filter:font-bold font-technical uppercase">
           {{ filter.label }}
           {{ 'icon-chevron-down.svg' | inline_asset_content }}
         </summary>

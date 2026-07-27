@@ -43,7 +43,7 @@
               {% if section.settings.collapsible_menu %} data-mobile-only-details {% endif %}
             >
               <summary
-                class="max-md:group-open/lv1:font-bold [&_svg]:md:hidden uppercase font-mono"
+                class="max-md:group-open/lv1:font-bold [&_svg]:md:hidden font-technical uppercase"
                 {% unless section.settings.collapsible_menu %} onclick="event.preventDefault()" {% endunless %}
               >
                 {{ link.title | link_to: link.url, class: 'block py-1 hover:underline' }}

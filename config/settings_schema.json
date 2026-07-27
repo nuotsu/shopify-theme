@@ -90,8 +90,8 @@
       },
       {
         "type": "font_picker",
-        "id": "font_mono",
-        "label": "Mono Font",
+        "id": "font_technical",
+        "label": "Technical Font",
         "default": "geist_mono_n4"
       },
       {

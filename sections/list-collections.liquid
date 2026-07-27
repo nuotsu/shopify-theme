@@ -2,11 +2,6 @@
   @scope {
     .collection-list {
       --column-width: {{ section.settings.column_width }}px;
-      --gap: {{ section.settings.gap }}px;
-
-      li > :not(:is(figure, .no-image)) {
-        padding-inline: max(0px, calc(.5rem - var(--gap)));
-      }
 
       img {
         object-fit: {{ section.settings.image_fit }};
@@ -23,9 +18,12 @@
 {% endif %}
 
 {%- paginate collections by section.settings.collections_per_page -%}
-  <ul class="collection-list grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-stretch gap-x-(--gap) gap-y-[2lh] leading-tight">
+  <ul class="collection-list grid md:grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-stretch gap-px leading-tight bg-foreground border">
     {%- for collection in collections -%}
-      <li class="group/card relative flex flex-col gap-2">
+      <li class="
+        group/card relative flex flex-col gap-2 bg-background p-ch
+        {% if collection.image == blank %} justify-end {% endif %}
+      ">
         {%- if collection.image != blank -%}
           <figure>
             {{- collection.image
@@ -38,10 +36,7 @@
         <div class="{% if collection.image == blank %} no-image {% endif %}">
           <a
             href="{{ collection.url }}"
-            class="
-              flex items-center after:absolute after:inset-0 hover:underline font-bold
-              {% if collection.image == blank %} h-full p-lh bg-current/2 group-hover/card:bg-current/5 transition-colors {% endif %}
-            "
+            class="flex items-center after:absolute after:inset-0 hover:underline font-bold uppercase"
           >
             {{ collection.title }}
           </a>
@@ -61,7 +56,7 @@
 {
   "name": "Collection list",
   "tag": "section",
-  "class": "section space-y-lh",
+  "class": "section space-y-lh bg-background color-foreground",
   "settings": [
     {
       "type": "richtext",
@@ -91,16 +86,6 @@
       "step": 10,
       "unit": "px",
       "default": 250
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "Gap",
-      "min": 0,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "default": 16
     },
     {
       "type": "header",

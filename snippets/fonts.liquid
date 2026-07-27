@@ -1,9 +1,9 @@
-{% unless settings.font_primary.system? and settings.font_mono.system? %}
+{% unless settings.font_primary.system? and settings.font_technical.system? %}
   <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
 {% endunless %}
 {% unless settings.font_primary.system? %}
   {{ settings.font_primary | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
 {% endunless %}
-{% unless settings.font_mono.system? %}
-  {{ settings.font_mono | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
+{% unless settings.font_technical.system? %}
+  {{ settings.font_technical | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
 {% endunless %}

@@ -2,11 +2,6 @@
   @scope {
     .article-list {
       --column-width: {{ section.settings.column_width }}px;
-      --gap: {{ section.settings.gap }}px;
-
-      li > :not(.article-image) {
-        padding-inline: max(0px, calc(.5rem - var(--gap)));
-      }
     }
 
     aside {
@@ -89,7 +84,7 @@
 
 
     {%- paginate blog.articles by section.settings.articles_per_page -%}
-      <ul class="article-list grid grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-x-(--gap) gap-y-lh">
+      <ul class="article-list grid grid-cols-[repeat(auto-fill,minmax(min(var(--column-width),100%),1fr))] items-start gap-px bg-foreground border">
         {%- liquid
           for article in blog.articles limit: section.settings.limit
             content_for 'block', type: '_article-card', id: 'article-card', closest.article: article
@@ -157,16 +152,6 @@
       "step": 50,
       "unit": "px",
       "default": 250
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "Gap",
-      "min": 0,
-      "max": 30,
-      "step": 1,
-      "unit": "px",
-      "default": 16
     },
     {
       "type": "range",

@@ -3,7 +3,6 @@
     :scope {
       --column-width: {{ section.settings.column_width }}px;
       --gallery-height: {{ section.settings.gallery_height }}px;
-      --gallery-gap: {{ section.settings.gallery_gap }}px;
     }
   }
 </style>
@@ -99,16 +98,6 @@
       "step": 50,
       "unit": "px",
       "default": 400
-    },
-    {
-      "type": "range",
-      "id": "gallery_gap",
-      "label": "Gap",
-      "min": 0,
-      "max": 20,
-      "step": 1,
-      "unit": "px",
-      "default": 1
     },
     {
       "type": "checkbox",

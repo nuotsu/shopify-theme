@@ -1,20 +1,8 @@
-<style>
-  @scope {
-    .article-list {
-      --gap: {{ section.settings.gap }}px;
-
-      li > :not(.article-image) {
-        padding-inline: max(0px, calc(.5rem - var(--gap)));
-      }
-    }
-  }
-</style>
-
 <header class="prose">
   {%- content_for 'blocks' -%}
 </header>
 
-<ul class="article-list carousel carousel-scroll-buttons carousel-scroll-markers gap-(--gap) md:masked-edge-r max-md:full-bleed max-md:px-4">
+<ul class="article-list carousel carousel-scroll-buttons carousel-scroll-markers gap-px bg-foreground border max-md:full-bleed max-md:px-4 items-stretch">
   {%- liquid
     if template.name == 'blog'
       assign articles_blog = blog
@@ -58,16 +46,6 @@
       "max": 10,
       "step": 1,
       "default": 6
-    },
-    {
-      "type": "range",
-      "id": "gap",
-      "label": "Gap",
-      "min": 0,
-      "max": 30,
-      "step": 1,
-      "unit": "px",
-      "default": 16
     }
   ],
   "blocks": [

@@ -163,8 +163,7 @@
         "layout": "horizontal",
         "enable_carousel": false,
         "enable_two_column": true,
-        "gallery_height": 400,
-        "gallery_gap": 1
+        "gallery_height": 400
       }
     }
   },

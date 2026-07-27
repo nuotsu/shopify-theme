@@ -245,9 +245,7 @@
         "layout": "grid",
         "fixed_columns": false,
         "column_count": 3,
-        "masked_edge": true,
-        "column_width": 250,
-        "gap": 16
+        "column_width": 250
       }
     },
     "collection_list": {
@@ -318,8 +316,7 @@
       "name": "Article list",
       "settings": {
         "blog": "blog",
-        "limit": 6,
-        "gap": 16
+        "limit": 6
       }
     },
     "newsletter_form": {

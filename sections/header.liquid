@@ -33,7 +33,7 @@
 
 {%- liquid
   assign megamenu_cards = section.blocks | where: 'type', 'megamenu_card'
-  assign top_level_link_class = 'uppercase font-mono py-1 md:text-center md:text-sm'
+  assign top_level_link_class = 'font-technical uppercase py-1 md:text-center md:text-sm'
 -%}
 
 <div
@@ -59,7 +59,7 @@
                   {%- case lv1_link.levels -%}
                     {%- when 1 -%}
                       <details class="group/lv2 accordion" name="header-{{ section.id }}-lv2" open data-mobile-only-details>
-                        <summary class="line-clamp-1 break-all py-1 [&_svg]:md:hidden max-md:group-open/lv2:font-bold uppercase font-mono">
+                        <summary class="line-clamp-1 break-all py-1 [&_svg]:md:hidden max-md:group-open/lv2:font-bold font-technical uppercase">
                           {{ lv1_link.title }}
                           {{ 'icon-chevron-down.svg' | inline_asset_content }}
                         </summary>
@@ -117,7 +117,7 @@
               {{ link.title }}
               {{ 'icon-chevron-down.svg' | inline_asset_content }}
             </summary>
-            <ul class="max-md:anim-fade-to-b p-4 max-md:py-0 max-md:border-l max-md:mb-4 md:border">
+            <ul class="max-md:anim-fade-to-b px-4 py-[.5lh] max-md:py-0 max-md:border-l max-md:mb-4 md:border">
               {% for lv1_link in link.links %}
                 <li>{{ lv1_link.title | link_to: lv1_link.url, class: 'block py-1 hover:underline' }}</li>
               {% endfor %}
@@ -131,7 +131,7 @@
       {%- endcase -%}
     {%- endfor -%}
 
-    {% render 'account-dropdown', section: section, class: 'md:hidden' %}
+    {% render 'account-dropdown', section: section, class: 'md:hidden leading-tight' %}
   </nav>
 
   <nav class="[grid-area:actions] flex items-center gap-x-4">

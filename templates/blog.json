@@ -103,7 +103,6 @@
         "feature_type": "newest",
         "featured_list": [],
         "column_width": 250,
-        "gap": 16,
         "limit": 12
       }
     }

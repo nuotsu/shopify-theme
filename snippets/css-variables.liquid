@@ -4,14 +4,14 @@
   {{ settings.font_primary | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.font_primary | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
-  {{ settings.font_mono | font_face: font_display: 'swap' }}
-  {{ settings.font_mono | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
-  {{ settings.font_mono | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-  {{ settings.font_mono | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.font_technical | font_face: font_display: 'swap' }}
+  {{ settings.font_technical | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {{ settings.font_technical | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {{ settings.font_technical | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
   :root {
     --font-primary: {{ settings.font_primary.family }}, {{ settings.font_primary.fallback_families }};
-    --font-mono: {{ settings.font_mono.family }}, {{ settings.font_mono.fallback_families }};
+    --font-technical: {{ settings.font_technical.family }}, {{ settings.font_technical.fallback_families }};
 
     --color-background: {{ settings.color_schemes.scheme-1.settings.background }};
     --color-foreground: {{ settings.color_schemes.scheme-1.settings.foreground }};
