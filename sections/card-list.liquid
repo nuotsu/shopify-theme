@@ -11,7 +11,7 @@
 
 <div class="section space-y-lh">
   {%- if section.settings.content != blank -%}
-    <header class="prose text-center max-w-3xl mx-auto">
+    <header class="prose">
       {{ section.settings.content }}
     </header>
   {%- endif -%}
@@ -83,7 +83,8 @@
       "max": 400,
       "step": 10,
       "unit": "px",
-      "default": 250
+      "default": 250,
+      "visible_if": "{{ section.settings.layout == 'grid' and section.settings.fixed_columns == false }}"
     },
   ],
   "blocks": [

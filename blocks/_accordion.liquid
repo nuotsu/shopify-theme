@@ -11,18 +11,10 @@
   {%- content_for 'blocks', closest.product: closest.product -%}
 </details>
 
-<style>
-  @scope {
-    *:has(> :scope):last-of-type {
-      border-bottom: 1px solid;
-    }
-  }
-</style>
-
 {% schema %}
 {
   "name": "Accordion",
-  "class": "border-t",
+  "class": "accordion-block border-t",
   "settings": [
     {
       "type": "inline_richtext",

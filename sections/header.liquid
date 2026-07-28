@@ -33,7 +33,7 @@
 
 {%- liquid
   assign megamenu_cards = section.blocks | where: 'type', 'megamenu_card'
-  assign top_level_link_class = 'font-technical uppercase py-1 md:text-center md:text-sm'
+  assign top_level_link_class = 'font-technical uppercase py-2 md:py-1 md:text-center md:text-sm md:border-b border-transparent'
 -%}
 
 <div
@@ -125,7 +125,10 @@
           </details>
 
         {%- else -%} {% # top-level link %}
-          <a href="{{ link.url }}" class="block {{ top_level_link_class }}">
+          <a
+            href="{{ link.url }}"
+            class="block {{ top_level_link_class }} {% if link.active %} md:border-current {% endif %}"
+          >
             {{ link.title }}
           </a>
       {%- endcase -%}

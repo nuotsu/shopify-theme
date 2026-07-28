@@ -12,6 +12,7 @@
     "hero_backdrop": {
       "type": "hero-backdrop",
       "name": "Collection hero",
+      "disabled": true,
       "settings": {},
       "blocks": {
         "hero_backdrop": {
@@ -19,7 +20,7 @@
           "name": "Hero",
           "settings": {
             "content_width": 750,
-            "horizontal_alignment": "center",
+            "horizontal_alignment": "start",
             "vertical_alignment": "center"
           },
           "blocks": {

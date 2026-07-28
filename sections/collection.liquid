@@ -10,6 +10,24 @@
   }
 </style>
 
+{%- if section.settings.display_header -%}
+  <header class="border-b">
+    <div class="section flex flex-wrap justify-between gap-lh">
+      <div class="self-center md:w-[32ch] space-y-lh">
+        <div class="font-technical uppercase text-sm text-current/50">{{ collection.products_count }} Products</div>
+
+        <h1 class="h1 md:h0">{{ collection.title }}</h1>
+      </div>
+
+      {%- if collection.description -%}
+        <div class="self-end prose md:w-[32ch]">
+          {{ collection.description }}
+        </div>
+      {%- endif -%}
+    </div>
+  </header>
+{%- endif -%}
+
 <div
   class="section grid has-[aside]:md:grid-cols-[auto_1fr] items-start gap-lh"
   data-section-id="{{ section.id }}"
@@ -156,6 +174,12 @@
   "name": "Collection",
   "tag": "section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "display_header",
+      "label": "Display header",
+      "default": true
+    },
     {
       "type": "header",
       "content": "Product grid"

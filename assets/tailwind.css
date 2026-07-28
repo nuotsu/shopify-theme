@@ -100,13 +100,13 @@
   }
 }
 @utility h0 {
-  @apply h-base text-7xl;
+  @apply h-base text-6xl/[0.8] md:text-7xl/[0.8];
 }
 @utility h1 {
-  @apply h-base text-5xl;
+  @apply h-base text-4xl/[0.8] md:text-5xl/[0.8];
 }
 @utility h2 {
-  @apply h-base text-3xl;
+  @apply h-base text-3xl/[1];
 }
 @utility h3 {
   @apply h-base text-2xl;

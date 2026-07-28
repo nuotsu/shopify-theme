@@ -74,6 +74,54 @@
         "color_scheme": "scheme-2"
       }
     },
+    "product_list": {
+      "type": "product-list",
+      "settings": {
+        "content": "<h2>Product list</h2>",
+        "source": "collection",
+        "collection": "all",
+        "limit": 4,
+        "layout": "grid",
+        "fixed_columns": true,
+        "column_count": 4
+      },
+      "blocks": {
+        "card": {
+          "type": "_product-card",
+          "static": true,
+          "settings": {
+            "collection": "all",
+          },
+          "blocks": {
+            "product-card-image": {
+              "type": "_product-card-image"
+            },
+            "product-card-title": {
+              "type": "_product-title"
+            },
+            "product-card-price": {
+              "type": "_product-card-price"
+            },
+            "product-card-variants_color": {
+              "type": "_product-card-variants"
+            },
+            "product-card-variants_size": {
+              "type": "_product-card-variants",
+              "settings": {
+                "option_name": "Size"
+              }
+            }
+          },
+          "block_order": [
+            "product-card-image",
+            "product-card-title",
+            "product-card-price",
+            "product-card-variants_color",
+            "product-card-variants_size"
+          ]
+        }
+      }
+    },
     "logo_list": {
       "type": "logo-list",
       "settings": {
@@ -328,6 +376,7 @@
   },
   "order": [
     "hero_backdrop",
+    "product_list",
     "logo_list",
     "card_list",
     "collection_list",

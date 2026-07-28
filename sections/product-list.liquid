@@ -1,0 +1,185 @@
+{%- liquid
+  if section.settings.source == 'collection' and section.settings.collection != blank
+    assign products = section.settings.collection.products
+  elsif section.settings.source == 'products'
+    assign products = section.settings.products
+  endif
+-%}
+
+<style>
+  @scope {
+    .product-list {
+      --column-width: {{ section.settings.column_width }}px;
+      {% if section.settings.fixed_columns %}
+        --column-count: {{ section.settings.column_count }};
+      {% endif %}
+    }
+
+    .product-card-variants:not(:has(*)) {
+      display: none;
+    }
+  }
+</style>
+
+<div class="section space-y-lh">
+  {%- if section.settings.content != blank -%}
+    <header class="prose">
+      {{ section.settings.content }}
+    </header>
+  {%- endif -%}
+
+  <ul class="
+    product-list items-stretch gap-px leading-tight bg-foreground border
+    {% if section.settings.layout == "carousel" %}
+      carousel carousel-scroll-buttons carousel-scroll-marker max-md:full-bleed max-md:px-4
+    {% else %} grid
+      {% if section.settings.fixed_columns %} md:grid-cols-[repeat(var(--column-count),minmax(0px,1fr))]
+      {% else %} md:grid-cols-[repeat(auto-fit,minmax(min(var(--column-width),100%),1fr))]
+      {% endif %}
+    {% endif %}
+  ">
+    {%- for product in products limit: section.settings.limit -%}
+      {% content_for 'block', type: '_product-card', id: 'card', closest.product: product %}
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "Product list",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "default": "<h2>Product list</h2>"
+    },
+    {
+      "type": "select",
+      "id": "source",
+      "label": "Source",
+      "options": [
+        {
+          "value": "collection",
+          "label": "Collection"
+        },
+        {
+          "value": "products",
+          "label": "Product list"
+        }
+      ],
+      "default": "collection"
+    },
+    {
+      "type": "header",
+      "content": "Product grid",
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Product list",
+      "limit": 50
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Product grid"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "grid",
+          "label": "Grid"
+        },
+        {
+          "value": "carousel",
+          "label": "Carousel"
+        }
+      ],
+      "default": "carousel"
+    },
+    {
+      "type": "checkbox",
+      "id": "fixed_columns",
+      "label": "Fixed columns",
+      "default": false,
+      "visible_if": "{{ section.settings.layout == 'grid' }}"
+    },
+    {
+      "type": "number",
+      "id": "column_count",
+      "label": "Column count",
+      "default": 3,
+      "visible_if": "{{ section.settings.layout == 'grid' and section.settings.fixed_columns == true }}"
+    },
+    {
+      "type": "range",
+      "id": "column_width",
+      "label": "Column width",
+      "min": 100,
+      "max": 400,
+      "step": 10,
+      "unit": "px",
+      "default": 250,
+      "visible_if": "{{ section.settings.layout == 'grid' and section.settings.fixed_columns == false }}"
+    }
+  ],
+  "blocks": [{ "type": "_product-card" }],
+  "presets": [
+    {
+      "name": "Product list",
+      "category": "Product",
+      "blocks": {
+        "card": {
+          "type": "_product-card",
+          "static": true,
+          "blocks": {
+            "product-card-image": {
+              "type": "_product-card-image"
+            },
+            "product-card-title": {
+              "type": "_product-title"
+            },
+            "product-card-price": {
+              "type": "_product-card-price"
+            },
+            "product-card-variants_color": {
+              "type": "_product-card-variants"
+            },
+            "product-card-variants_size": {
+              "type": "_product-card-variants",
+              "settings": {
+                "option_name": "Size"
+              }
+            }
+          },
+          "block_order": [
+            "product-card-image",
+            "product-card-title",
+            "product-card-price",
+            "product-card-variants_color",
+            "product-card-variants_size"
+          ]
+        }
+      }
+    }
+  ]
+}
+{% endschema %}

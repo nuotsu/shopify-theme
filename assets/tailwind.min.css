@@ -24,11 +24,10 @@
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
     --text-3xl: 1.875rem;
-    --text-3xl--line-height: calc(2.25 / 1.875);
+    --text-4xl: 2.25rem;
     --text-5xl: 3rem;
-    --text-5xl--line-height: 1;
+    --text-6xl: 3.75rem;
     --text-7xl: 4.5rem;
-    --text-7xl--line-height: 1;
     --font-weight-bold: 700;
     --leading-tight: 1.25;
     --leading-relaxed: 1.625;
@@ -923,8 +922,8 @@
   .gap-\[\.5ch\] {
     gap: .5ch;
   }
-  .gap-\[\.25em_\.5em\] {
-    gap: .25em .5em;
+  .gap-\[\.25em_1\.5ch\] {
+    gap: .25em 1.5ch;
   }
   .gap-\[2lh\] {
     gap: 2lh;
@@ -947,8 +946,8 @@
     margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
   }
   .prose h1 {
-    font-size: var(--text-5xl);
-    line-height: var(--tw-leading, var(--text-5xl--line-height));
+    font-size: var(--text-4xl);
+    line-height: 0.8;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -957,10 +956,14 @@
       color: transparent;
       -webkit-text-stroke: 1px var(--color-foreground);
     }
+    @media (width >= 48rem) {
+      font-size: var(--text-5xl);
+      line-height: 0.8;
+    }
   }
   .prose h2 {
     font-size: var(--text-3xl);
-    line-height: var(--tw-leading, var(--text-3xl--line-height));
+    line-height: 1;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -1054,6 +1057,9 @@
   .gap-x-4 {
     column-gap: calc(var(--spacing) * 4);
   }
+  .gap-x-\[\.5ch\] {
+    column-gap: .5ch;
+  }
   .gap-x-\[\.5em\] {
     column-gap: .5em;
   }
@@ -1077,6 +1083,9 @@
   }
   .self-center {
     align-self: center;
+  }
+  .self-end {
+    align-self: flex-end;
   }
   .self-start {
     align-self: flex-start;
@@ -1112,6 +1121,12 @@
   .border-none {
     --tw-border-style: none;
     border-style: none;
+  }
+  .border-current\/25 {
+    border-color: currentcolor;
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, currentcolor 25%, transparent);
+    }
   }
   .border-transparent {
     border-color: transparent;
@@ -1259,8 +1274,8 @@
     font-family: var(--font-technical);
   }
   .h1 {
-    font-size: var(--text-5xl);
-    line-height: var(--tw-leading, var(--text-5xl--line-height));
+    font-size: var(--text-4xl);
+    line-height: 0.8;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -1269,10 +1284,14 @@
       color: transparent;
       -webkit-text-stroke: 1px var(--color-foreground);
     }
+    @media (width >= 48rem) {
+      font-size: var(--text-5xl);
+      line-height: 0.8;
+    }
   }
   .h2 {
     font-size: var(--text-3xl);
-    line-height: var(--tw-leading, var(--text-3xl--line-height));
+    line-height: 1;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -1617,6 +1636,21 @@
   .has-checked\:z-1:has(:checked) {
     z-index: 1;
   }
+  .has-checked\:border-background:has(:checked) {
+    border-color: var(--color-background);
+  }
+  .has-checked\:border-background\!:has(:checked) {
+    border-color: var(--color-background) !important;
+  }
+  .has-checked\:border-foreground:has(:checked) {
+    border-color: var(--color-foreground);
+  }
+  .has-checked\:bg-foreground:has(:checked) {
+    background-color: var(--color-foreground);
+  }
+  .has-checked\:text-background:has(:checked) {
+    color: var(--color-background);
+  }
   .has-disabled\:bg-current\/25:has(:disabled) {
     background-color: currentcolor;
     @supports (color: color-mix(in lab, red, red)) {
@@ -1871,6 +1905,9 @@
     .md\:w-\(--sidebar-width\) {
       width: var(--sidebar-width);
     }
+    .md\:w-\[32ch\] {
+      width: 32ch;
+    }
     .md\:max-w-\(--content-width\) {
       max-width: var(--content-width);
     }
@@ -1924,14 +1961,38 @@
       border-bottom-style: var(--tw-border-style);
       border-bottom-width: 1px;
     }
+    .md\:border-current {
+      border-color: currentcolor;
+    }
     .md\:bg-background {
       background-color: var(--color-background);
+    }
+    .md\:py-1 {
+      padding-block: var(--spacing);
     }
     .md\:pb-4 {
       padding-bottom: calc(var(--spacing) * 4);
     }
     .md\:text-center {
       text-align: center;
+    }
+    .md\:h0 {
+      font-size: var(--text-6xl);
+      line-height: 0.8;
+      --tw-font-weight: var(--font-weight-bold);
+      font-weight: var(--font-weight-bold);
+      text-transform: uppercase;
+    }
+    .md\:h0 strong {
+      font-weight: inherit;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--color-foreground);
+    }
+    @media (width >= 48rem) {
+      .md\:h0 {
+        font-size: var(--text-7xl);
+        line-height: 0.8;
+      }
     }
     .md\:text-sm {
       font-size: var(--text-sm);
@@ -2110,8 +2171,8 @@
     }
   }
   .\[\&_\.article-title\]\:h1 .article-title {
-    font-size: var(--text-5xl);
-    line-height: var(--tw-leading, var(--text-5xl--line-height));
+    font-size: var(--text-4xl);
+    line-height: 0.8;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -2119,6 +2180,10 @@
       font-weight: inherit;
       color: transparent;
       -webkit-text-stroke: 1px var(--color-foreground);
+    }
+    @media (width >= 48rem) {
+      font-size: var(--text-5xl);
+      line-height: 0.8;
     }
   }
   .\[\&_a\]\:block a {
@@ -2152,9 +2217,9 @@
       margin-inline: calc(50% - 50vw);
     }
   }
-  .\[\&_h1\,h2\]\:h0 h1, .\[\&_h1\,h2\]\:h0 h2 {
-    font-size: var(--text-7xl);
-    line-height: var(--tw-leading, var(--text-7xl--line-height));
+  .\[\&_h1\]\:h0 h1 {
+    font-size: var(--text-6xl);
+    line-height: 0.8;
     --tw-font-weight: var(--font-weight-bold);
     font-weight: var(--font-weight-bold);
     text-transform: uppercase;
@@ -2162,6 +2227,26 @@
       font-weight: inherit;
       color: transparent;
       -webkit-text-stroke: 1px var(--color-foreground);
+    }
+    @media (width >= 48rem) {
+      font-size: var(--text-7xl);
+      line-height: 0.8;
+    }
+  }
+  .\[\&_h1\,h2\]\:h0 h1, .\[\&_h1\,h2\]\:h0 h2 {
+    font-size: var(--text-6xl);
+    line-height: 0.8;
+    --tw-font-weight: var(--font-weight-bold);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    & strong {
+      font-weight: inherit;
+      color: transparent;
+      -webkit-text-stroke: 1px var(--color-foreground);
+    }
+    @media (width >= 48rem) {
+      font-size: var(--text-7xl);
+      line-height: 0.8;
     }
   }
   .\[\&_svg\]\:shrink-0 svg {

@@ -16,10 +16,10 @@
           "type": "button-list",
           "name": "Button list",
           "settings": {
-            "justify_content": "center"
+            "justify_content": "start"
           },
           "blocks": {
-            "button": {
+            "button_1": {
               "type": "_button",
               "settings": {
                 "label": "Return home",
@@ -27,10 +27,20 @@
                 "style": "action"
               },
               "blocks": {}
+            },
+            "button_2": {
+              "type": "_button",
+              "settings": {
+                "label": "Search",
+                "link": "/search",
+                "style": "action-outline"
+              },
+              "blocks": {}
             }
           },
           "block_order": [
-            "button"
+            "button_1",
+            "button_2"
           ]
         }
       },
@@ -38,8 +48,9 @@
         "button_list"
       ],
       "settings": {
-        "content": "<p>404</p><h1>Page not found</h1>",
-        "text_align": "center"
+        "color_scheme": "scheme-2",
+        "content": "<h1><strong>404</strong></h1><p>This page doesn't exist.</p>",
+        "text_align": "start"
       }
     }
   },

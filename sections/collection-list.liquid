@@ -18,7 +18,7 @@
 
 <div class="section space-y-lh">
   {%- if section.settings.content != blank -%}
-    <header class="prose text-center max-w-3xl mx-auto">
+    <header class="prose">
       {{ section.settings.content }}
     </header>
   {%- endif -%}
@@ -33,7 +33,7 @@
       {% endif %}
     {% endif %}
   ">
-    {%- for collection in collections -%}
+    {%- for collection in collections limit: section.settings.limit -%}
       <li class="group/card relative flex flex-col gap-2 bg-background p-ch">
         {%- if collection.image != blank -%}
           <figure>
@@ -73,6 +73,15 @@
       "id": "collections",
       "label": "Collections",
       "info": "Leave blank to show all collections"
+    },
+    {
+      "type": "range",
+      "id": "limit",
+      "label": "Limit",
+      "min": 2,
+      "max": 24,
+      "step": 1,
+      "default": 8
     },
     {
       "type": "header",
@@ -116,7 +125,8 @@
       "max": 400,
       "step": 10,
       "unit": "px",
-      "default": 250
+      "default": 250,
+      "visible_if": "{{ section.settings.layout == 'grid' and section.settings.fixed_columns == false }}"
     },
     {
       "type": "header",

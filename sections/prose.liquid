@@ -1,5 +1,18 @@
 <style>
   @scope {
+    :scope {
+      --color-background: {{ section.settings.color_scheme.settings.background }};
+      --color-foreground: {{ section.settings.color_scheme.settings.foreground }};
+      --color-primary: {{ section.settings.color_scheme.settings.primary }};
+      --color-primary-foreground: {{ section.settings.color_scheme.settings.primary_foreground }};
+      --color-secondary: {{ section.settings.color_scheme.settings.secondary }};
+      --color-secondary-foreground: {{ section.settings.color_scheme.settings.secondary_foreground }};
+      --color-accent: {{ section.settings.color_scheme.settings.accent }};
+
+      background-color: var(--color-background);
+      color: var(--color-foreground);
+    }
+
     .section {
       --section-width:
       {%- if section.settings.section_full_width -%} 100%
@@ -57,7 +70,7 @@
   {% endif %}
 
   <div class="space-y-4 {% if section.settings.enable_toc %} md:[grid-area:content] {% endif %}">
-    <div class="prose" data-toc-content>
+    <div class="prose [&_h1]:h0" data-toc-content>
       {{ section.settings.content }}
     </div>
 
@@ -69,6 +82,12 @@
 {
   "name": "Prose",
   "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
     {
       "type": "richtext",
       "id": "content",

@@ -1,6 +1,19 @@
+<style>
+  @scope {
+    .discount {
+      {% if block.settings.discount_prefix != 'none' %}
+        --before: {{ block.settings.discount_prefix }};
+      {% endif %}
+      {% if block.settings.discount_suffix != 'none' %}
+        --after: {{ block.settings.discount_suffix }};
+      {% endif %}
+    }
+  }
+</style>
+
 {% capture single_price %}
   {% if closest.product.price < closest.product.compare_at_price %}
-    <span>{{ closest.product.price | money }}</span>
+    <strong>{{ closest.product.price | money }}</strong>
     <s class="opacity-50">{{ closest.product.compare_at_price | money }}</s>
   {% else %}
     <span>{{ closest.product.price | money }}</span>
@@ -45,19 +58,6 @@
     </span>
   {%- endif -%}
 </div>
-
-<style>
-  @scope {
-    .discount {
-      {% if block.settings.discount_prefix != 'none' %}
-        --before: {{ block.settings.discount_prefix }};
-      {% endif %}
-      {% if block.settings.discount_suffix != 'none' %}
-        --after: {{ block.settings.discount_suffix }};
-      {% endif %}
-    }
-  }
-</style>
 
 {% schema %}
 {
